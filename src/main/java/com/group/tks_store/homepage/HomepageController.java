@@ -16,7 +16,8 @@ public class HomepageController {
     }
 
     @GetMapping("/category")
-    public String redirect2Category() {
+    public String redirect2Category(Model model) {
+        model.addAttribute("page_type", "ប្រភេទទំនិញ");
         return "category";
     }
 }

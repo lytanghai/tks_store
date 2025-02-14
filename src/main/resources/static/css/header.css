@@ -1,0 +1,37 @@
+.homepage_header_container {
+             position: absolute;
+             width: 88%;
+             height: 10%;
+             top: 1%;
+             left: 11.5%;
+             display: flex;
+             justify-content: space-between;
+             align-item: center;
+        }
+
+        .page_type {
+            padding-top: 10px;
+            padding-left: 15px;
+            font-weight: bold;
+            color: #000;
+        }
+        .announcement {
+            padding-left: 12px;
+            padding-top: 10px;
+            width: 75%;
+            height: 38px;
+            text-align: center;
+            justify-content: center;
+            align-item: center;
+            font-weight: bold;
+            color: #000;
+            border-left: 1px solid #000;
+            border-right: 1px solid #000;
+        }
+        .date{
+            margin-left: auto;
+            padding-top: 10px;
+            color: #000;
+            font-weight: bold;
+            padding-right: 50px;
+        }

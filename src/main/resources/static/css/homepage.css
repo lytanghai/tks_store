@@ -1,0 +1,68 @@
+
+
+        .battambang-black {
+          font-family: "Battambang", serif;
+          font-weight: 900;
+          font-style: normal;
+        }
+
+        body {
+          display: flex;
+          font-family: "Battambang", serif;
+          font-weight: 300;
+          font-style: normal;
+        }
+
+        .feature-container {
+            background-color: #fafafa;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            width: 168px;
+            height: 50px;
+            margin-top: 3px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left:0;
+            top:0;
+            width: 170px;
+            height: 100vh;
+            position: fixed;
+            background-color: #343a40;
+            color: white;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #000;
+            text-align: center;
+            font-size: .8rem;
+            padding-left: 6px;
+            color: #000;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+        }
+
+        .text-center {
+          position: relative;
+          text-align: center;
+          align-item: center;
+          margin: 0 auto;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .homepage_middle_content {
+             position: absolute;
+             width: 88%;
+             height: 50%;
+             top: 10%;
+             left: 13%;
+        }
+
+

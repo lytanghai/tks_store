@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Battambang:wght@100;300;400;700;900&family=Changa:wght@200..800&family=Concert+One&family=Lexend+Deca:wght@100..900&family=Pridi:wght@200;300;400;500;600;700&family=Protest+Strike&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/homepage.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+
+</head>
+    <body>
+        <!-- Side Bar Fragment -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <!-- Header Fragment -->
+        <div th:replace="fragments/header :: header"></div>
+
+<!--        <div class="homepage_middle_content">-->
+<!--            <h2>XXX Store</h2>-->
+<!--            <p>ទំព័រដើម</p>-->
+<!--        </div>-->
+
+    </body>
+
+<script>
+        function displayDateTime() {
+            const now = new Date();
+                        const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                        const dateTimeString = now.toLocaleString('en-US', options).replace(',', ' -');
+            const dateElement = document.querySelector('.date');
+            dateElement.innerText = dateTimeString;
+        }
+        displayDateTime();
+
+        setInterval(displayDateTime, 1000);
+
+        function adjustAnimationDuration() {
+            const runningText = document.querySelector('.running-text');
+            const textLength = runningText.textContent.length;
+            const animationDuration = textLength * 0.05 + 's';
+
+            runningText.style.animationDuration = animationDuration;
+        }
+
+        adjustAnimationDuration();
+        window.addEventListener('resize', adjustAnimationDuration);
+
+    </script>
+
+</html>

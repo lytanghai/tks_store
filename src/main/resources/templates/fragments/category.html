@@ -1,0 +1,57 @@
+
+<div class="content" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="category">
+
+<!--    <div th:replace="fragments/form/create-category :: create-category"></div>-->
+
+    <a th:href="@{/category/create-form}" class="btn btn-success btn-md mb-3">Add New Category</a>
+
+    <table class="category_table_list_container">
+        <thead>
+        <tr>
+            <th class="category_th">លេខរៀង</th>
+            <th class="category_th">ឈ្មោះ(ខ្មែរ)</th>
+            <th class="category_th">ឈ្មោះ(អង់គ្លេស)</th>
+            <th class="category_th">ពត៍មានបន្ថែម</th>
+            <th class="category_th">ស្ថានភាព</th>
+            <th class="category_th">ថ្ងៃខែបញ្ជូល</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${content}">
+            <div th:if="${content != null}">
+                <td class="category_td" th:text="${row.id}"></td>
+                <td class="category_td" th:text="${row.name}"></td>
+                <td class="category_td" th:text="${row.nameKh}"></td>
+                <td class="category_td" th:text="${row.description}"></td>
+                <td class="category_td" th:text="${row.status}"></td>
+                <td class="category_td" th:text="${row.createdAt}"></td>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="page-redirect">
+        <p>Page: <span th:text="${current_page + 1}"></span> of <span th:text="${total_pages}"></span></p>
+    </div>
+
+    <div class="page-number">
+
+        <div th:if="${current_page == 0}" class="category-list-prev">
+            <a href="#" class="category-redirect-href">X</a>
+        </div>
+
+        <div th:if="${current_page != 0}" class="category-list-prev">
+            <a th:if="${current_page > 0}" th:href="@{/category/(page=${current_page - 1})}" class="category-redirect-href">Previous</a>
+        </div>
+
+        <div th:if="${current_page < total_pages}" class="category-list-next">
+            <a th:if="${current_page < total_pages - 1}" th:href="@{/category/(page=${current_page + 1})}" class="category-redirect-href">Next</a>
+        </div>
+
+    </div>
+ </div>
+
+
+
+
+

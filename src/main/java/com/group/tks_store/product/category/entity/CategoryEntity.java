@@ -1,10 +1,15 @@
 package com.group.tks_store.product.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "categories")
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CategoryEntity {
 
     @Id
@@ -15,6 +20,7 @@ public class CategoryEntity {
     private String name;
 
     @Column(name = "name_kh")
+    @JsonProperty("name_kh")
     private String nameKh;
 
     @Column(name = "description")
@@ -24,9 +30,11 @@ public class CategoryEntity {
     private String status;
 
     @Column(name = "created_at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     @Column(name = "last_updated_at")
+    @JsonProperty("last_updated_at")
     private Date lastUpdatedAt;
 
     public Integer getId() {

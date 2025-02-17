@@ -1,0 +1,119 @@
+*{
+    font-family: "Battambang", serif;
+    font-weight: 300;
+}
+
+.category_container {
+    position: fixed;
+    top: 5%;
+    left: 15%;
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category_form-group {
+    margin-bottom: 20px;
+}
+
+.category_label {
+    display: block;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.category_input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.category_textarea {
+    width: 100%;
+    height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.category_button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.category_button:hover {
+    background-color: #0056b3;
+}
+
+.category_table_list_container {
+    position: fixed;
+    top: 5%;
+    left: 48%;
+    width: 750px;
+    height: auto;
+    margin: 50px auto;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+}
+.category_table_list_container table {
+    width: 40%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 24px;
+}
+
+.category_th, .category_td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.category_th {
+    background-color: #fff;
+}
+
+.category_th:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.category_tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.page-redirect{
+    position: fixed;
+    top: 82%;
+    left: 70%;
+}
+.page-number{
+    position: fixed;
+    top: 88%;
+    left: 65%;
+    display: inline-flex;
+}
+.category-list-prev{
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+.category-list-next{
+    position: absolute;
+    margin-left: 200px;
+}
+.category-redirect-href{
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Status;
+import com.group.tks_store.common.util.DateTimeUtil;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.dto.CategoryListDTO;
 import com.group.tks_store.product.category.dto.CategoryUpdateDto;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -28,23 +30,23 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public void create(CategoryCreateDTO payloadRequest) {
+    public void create(CategoryCreateDTO payloadRequest) throws ParseException {
         CategoryEntity category = new CategoryEntity();
         category.setName(payloadRequest.getName());
         category.setNameKh(payloadRequest.getNameKh());
         category.setDescription(payloadRequest.getDescription().isEmpty() ? null : payloadRequest.getDescription());
         category.setStatus(Status.ACTIVE.getValue());
-        category.setCreatedAt(new Date());
+        category.setCreatedAt(DateTimeUtil.convertDate(new Date()));
         this.categoryRepository.save(category);
     }
 
-    public void update(CategoryUpdateDto payloadRequest) {
+    public void update(CategoryUpdateDto payloadRequest) throws ParseException {
         CategoryEntity existCategory = categoryRepository.getById(payloadRequest.getId());
         if(Objects.nonNull(existCategory)) {
             existCategory.setName(payloadRequest.getName());
             existCategory.setNameKh(payloadRequest.getNameKh());
             existCategory.setDescription(payloadRequest.getDescription());
-            existCategory.setLastUpdatedAt(new Date());
+            existCategory.setLastUpdatedAt(DateTimeUtil.convertDate(new Date()));
             this.categoryRepository.save(existCategory);
         }
     }

@@ -1,5 +1,5 @@
--- Categories Table
-CREATE table tks.public.categories (
+-- CategoryTable
+CREATE table tks.public.category (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     name_kh VARCHAR(255),
@@ -13,7 +13,7 @@ CREATE table tks.public.categories (
 CREATE TABLE tks.public.products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    category_id INT REFERENCES categories(id) ON DELETE SET NULL,
+    category_id INT REFERENCES category(id) ON DELETE SET NULL,
     sale_price DECIMAL(10,2),
     currency VARCHAR(5),
     description TEXT,

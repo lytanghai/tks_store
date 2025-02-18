@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM categories where status = 'ACTIVE'")
+    @Query(nativeQuery = true, value = "SELECT * FROM category where status = 'ACTIVE'")
     List<CategoryEntity> findAllByActive(String status);
 
-    @Query(value = "SELECT * FROM categories " +
+    @Query(value = "SELECT * FROM category " +
             "WHERE (status = :status) ",
             nativeQuery = true)
     Page<CategoryEntity> findAllByPagination(@Param("status") String status,

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CategoryEntity {
 

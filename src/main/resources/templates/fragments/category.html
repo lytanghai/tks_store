@@ -1,9 +1,22 @@
-
 <div class="content" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="category">
-
-<!--    <div th:replace="fragments/form/create-category :: create-category"></div>-->
-
-    <a th:href="@{/category/create-form}" class="btn btn-success btn-md mb-3">Add New Category</a>
+    <div class="category_container" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="create-category">
+        <h2>ប្រភេទទំនិញ</h2>
+        <form id="createCategory">
+            <div class="category_form-group">
+                <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
+                <input type="text" id="name" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+            </div>
+            <div class="category_form-group">
+                <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
+                <input type="text" id="name_kh" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+            </div>
+            <div class="category_form-group">
+                <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
+                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+            </div>
+            <button type="submit" onclick="createNewCategory()" class="category_button">បញ្ជូល</button>
+        </form>
+    </div>
 
     <table class="category_table_list_container">
         <thead>
@@ -14,6 +27,7 @@
             <th class="category_th">ពត៍មានបន្ថែម</th>
             <th class="category_th">ស្ថានភាព</th>
             <th class="category_th">ថ្ងៃខែបញ្ជូល</th>
+            <th class="category_th">សកម្មភាព</th>
         </tr>
         </thead>
         <tbody>
@@ -23,19 +37,20 @@
                 <td class="category_td" th:text="${row.name}"></td>
                 <td class="category_td" th:text="${row.nameKh}"></td>
                 <td class="category_td" th:text="${row.description}"></td>
-                <td class="category_td" th:text="${row.status}"></td>
+                <td class="category_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
                 <td class="category_td" th:text="${row.createdAt}"></td>
+                <td class="category_td"></td>
             </div>
         </tr>
         </tbody>
     </table>
 
     <div class="page-redirect">
+<!--        <div th:if="${}"></div>-->
         <p>Page: <span th:text="${current_page + 1}"></span> of <span th:text="${total_pages}"></span></p>
     </div>
 
     <div class="page-number">
-
         <div th:if="${current_page == 0}" class="category-list-prev">
             <a href="#" class="category-redirect-href">X</a>
         </div>
@@ -47,9 +62,9 @@
         <div th:if="${current_page < total_pages}" class="category-list-next">
             <a th:if="${current_page < total_pages - 1}" th:href="@{/category/(page=${current_page + 1})}" class="category-redirect-href">Next</a>
         </div>
-
     </div>
  </div>
+
 
 
 

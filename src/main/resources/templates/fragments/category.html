@@ -51,8 +51,8 @@
                         <li> <span>|</span> </li>
                         &nbsp;
                         <li>
-                            <a th:id="${row.id}" th:href="'#'" onclick="deleteCategory(this)">
-                                <img th:src="@{/icon/edit.png}" class="category-icon" alt="Trash Icon">
+                            <a href="#" onclick="openModal()">
+                                <img th:src="@{/icon/edit.png}" class="category-icon" alt="Edit Icon">
                                 <span th:text="កែ"></span>
                             </a>
                         </li>
@@ -62,6 +62,31 @@
         </tr>
         </tbody>
     </table>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">X</span>
+            <form id="popupForm" class="pop-up">
+                <div class="category_form-group">
+                    <label for="name" class="category_label">លេខរៀង:</label>
+                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
+                </div>
+                <div class="category_form-group">
+                    <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
+                    <input type="text" id="name_edit" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+                </div>
+                <div class="category_form-group">
+                    <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                </div>
+                <div class="category_form-group">
+                    <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
+                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+                </div>
+                <button type="submit" onclick="createNewCategory()" class="category_button" id="category-edit-btn">កែប្រែ</button>
+            </form>
+        </div>
+    </div>
 
     <div class="page-redirect">
         <div th:if="${total_records < 0}">
@@ -91,10 +116,7 @@
             <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href">Next</a>
         </div>
     </div>
+
  </div>
-
-
-
-
-
+</div>
 

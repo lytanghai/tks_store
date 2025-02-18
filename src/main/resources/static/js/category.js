@@ -1,3 +1,7 @@
+window.onload = function() {
+    closeModal();
+};
+
 function createNewCategory() {
     var name = document.getElementById('name').value;
     var nameKh = document.getElementById('name_kh').value;
@@ -31,4 +35,11 @@ function deleteCategory(element) {
     })
 
     location.reload(true);
+}
+function openModal() {
+    document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
 }

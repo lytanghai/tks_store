@@ -16,5 +16,19 @@ function createNewCategory() {
         },
         body: JSON.stringify(formData)
     })
+    location.reload(true);
 }
 
+function deleteCategory(element) {
+    var categoryId = element.id;
+
+    fetch('/category/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: categoryId })
+    })
+
+    location.reload(true);
+}

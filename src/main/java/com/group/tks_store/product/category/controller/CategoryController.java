@@ -3,6 +3,7 @@ package com.group.tks_store.product.category.controller;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.dto.CategoryListDTO;
+import com.group.tks_store.product.category.dto.CategoryUpdateDto;
 import com.group.tks_store.product.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.text.ParseException;
 
 
 @Controller
@@ -20,7 +22,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    public String create(@RequestBody CategoryCreateDTO category) {
+    public String create(@RequestBody CategoryCreateDTO category) throws ParseException {
         categoryService.create(category);
         return "redirect:/category";
     }
@@ -28,6 +30,13 @@ public class CategoryController {
     @PostMapping("/delete")
     public String delete(@RequestBody ID id) {
         categoryService.delete(id);
+        return "redirect:/category";
+    }
+
+    @PostMapping("/update")
+    public String delete(@RequestBody CategoryUpdateDto categoryUpdateDto) throws ParseException {
+        categoryService.update(categoryUpdateDto);
+        System.out.println("1 UPDATED");
         return "redirect:/category";
     }
 

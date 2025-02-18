@@ -51,10 +51,16 @@
                         <li> <span>|</span> </li>
                         &nbsp;
                         <li>
-                            <a href="#" onclick="openModal()">
-                                <img th:src="@{/icon/edit.png}" class="category-icon" alt="Edit Icon">
-                                <span th:text="កែ"></span>
+                            <a th:id="${row.id}"
+                               th:data-name="${row.name}"
+                               th:data-name-kh="${row.nameKh}"
+                               th:data-description="${row.description}"
+                               th:href="'#'"
+                               onclick="openModal(this)">
+                                <img th:src="@{/icon/edit.png}" class="category-icon" alt="Trash Icon">
+                                <span th:text="'កែ'"></span>
                             </a>
+
                         </li>
                     </ul>
                 </td>
@@ -66,7 +72,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">X</span>
-            <form id="popupForm" class="pop-up">
+            <form id="popupForm" class="pop-up" onsubmit="submitUpdateCategory(event)">
                 <div class="category_form-group">
                     <label for="name" class="category_label">លេខរៀង:</label>
                     <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
@@ -83,7 +89,7 @@
                     <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
                     <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
                 </div>
-                <button type="submit" onclick="createNewCategory()" class="category_button" id="category-edit-btn">កែប្រែ</button>
+                <button type="submit" class="category_button" id="category-edit-btn">កែប្រែ</button>
             </form>
         </div>
     </div>

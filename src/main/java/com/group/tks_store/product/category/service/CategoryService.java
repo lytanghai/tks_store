@@ -27,6 +27,7 @@ import java.util.Objects;
 public class CategoryService {
 
     private final Logger log = LoggerFactory.getLogger(CategoryService.class);
+
     @Autowired
     private CategoryRepository categoryRepository;
 

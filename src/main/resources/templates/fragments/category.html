@@ -86,7 +86,6 @@
             <input type="date" id="categoryEndDate" onchange="filterResults()" class="date-obj">
             <button type="button" class="clear-btn" onclick="clearEndDate()">&#10005;</button>
         </div>
-
     </div>
 
     <div id="myModal" class="modal">
@@ -94,11 +93,11 @@
             <span class="close" onclick="closeCreateCategoryModal()">X</span>
             <form id="popupForm" class="pop-up" onsubmit="updateCategory(event)">
                 <div class="category_form-group">
-                    <label for="name" class="category_label">លេខរៀង:</label>
+                    <label for="id_edit" class="category_label">លេខរៀង:</label>
                     <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
                 </div>
                 <div class="category_form-group">
-                    <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
+                    <label for="name_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
                     <input type="text" id="name_edit" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
                 </div>
                 <div class="category_form-group">
@@ -142,6 +141,8 @@
             <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href"> > </a>
         </div>
     </div>
+
  </div>
+
 </div>
 

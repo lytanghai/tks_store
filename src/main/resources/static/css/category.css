@@ -33,12 +33,13 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    padding: 5px;
 }
 
 .category_textarea {
     width: 100%;
     height: 80px;
-
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -90,7 +91,9 @@
 }
 
 .category_th {
+    font-weight: 500;
     background-color: #fff;
+    padding: 2px;
 }
 .odd-row {
     background-color: #f2f2f2;
@@ -105,12 +108,12 @@
 }
 .page-redirect{
     position: fixed;
-    top: 75%;
+    top: 80%;
     left: 67%;
 }
 .page-number{
     position: fixed;
-    top: 77%;
+    top: 82%;
     left: 62%;
     display: inline-flex;
 }
@@ -144,9 +147,7 @@
     text-decoration: none;
     color: #000;
 }
-.category-icon{
-    width: 10px;
-}
+
 .modal{
     position: fixed;
     display: none;
@@ -191,4 +192,12 @@
     position:fixed;
     right:27%;
     width:75px;
+}
+
+.category-search-bar-container{
+    position: fixed;
+    width: 51%;
+    height: 100px;
+    top: 72%;
+    left: 47.5%;
 }

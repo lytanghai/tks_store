@@ -22,6 +22,10 @@ body {
     height: 50px;
     margin-top: 3px;
 }
+.feature-container a {
+  font-style: normal;
+}
+
 
 .sidebar {
     position: fixed;

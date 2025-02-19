@@ -50,7 +50,6 @@ function deleteCategory(element) {
     });
 }
 
-
 function updateCategory(event) {
     event.preventDefault();
 
@@ -97,4 +96,45 @@ function openCreateCategoryModal(element) {
 
 function closeCreateCategoryModal() {
     document.getElementById("myModal").style.display = "none";
+}
+
+function filterResults() {
+    let searchValue = document.getElementById("search_input_category").value.toLowerCase();
+    let startDate = document.getElementById("categoryStartDate").value;
+    let endDate = document.getElementById("categoryEndDate").value;
+    let rows = document.querySelectorAll("#categoryTable tr");
+
+    rows.forEach(row => {
+        let rowText = row.textContent.toLowerCase();
+        let rowDate = row.cells[5].textContent.trim();
+        let showRow = rowText.includes(searchValue);
+
+        let rowDateTime = new Date(rowDate);
+
+        if (startDate) {
+            let startDateTime = new Date(startDate + "T00:00:00.000");
+            if (rowDateTime < startDateTime) {
+                showRow = false;
+            }
+        }
+
+        if (endDate) {
+            let endDateTime = new Date(endDate + "T23:59:59.999");
+            if (rowDateTime > endDateTime) {
+                showRow = false;
+            }
+        }
+
+        row.style.display = showRow ? "" : "none";
+    });
+}
+
+function clearStartDate() {
+    document.getElementById("categoryStartDate").value = "";
+    filterResults();
+}
+
+function clearEndDate() {
+    document.getElementById("categoryEndDate").value = "";
+    filterResults();
 }

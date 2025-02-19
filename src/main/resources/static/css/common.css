@@ -1,3 +1,18 @@
+.service-type-title{
+    display: flex;
+    width: 99%;
+}
+
+.icon-service-type{
+    margin-top: 22px;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.icon{
+    width: 10px;
+}
 .pop-up-message-container {
     font-family: Arial, sans-serif;
     display: flex;
@@ -26,3 +41,34 @@
 }
 .success { background: #28a745; }
 .error { background: #dc3545; }
+
+.search-ipt{
+    width: 35%;
+    padding: 4px;
+    border-radius: 3px;
+}
+.date-obj{
+    width: 110px;
+    height: 25px;
+    padding: 4px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.filter-date-container {
+    position: relative;
+    display: inline-block;
+}
+.filter-date-container input[type="date"] {
+    padding-right: 30px;
+}
+.clear-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #888;
+}

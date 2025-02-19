@@ -29,7 +29,6 @@ window.addEventListener('load', function() {
         }
 })
 
-
 function showPopUpMessage(type, action) {
     sessionStorage.setItem('popupMessage', type);
     sessionStorage.setItem('popupAction', action);

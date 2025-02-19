@@ -10,9 +10,10 @@ CREATE table tks.public.category (
 );
 
 -- Products Table
-CREATE TABLE tks.public.products (
+CREATE TABLE tks.public.product (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name_en VARCHAR(255) NOT NULL,
+    name_kh VARCHAR(255) NOT NULL,
     category_id INT REFERENCES category(id) ON DELETE SET NULL,
     sale_price DECIMAL(10,2),
     currency VARCHAR(5),
@@ -43,6 +44,15 @@ CREATE TABLE tks.public.product_variants (
     last_updated_at TIMESTAMP
 );
 
+Brand: Nike
+Model: Air Zoom Pegasus
+Gender: Men
+Shoe Type: Running Shoes
+Upper Material: Mesh
+Sole Material: Rubber
+Closure Type: Lace-up
+Color Options: Black, Blue, Red
+Sizes Available: 7, 8, 9, 10, 11
 -- Attributes Table (E.g., Color, Size, Brand)
 CREATE TABLE tks.public.attributes (
     id SERIAL PRIMARY KEY,
@@ -50,6 +60,12 @@ CREATE TABLE tks.public.attributes (
     status VARCHAR(10)
 );
 
+
+Variant 1:
+Color:
+Size:
+Price:
+SKU:
 -- Mapping Variants to Attributes (E.g., Color: Red)
 CREATE TABLE tks.public.variant_attributes (
     id SERIAL PRIMARY KEY,

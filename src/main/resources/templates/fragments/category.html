@@ -64,7 +64,6 @@
                                 <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
                                 <span th:text="'កែ'"></span>
                             </a>
-
                         </li>
                     </ul>
                 </td>
@@ -132,15 +131,15 @@
 
     <div class="page-number">
         <div th:if="${current_page == 0}" class="category-list-prev">
-            <a href="#" class="category-redirect-href">X</a>
+            <a href="#" class="category-redirect-href"><</a>
         </div>
 
         <div th:if="${current_page != 0}" class="category-list-prev">
-            <a th:if="${current_page > 0}" th:href="@{/category/list/(page=${current_page - 1})}" class="category-redirect-href">Previous</a>
+            <a th:if="${current_page > 0}" th:href="@{/category/list/(page=${current_page - 1})}" class="category-redirect-href"> < </a>
         </div>
 
         <div th:if="${current_page < total_pages}" class="category-list-next">
-            <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href">Next</a>
+            <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href"> > </a>
         </div>
     </div>
  </div>

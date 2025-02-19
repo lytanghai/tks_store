@@ -18,6 +18,7 @@
         </form>
     </div>
 
+
     <table class="category_table_list_container">
         <thead>
         <tr>
@@ -56,7 +57,7 @@
                                th:data-name-kh="${row.nameKh}"
                                th:data-description="${row.description}"
                                th:href="'#'"
-                               onclick="openModal(this)">
+                               onclick="openCreateCategoryModal(this)">
                                 <img th:src="@{/icon/edit.png}" class="category-icon" alt="Trash Icon">
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -71,8 +72,8 @@
 
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">X</span>
-            <form id="popupForm" class="pop-up" onsubmit="submitUpdateCategory(event)">
+            <span class="close" onclick="closeCreateCategoryModal()">X</span>
+            <form id="popupForm" class="pop-up" onsubmit="updateCategory(event)">
                 <div class="category_form-group">
                     <label for="name" class="category_label">លេខរៀង:</label>
                     <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
@@ -122,7 +123,6 @@
             <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href">Next</a>
         </div>
     </div>
-
  </div>
 </div>
 

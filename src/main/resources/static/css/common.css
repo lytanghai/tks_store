@@ -1,0 +1,28 @@
+.pop-up-message-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+.pop-up-container {
+    text-align: center;
+}
+.pop-up-message {
+    position: fixed;
+    width: 300px;
+    top: 8%;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 30;
+}
+.success { background: #28a745; }
+.error { background: #dc3545; }

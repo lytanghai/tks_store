@@ -10,11 +10,12 @@
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/main_body.css}">
-
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <link rel="stylesheet" th:href="@{/css/category.css}">
-    <script th:src="@{/js/date.js}" type="text/javascript"></script>
-    <script th:src="@{/js/category.js}" type="text/javascript"></script>
+    <script th:src="@{/js/date.js}" type="text/javascript" defer></script>
+    <script th:src="@{/js/category.js}" type="text/javascript" defer></script>
+    <script th:src="@{/js/common.js}" type="text/javascript" defer></script>
 
 </head>
     <body>
@@ -22,6 +23,8 @@
         <div th:replace="fragments/sidebar :: sidebar"></div>
         <!-- Header Fragment -->
         <div th:replace="fragments/header :: header"></div>
+
+        <div id="pop_up_message" class="pop-up-message"></div>
 
         <!-- Content -->
         <div class="main-body">

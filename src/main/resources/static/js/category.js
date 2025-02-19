@@ -1,6 +1,6 @@
-window.onload = function() {
-    closeModal();
-};
+window.addEventListener('load', function() {
+    closeCreateCategoryModal();
+})
 
 function createNewCategory() {
     var name = document.getElementById('name').value;
@@ -20,7 +20,14 @@ function createNewCategory() {
         },
         body: JSON.stringify(formData)
     })
-    location.reload(true);
+    .then(data => {
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'create');
+        location.reload();
+    })
+    .catch(err => {
+        showPopUpMessage('error', 'create');
+    })
 }
 
 function deleteCategory(element) {
@@ -33,18 +40,18 @@ function deleteCategory(element) {
         },
         body: JSON.stringify({ id: categoryId })
     })
-
-    location.reload();
+    .then(data => {
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'delete');
+        location.reload();
+    })
+     .catch(error => {
+        showPopUpMessage('error', 'delete');
+    });
 }
 
-function testUpdate() {
-    var id = document.getElementById("id_edit").value;
-    var name =  document.getElementById("name_edit").value;
-    var nameKh = document.getElementById("name_kh_edit").value;
-    var desc = document.getElementById("description_edit").value;
-}
 
-function submitUpdateCategory(event) {
+function updateCategory(event) {
     event.preventDefault();
 
     let formData = {
@@ -63,14 +70,17 @@ function submitUpdateCategory(event) {
     })
     .then(response => response.json())
     .then(data => {
-        alert("Category updated successfully!");
         document.getElementById("myModal").style.display = "none";
-        location.reload();
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'update');
+        showPopUpMessage('success', 'update');
     })
-    .catch(error => console.error("Error:", error));
+    .catch(error => {
+        showPopUpMessage('error', 'update');
+    });
 }
 
-function openModal(element) {
+function openCreateCategoryModal(element) {
 
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
@@ -82,9 +92,9 @@ function openModal(element) {
     document.getElementById("name_kh_edit").value = nameKh;
     document.getElementById("description_edit").value = description;
 
-    document.getElementById("myModal").style.display = "block"; // Show modal
+    document.getElementById("myModal").style.display = "block";
 }
 
-function closeModal() {
+function closeCreateCategoryModal() {
     document.getElementById("myModal").style.display = "none";
 }

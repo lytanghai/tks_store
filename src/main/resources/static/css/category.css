@@ -149,6 +149,7 @@
 }
 .modal{
     position: fixed;
+    display: none;
     left:11.1%;
     top:7.3%;
     width: 100%;

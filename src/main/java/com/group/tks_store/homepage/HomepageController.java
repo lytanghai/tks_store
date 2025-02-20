@@ -30,4 +30,11 @@ public class HomepageController {
         return "index";
     }
 
+    @GetMapping("/test")
+    public String test(Model model) {
+        model.addAttribute("page_type_kh", "ទំព័រដើម");
+        model.addAttribute("page_type_en", "product");
+        return "test";
+    }
+
 }

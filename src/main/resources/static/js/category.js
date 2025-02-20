@@ -129,12 +129,12 @@ function filterResults() {
     });
 }
 
-function clearStartDate() {
+function clearCategoryStartDate() {
     document.getElementById("categoryStartDate").value = "";
     filterResults();
 }
 
-function clearEndDate() {
+function clearCategoryEndDate() {
     document.getElementById("categoryEndDate").value = "";
     filterResults();
 }

@@ -1,16 +1,20 @@
+document.addEventListener("DOMContentLoaded", function() {
+    fetchCategories();
+});
+
 function createNewProduct() {
-    var name = document.getElementById('name_en').value;
-    var nameKh = document.getElementById('name_kh').value;
-    var categoryId = document.getElementById('category_id').value;
-    var salePrice = document.getElementById('sale_price').value;
-    var currency = document.getElementById('currency').value;
-    var description = document.getElementById('description').value;
+    var nameEn = document.getElementById('name_en_edit').value;
+    var nameKh = document.getElementById('name_kh_edit').value;
+    var categoryId = document.getElementById('category_select').value;
+    var salePrice = document.getElementById('sale_price_edit').value;
+    var currency = document.getElementById('currency_edit').value;
+    var description = document.getElementById('description_edit').value;
 
     var formData = {
         name_en: nameEn,
         name_kh: nameKh,
-        category_id: categoryId,
-        sale_price: salePrice,
+        category: { id: categoryId },
+        sale_price: parseFloat(salePrice),
         currency: currency,
         description: description
     };
@@ -23,7 +27,6 @@ function createNewProduct() {
         body: JSON.stringify(formData)
     })
     .then(data => {
-        clearCacheAndRefreshCategories();
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'create');
         location.reload();
@@ -33,8 +36,8 @@ function createNewProduct() {
     })
 }
 
-function deleteProduct(element) {
-    var productId = element.id;
+function deleteProduct(id) {
+    var productId = id;
 
     fetch('/product/delete', {
         method: 'POST',
@@ -44,7 +47,6 @@ function deleteProduct(element) {
         body: JSON.stringify({ id: productId })
     })
     .then(data => {
-         clearCacheAndRefreshCategories();
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'delete');
         location.reload();
@@ -54,9 +56,7 @@ function deleteProduct(element) {
     });
 }
 
-function updateProduct(event) {
-    event.preventDefault();
-
+function updateProduct() {
     let formData = {
         id: document.getElementById("id_edit").value,
         name_en: document.getElementById("name_en_edit").value,
@@ -78,14 +78,13 @@ function updateProduct(event) {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
-        clearCacheAndRefreshCategories();
     })
     .catch(error => {
         showPopUpMessage('error', 'update');
     });
 }
 
-function openCreateProductModal(element) {
+function openUpdateProductModal(element) {
 
     let id = element.getAttribute("id");
     let nameEn = element.getAttribute("data-name-en");
@@ -94,18 +93,31 @@ function openCreateProductModal(element) {
     let salePrice = element.getAttribute("data-sale-price");
     let description = element.getAttribute("data-description");
 
+    var iconElement = document.querySelector(".icon-service-type");
+    var formTitle = element.getAttribute("data-form-title");
+
+    if(formTitle === 'Create') {
+        document.getElementById("form-modal-product-title").textContent = 'បញ្ជូលផលិតថ្មី';
+        document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
+        iconElement.src = "/icon/new-product-icon.png";
+        iconElement.alt = "new-product-icon.png";
+    } else if(formTitle == 'Update') {
+        document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
+        document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
+        iconElement.src = "/icon/edit-product-icon.png";
+        iconElement.alt = "edit-product-icon.png";
+    }
+
     document.getElementById("id_edit").value = id;
     document.getElementById("name_en_edit").value = nameEn;
     document.getElementById("name_kh_edit").value = nameKh;
     document.getElementById("description_edit").value = description;
     document.getElementById("currency_edit").value = currency;
     document.getElementById("sale_price_edit").value = salePrice;
-
-
     document.getElementById("myProductModal").style.display = "block";
 }
 
-function closeCreateProductModal() {
+function closeUpdateProductModal() {
     document.getElementById("myProductModal").style.display = "none";
 }
 
@@ -128,57 +140,40 @@ function productFilterResults() {
                 showRow = false;
             }
         }
-
         if (endDate) {
             let endDateTime = new Date(endDate + "T23:59:59.999");
             if (rowDateTime > endDateTime) {
                 showRow = false;
             }
         }
-
         row.style.display = showRow ? "" : "none";
     });
 }
 
-function clearStartDate() {
-    document.getElementById("productStartDate").value = "";
-    filterResults();
+function clearProductStartDate() {
+    let startDateInput = document.getElementById("productStartDate");
+    startDateInput.value = "";
+    startDateInput.dispatchEvent(new Event("change"));
 }
 
-function clearEndDate() {
-    document.getElementById("productEndDate").value = "";
-    filterResults();
+function clearProductEndDate() {
+    let endDateInput = document.getElementById("productEndDate");
+    endDateInput.value = "";
+    endDateInput.dispatchEvent(new Event("change"));
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetchCategories();
-});
-
 
 function fetchCategories() {
-    const cachedData = localStorage.getItem("categories");
-    const cachedTimestamp = localStorage.getItem("categories_timestamp");
+    fetch("/rest/category/list")
+        .then(response => response.json())
+        .then(categories => {
+            localStorage.setItem("categories", JSON.stringify(categories));
+            localStorage.setItem("categories_timestamp", currentTime);
 
-    const currentTime = new Date().getTime();
-
-    if (cachedData && cachedTimestamp && (currentTime - cachedTimestamp < 3600000)) {
-        const categories = JSON.parse(cachedData);
-        populateCategoryDropdown(categories);
-    } else {
-        // Fetch data from the API and cache it
-        fetch("/rest/category/list")
-            .then(response => response.json())
-            .then(categories => {
-                // Cache the new data with the current timestamp
-                localStorage.setItem("categories", JSON.stringify(categories));
-                localStorage.setItem("categories_timestamp", currentTime);
-
-                populateCategoryDropdown(categories);
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
-            });
-    }
+            populateCategoryDropdown(categories);
+        })
+        .catch(error => {
+            console.error("Error fetching categories:", error);
+    });
 }
 
 function populateCategoryDropdown(categories) {
@@ -188,8 +183,8 @@ function populateCategoryDropdown(categories) {
     categorySelect.innerHTML = "";
 
     const defaultOption = document.createElement("option");
-    defaultOption.text = "ជ្រើសរើសប្រភេទទំនិញ";
-    defaultOption.value = "";
+    defaultOption.text = "ទូទៅ";
+    defaultOption.value = "General";
     categorySelect.appendChild(defaultOption);
 
     categories.forEach(category => {
@@ -200,9 +195,63 @@ function populateCategoryDropdown(categories) {
     });
 }
 
-function clearCacheAndRefreshCategories() {
-    localStorage.removeItem("categories");
-    localStorage.removeItem("categories_timestamp");
+function showConfirmationModal(action, id) {
+    document.getElementById("confirmation-modal").style.display = "block";
+    const modalText = document.getElementById("confirm-modal-text");
+    if (action === 'create') {
+//        modalText.textContent = 'Are you sure you want to create a new product?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលផលិតផលថ្មីមែនទេ?';
+    } else if (action === 'update') {
+//        modalText.textContent = 'Are you sure you want to update this product?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការកែប្រែផលិតផលនេះទេ?';
+    } else if (action === 'delete') {
+//        modalText.textContent = 'Are you sure you want to delete this product?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការលុបផលិតផលនេះទេ?';
+    }
+    window.currentAction = action;
+    window.productId = id;
+}
+function closeConfirmationModal() {
+    document.getElementById("confirmation-modal").style.display = "none";
+}
 
-    fetchCategories();
+function confirmProductActionConfirmation() {
+    if (window.currentAction === 'create') {
+        createNewProduct();
+    } else if (window.currentAction === 'update') {
+        updateProduct();
+    } else if (window.currentAction === 'delete') {
+        deleteProduct(window.productId);
+    }
+    updateServiceIcon();
+    closeConfirmationModal();
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const titleText = document.getElementById("form-modal-product-title").textContent.toLowerCase();
+
+    if(titleText.includes("បញ្ជូលផលិតថ្មី")) {
+        showConfirmationModal('create');
+    } else {
+        showConfirmationModal('update');
+    }
+}
+
+function updateServiceIcon() {
+    const titleElement = document.getElementById("form-modal-product-title");
+    const iconElement = document.querySelector(".icon-service-type");
+
+    const titleText = titleElement.textContent.trim().toLowerCase();
+
+    if (titleText === "create") {
+        iconElement.src = "/icon/new-product-icon.png";
+        iconElement.alt = "new-product-icon.png";
+    } else if (titleText === "update") {
+        iconElement.src = "/icon/edit-product-icon.png";
+        iconElement.alt = "edit-product-icon.png";
+    } else {
+        iconElement.src = "/icon/category-icon.png";
+        iconElement.alt = "category-icon.png";
+    }
 }

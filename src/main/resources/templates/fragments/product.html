@@ -6,15 +6,24 @@
         <label for="productStartDate">ចាប់ពី:</label>
         <div class="filter-date-container">
             <input type="date" id="productStartDate" onchange="productFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearStartDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
         </div>
 
         <label for="productEndDate">រហូតដល់:</label>
         <div class="filter-date-container">
             <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearEndDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
         </div>
 
+    </div>
+    <div id="product-create-container">
+        <button th:href="'#'"
+                th:data-form-title="Create"
+                onclick="openUpdateProductModal(this)"
+                class="product-create-btn">
+            <img th:src="@{/icon/add-icon.png}" style="width:12px; color: #0a0a0a" alt="Trash Icon">
+            <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; color: #0a0a0a"></span>
+        </button>
     </div>
 
     <table class="product_table_list_container">
@@ -43,7 +52,7 @@
                 <td class="product_td">
                     <ul class="product-action">
                         <li>
-                            <a th:id="${row.id}" th:href="'#'" onclick="deleteProduct(this)">
+                            <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
                                 <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
                                 <span th:text="លុប"></span>
                             </a>
@@ -58,8 +67,9 @@
                                th:data-sale-price="${row.salePrice}"
                                th:data-currency="${row.currency}"
                                th:data-description="${row.description}"
+                               th:data-form-title="'Update'"
                                th:href="'#'"
-                               onclick="openCreateProductModal(this)">
+                               onclick="openUpdateProductModal(this)">
                                 <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -73,19 +83,24 @@
 
     <div id="myProductModal" class="product-create-modal">
         <div class="product-create-modal-content">
-            <span class="close" onclick="closeCreateProductModal()">X</span>
-            <form id="popupForm" class="pop-up" onsubmit="updateProduct(event)">
+            <span class="close" onclick="closeUpdateProductModal()">X</span>
+            <div class="service-type-title">
+                <img class="icon-service-type" src="/icon/category-icon.png">
+                <h2 id="form-modal-product-title">create</h2>
+            </div>
+
+            <form id="popupForm" class="pop-up" onsubmit="handleFormSubmit(event)">
                 <div class="category_form-group">
                     <label for="id_edit" class="category_label">លេខរៀង:</label>
                     <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
                 </div>
                 <div class="category_form-group">
                     <label for="name_en_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                    <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+                    <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
                 </div>
                 <div class="category_form-group">
                     <label for="name_kh_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
                 </div>
                 <div class="product-info-ipt">
                     <div class="category_form-group flex-item">
@@ -96,7 +111,7 @@
                     </div>
                     <div class="category_form-group flex-item">
                         <label for="sale_price_edit" class="category_label product-price-ipt">តម្លៃ:</label>
-                        <input type="text" id="sale_price_edit" name="sale_price" class="product-price-ipt" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                        <input type="text" id="sale_price_edit" name="sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                     </div>
 
                     <div class="category_form-group flex-item">
@@ -110,53 +125,29 @@
                     </div>
                 </div>
 
-
-<!--                <div class="price-customize">-->
-<!--                    -->
-<!--                   -->
-<!--                </div>-->
                 <div class="category_form-group">
                     <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>
                     <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea"></textarea>
                 </div>
-                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn">កែប្រែ</button>
+                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn"></button>
             </form>
         </div>
     </div>
 
-
-    <!--    <div id="myProductModal" class="product-create-modal">-->
-<!--        <div class="product-create-modal-content">-->
-<!--            <span class="close" onclick="closeCreateProductModal()">X</span>-->
-<!--            <form id="popupForm" class="pop-up" onsubmit="updateProduct(event)">-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="id_edit" class="category_label">លេខរៀង:</label>-->
-<!--                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>-->
-<!--                </div>-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="name_en_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>-->
-<!--                    <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">-->
-<!--                </div>-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="name_kh_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>-->
-<!--                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="sale_price_edit" class="category_label">តម្លៃ:</label>-->
-<!--                    <input type="text" id="sale_price_edit" name="sale_price" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="currency_edit" class="category_label">រូបីយប័ណ្ណ:</label>-->
-<!--                    <input type="text" id="currency_edit" name="currency" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="category_form-group">-->
-<!--                    <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>-->
-<!--                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>-->
-<!--                </div>-->
-<!--                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn">កែប្រែ</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div id="confirmation-modal" class="confirm-modal" style="z-index:999">
+        <div class="confirm-modal-content">
+            <span class="close-confirm-modal" onclick="closeConfirmationModal()">&times;</span>
+            <div id="product-confirm-modal-header">
+                <img th:src="@{/icon/exclamation-mark.png}"class="flex-item" alt="exclamation-mark.png" style="width: 40px; margin-left: 10%;">
+                <h2 class="flex-item">សំខាន់</h2>
+            </div>
+            <p id="confirm-modal-text">Do you want to proceed with this action?</p>
+            <div class="modal-actions">
+                <button class="confirm-cancel-btn" onclick="closeConfirmationModal()">ទេ</button>
+                <button class="confirm-btn" onclick="confirmProductActionConfirmation()">បាទ/ចាស់</button>
+            </div>
+        </div>
+    </div>
 
 
     <div class="product-page-redirect">
@@ -188,4 +179,7 @@
             </div>
         </div>
     </div>
+
+
+
 </div>

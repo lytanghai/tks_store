@@ -2,10 +2,19 @@ package com.group.tks_store.product.category.dto;
 
 public class CategoryCreateDTO {
 
+    private Integer id;
     private String name;
     private String nameKh = null;
     private String description = null;
     private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

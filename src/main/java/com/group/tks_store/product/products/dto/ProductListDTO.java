@@ -1,80 +1,119 @@
 package com.group.tks_store.product.products.dto;
 
-import com.group.tks_store.product.products.entity.ProductEntity;
-
-import java.util.List;
+import java.util.Date;
 
 public class ProductListDTO {
-    private Integer totalPages;
-    private Integer totalRecords;
-    private List<ProductEntity> records;
-    private Integer pageNumber;
-    private String sortDirection;
-    private String sortBy;
-    private Boolean first;
-    private Boolean last;
+    private Integer id;
+    private String nameEn;
+    private String nameKh;
+    private Double salePrice;
+    private String currency;
+    private String description;
+    private String status;
+    private Date createdAt;
+    private Date lastUpdatedAt;
+    private String categoryNameEn;
+    private String categoryNameKh;
 
-    public Integer getPageNumber() {
-        return pageNumber;
+    public ProductListDTO(Integer id, String nameEn, String nameKh, Double salePrice, String currency, String description, String status, Date createdAt, Date lastUpdatedAt, String categoryNameEn, String categoryNameKh) {
+        this.id = id;
+        this.nameEn = nameEn;
+        this.nameKh = nameKh;
+        this.salePrice = salePrice;
+        this.currency = currency;
+        this.description = description;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.lastUpdatedAt = lastUpdatedAt;
+        this.categoryNameEn = categoryNameEn;
+        this.categoryNameKh = categoryNameKh;
     }
 
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
+    public Integer getId() {
+        return id;
     }
 
-    public Integer getTotalPages() {
-        return totalPages;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
+    public String getNameEn() {
+        return nameEn;
     }
 
-    public Integer getTotalRecords() {
-        return totalRecords;
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
     }
 
-    public void setTotalRecords(Integer totalRecords) {
-        this.totalRecords = totalRecords;
+    public String getNameKh() {
+        return nameKh;
     }
 
-    public List<ProductEntity> getRecords() {
-        return records;
+    public void setNameKh(String nameKh) {
+        this.nameKh = nameKh;
     }
 
-    public void setRecords(List<ProductEntity> records) {
-        this.records = records;
+    public Double getSalePrice() {
+        return salePrice;
     }
 
-    public String getSortDirection() {
-        return sortDirection;
+    public void setSalePrice(Double salePrice) {
+        this.salePrice = salePrice;
     }
 
-    public void setSortDirection(String sortDirection) {
-        this.sortDirection = sortDirection;
+    public String getCurrency() {
+        return currency;
     }
 
-    public String getSortBy() {
-        return sortBy;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
+    public String getDescription() {
+        return description;
     }
 
-    public Boolean getFirst() {
-        return first;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setFirst(Boolean first) {
-        this.first = first;
+    public String getStatus() {
+        return status;
     }
 
-    public Boolean getLast() {
-        return last;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setLast(Boolean last) {
-        this.last = last;
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(Date lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public String getCategoryNameEn() {
+        return categoryNameEn;
+    }
+
+    public void setCategoryNameEn(String categoryName) {
+        this.categoryNameEn = categoryName;
+    }
+
+    public String getCategoryNameKh() {
+        return categoryNameKh;
+    }
+
+    public void setCategoryNameKh(String categoryNameKh) {
+        this.categoryNameKh = categoryNameKh;
     }
 }

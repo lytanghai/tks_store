@@ -1,6 +1,6 @@
 package com.group.tks_store.product.products.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.category.entity.CategoryEntity;
@@ -17,14 +17,16 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name_en")
+    @Column(name = "name_en", nullable = false)
     private String nameEn;
 
-    @Column(name = "name_kh")
+    @Column(name = "name_kh", nullable = false)
     private String nameKh;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
+    @JsonBackReference
+    private CategoryEntity category;
 
     @Column(name = "sale_price")
     private Double salePrice;
@@ -39,12 +41,21 @@ public class ProductEntity {
     private String status;
 
     @Column(name = "created_at")
-    @JsonProperty("created_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(name = "last_updated_at")
-    @JsonProperty("last_updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedAt;
+
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
 
     public Integer getId() {
         return id;
@@ -68,14 +79,6 @@ public class ProductEntity {
 
     public void setNameKh(String nameKh) {
         this.nameKh = nameKh;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
     }
 
     public Double getSalePrice() {

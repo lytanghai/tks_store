@@ -1,15 +1,28 @@
 package com.group.tks_store.product.products.dto;
 
-import com.group.tks_store.product.category.dto.CategoryCreateDTO;
+import java.util.Date;
 
-public class ProductCreateDTO {
+public class ProductCategoryListDTO {
+
+    private Integer id;
     private String nameEn;
     private String nameKh;
-    private CategoryCreateDTO category;
     private Double salePrice;
     private String currency;
     private String description;
     private String status;
+    private Date createdAt;
+    private Date lastUpdatedAt;
+    private String categoryName;
+    private String categoryNameKh;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNameEn() {
         return nameEn;
@@ -27,12 +40,20 @@ public class ProductCreateDTO {
         this.nameKh = nameKh;
     }
 
-    public CategoryCreateDTO getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(CategoryCreateDTO category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryNameKh() {
+        return categoryNameKh;
+    }
+
+    public void setCategoryNameKh(String categoryNameKh) {
+        this.categoryNameKh = categoryNameKh;
     }
 
     public Double getSalePrice() {
@@ -65,5 +86,21 @@ public class ProductCreateDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(Date lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
     }
 }

@@ -21,8 +21,8 @@
         <thead>
         <tr>
             <th class="product_th">លេខរៀង</th>
-            <th class="product_th">ឈ្មោះ(ខ្មែរ)</th>
-            <th class="product_th">ឈ្មោះ(អង់គ្លេស)</th>
+            <th class="product_th">ឈ្មោះទំនិញ</th>
+            <th class="product_th">ប្រភេទទំនិញ</th>
             <th class="product_th">តម្លៃ</th>
             <th class="product_th">ពត៍មានបន្ថែម</th>
             <th class="product_th">ស្ថានភាព</th>
@@ -34,8 +34,8 @@
         <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <div th:if="${content != null}">
                 <td class="product_td" th:text="${row.id}"></td>
-                <td class="product_td" th:text="${row.nameEn}"></td>
-                <td class="product_td" th:text="${row.nameKh}"></td>
+                <td class="product_td" th:text="${row.nameEn + ' (' + row.nameKh +')'}"></td>
+                <td class="product_td" th:text="${row.categoryNameEn + ' (' + row.categoryNameKh +')'}"></td>
                 <td class="product_td" th:text="${row.salePrice + ' ' + row.currency}"></td>
                 <td class="product_td" th:text="${row.description}"></td>
                 <td class="product_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
@@ -71,39 +71,6 @@
         </tbody>
     </table>
 
-<!--    <div id="myProductModal" class="modal">-->
-<!--        <div class="modal-content">-->
-<!--            <span class="close" onclick="closeCreateProductModal()">X</span>-->
-<!--            <form id="popupForm" class="product-pop-up" onsubmit="updateProduct(event)">-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="id_edit" class="product_label">លេខរៀង:</label>-->
-<!--                    <input type="text" id="id_edit" name="id" class="product_input ready-only-field" placeholder="លេខរៀង" readonly>-->
-<!--                </div>-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="name_en_edit" class="product_label">ឈ្មោះ(អង់គ្លេស):</label>-->
-<!--                    <input type="text" id="name_en_edit" name="name" class="product_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">-->
-<!--                </div>-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="name_kh_edit" class="product_label">ឈ្មោះ(ខ្មែរ):</label>-->
-<!--                    <input type="text" id="name_kh_edit" name="name_kh" class="product_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="sale_price_edit" class="product_label">ឈ្មោះ(ខ្មែរ):</label>-->
-<!--                    <input type="text" id="sale_price_edit" name="name_kh" class="product_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="currency_edit" class="product_label">ឈ្មោះ(ខ្មែរ):</label>-->
-<!--                    <input type="text" id="currency_edit" name="name_kh" class="product_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--                </div>-->
-<!--                <div class="product_form-group">-->
-<!--                    <label for="description_edit" class="product_label">ពត៍មានបន្ថែម:</label>-->
-<!--                    <textarea id="description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="product_textarea" ></textarea>-->
-<!--                </div>-->
-<!--                <button type="submit" class="product_button" id="product-edit-btn">កែប្រែ</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-
     <div id="myProductModal" class="product-create-modal">
         <div class="product-create-modal-content">
             <span class="close" onclick="closeCreateProductModal()">X</span>
@@ -121,18 +88,18 @@
                     <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
                 <div class="category_form-group">
-                    <label for="sale_price_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <label for="sale_price_edit" class="category_label">តម្លៃ:</label>
                     <input type="text" id="sale_price_edit" name="sale_price" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
                 <div class="category_form-group">
-                    <label for="currency_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <label for="currency_edit" class="category_label">រូបីយប័ណ្ណ:</label>
                     <input type="text" id="currency_edit" name="currency" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
                 <div class="category_form-group">
                     <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>
                     <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
                 </div>
-                <button type="submit" class="product_button" id="category-edit-btn">កែប្រែ</button>
+                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn">កែប្រែ</button>
             </form>
         </div>
     </div>

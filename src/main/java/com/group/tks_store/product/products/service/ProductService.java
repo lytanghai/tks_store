@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.util.DateTimeUtil;
-import com.group.tks_store.product.category.dto.CategoryListDTO;
-import com.group.tks_store.product.category.dto.CategoryUpdateDto;
 import com.group.tks_store.product.category.entity.CategoryEntity;
+import com.group.tks_store.product.category.repository.CategoryRepository;
 import com.group.tks_store.product.products.dto.ProductCreateDTO;
 import com.group.tks_store.product.products.dto.ProductListDTO;
 import com.group.tks_store.product.products.dto.ProductUpdateDto;
@@ -15,9 +14,11 @@ import com.group.tks_store.product.products.entity.ProductEntity;
 import com.group.tks_store.product.products.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -30,11 +31,17 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     public void create(ProductCreateDTO productCreateDTO) throws ParseException {
+
+        CategoryEntity category = categoryRepository.findById(productCreateDTO.getCategory().getId()).orElseThrow(() -> new RuntimeException("Category Id is not found"));
+
         ProductEntity product = new ProductEntity();
+        product.setCategory(category);
         product.setNameEn(productCreateDTO.getNameEn());
         product.setNameKh(productCreateDTO.getNameKh());
-        product.setCategoryId(productCreateDTO.getCategoryId());
         product.setDescription(productCreateDTO.getDescription());
         product.setCurrency(productCreateDTO.getCurrency());
         product.setSalePrice(productCreateDTO.getSalePrice());
@@ -48,7 +55,6 @@ public class ProductService {
         if(Objects.nonNull(existProduct)) {
             existProduct.setSalePrice(payloadRequest.getSalePrice());
             existProduct.setCurrency(payloadRequest.getCurrency());
-            existProduct.setCategoryId(payloadRequest.getCategoryId());
             existProduct.setNameEn(payloadRequest.getNameEn());
             existProduct.setNameKh(payloadRequest.getNameKh());
             existProduct.setDescription(payloadRequest.getDescription());
@@ -61,30 +67,47 @@ public class ProductService {
         productRepository.deleteById(req.getId());
     }
 
-    public List<ProductEntity> list() {
-        return productRepository.findAllByActive(Status.ACTIVE.getValue());
+    public List<ProductEntity> getAllProducts() {
+        return productRepository.findAll();
     }
 
-    public ProductListDTO findAllByPagination(String status, PageRequest pageRequest) {
-        Page<ProductEntity> result  = productRepository.findAllByPagination(status, pageRequest);
-        ProductListDTO response = new ProductListDTO();
-        response.setRecords(result.getContent());
-        response.setTotalPages(result.getTotalPages());
-        response.setTotalRecords(result.getSize());
-        response.setFirst(result.isFirst());
-        response.setLast(result.isLast());
-        response.setPageNumber(result.getPageable().getPageNumber());
+    public ProductEntity getProductById(Integer id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
 
-        if (pageRequest.getSort().isSorted()) {
-            pageRequest.getSort().get().findFirst().ifPresent(order -> {
-                response.setSortBy(order.getProperty());
-                response.setSortDirection(order.getDirection().toString());
-            });
-        } else {
-            response.setSortBy(null);
-            response.setSortDirection(null);
+    public Page<ProductListDTO> getActiveProducts(Pageable pageable) {
+        return productRepository.findByStatus("ACTIVE", pageable).map(result -> {
+            Integer id = (Integer) result[0];
+            String nameEn = (String) result[1];
+            String nameKh = (String) result[2];
+            BigDecimal salePrice = (BigDecimal) result[3];
+            String currency = (String) result[4];
+            String description = (String) result[5];
+            String status = (String) result[6];
+            Date createdAt = (Date) result[7];
+            Date lastUpdatedAt = (Date) result[8];
+            String categoryName = (String) result[9];
+            String categoryNameKh = (String) result[10];
+
+            Double salePriceDouble = salePrice != null ? salePrice.doubleValue() : null;
+
+            return new ProductListDTO(id, nameEn, nameKh, salePriceDouble, currency, description, status, createdAt, lastUpdatedAt, categoryName, categoryNameKh);
+        });
+    }
+
+    @Transactional
+    public ProductEntity createProduct(ProductEntity product) {
+        if (product.getCategory() != null && product.getCategory().getId() != null) {
+            CategoryEntity category = categoryRepository.findById(product.getCategory().getId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            product.setCategory(category);
         }
+        return productRepository.save(product);
+    }
 
-        return response;
+    @Transactional
+    public void deleteProduct(Integer id) {
+        productRepository.deleteById(id);
     }
 }

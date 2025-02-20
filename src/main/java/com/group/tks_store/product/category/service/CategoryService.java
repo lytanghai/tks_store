@@ -31,6 +31,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public List<CategoryEntity> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
     public void create(CategoryCreateDTO payloadRequest) throws ParseException {
         CategoryEntity category = new CategoryEntity();
         category.setName(payloadRequest.getName());

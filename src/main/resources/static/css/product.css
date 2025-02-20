@@ -138,3 +138,17 @@
     top: 10%;
     left: 13%;
 }
+
+.product-price-ipt {
+    width: 100px;
+    padding: 2px;
+}
+.product-info-ipt{
+   display: flex;
+}
+
+.flex-item {
+    flex: 1;
+    margin: 4px;
+    text-align: left;
+}

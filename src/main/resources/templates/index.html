@@ -13,262 +13,253 @@
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <style>
-<!--    -->
-<!--.modal {-->
-<!--    display: none;-->
-<!--    position: fixed;-->
-<!--    left: 0;-->
-<!--    top: 0;-->
-<!--    width: 100%;-->
-<!--    height: 100%;-->
-<!--    background-color: rgba(0, 0, 0, 0.5);-->
-<!--}-->
-<!--.modal-content {-->
-<!--    background-color: white;-->
-<!--    width: 50%;-->
-<!--    margin: 100px auto;-->
-<!--    padding: 20px;-->
-<!--}-->
-<!--.close {-->
-<!--    float: right;-->
-<!--    cursor: pointer;-->
-<!--}-->
-<!--*{-->
-<!--font-family: "Battambang", serif;-->
-<!--font-weight: 300;-->
-<!--}-->
-
-<!--.category_container {-->
-<!--    position: fixed;-->
-<!--    top: 5%;-->
-<!--    left: 15%;-->
-<!--    width: 400px;-->
-<!--    height: auto;-->
-<!--    margin: 50px auto;-->
-<!--    padding: 20px;-->
-<!--    border-radius: 8px;-->
-<!--    background: #fff;-->
-<!--    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);-->
-<!--}-->
-
-<!--.category_form-group {-->
-<!--    margin-bottom: 20px;-->
-<!--}-->
-
-<!--.category_label {-->
-<!--    display: block;-->
-<!--    font-weight: 300;-->
-<!--    margin-bottom: 5px;-->
-<!--}-->
-
-<!--.category_input[type="text"] {-->
-<!--    width: 100%;-->
-
-<!--    border: 1px solid #ccc;-->
-<!--    border-radius: 4px;-->
-<!--    box-sizing: border-box;-->
-<!--}-->
-
-<!--.category_textarea {-->
-<!--    width: 100%;-->
-<!--    height: 80px;-->
-
-<!--    border: 1px solid #ccc;-->
-<!--    border-radius: 4px;-->
-<!--    box-sizing: border-box;-->
-<!--}-->
-
-<!--.category-button-container {-->
-<!--    position: absolute;-->
-<!--    right:0;-->
-<!--    width: 250px;-->
-<!--}-->
-<!--.category_button {-->
-<!--    background-color: #007bff;-->
-<!--    color: #fff;-->
-<!--    padding: 10px 20px;-->
-<!--    border: none;-->
-<!--    border-radius: 4px;-->
-<!--    cursor: pointer;-->
-<!--    margin-left: 330px;-->
-<!--}-->
-
-<!--.category_button:hover {-->
-<!--    background-color: #0056b3;-->
-<!--}-->
-
-<!--.category_table_list_container {-->
-<!--    position: fixed;-->
-<!--    top: 5%;-->
-<!--    left: 45%;-->
-<!--    width: 780px;-->
-<!--    margin: 50px auto;-->
-<!--    border-radius: 8px;-->
-<!--    background: #fff;-->
-<!--    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);-->
-<!--    padding: 20px;-->
-<!--    border-radius: 12px;-->
-<!--}-->
-<!--.category_table_list_container table {-->
-<!--    width: 40%;-->
-<!--    border-collapse: collapse;-->
-<!--    margin-top: 20px;-->
-<!--    border-radius: 24px;-->
-<!--}-->
-
-<!--.category_th, .category_td {-->
-<!--    border: 1px solid #ddd;-->
-<!--    text-align: center;-->
-<!--    font-size: 15px;-->
-<!--}-->
-
-<!--.category_th {-->
-<!--    background-color: #fff;-->
-<!--}-->
-<!--.odd-row {-->
-<!--    background-color: #f2f2f2;-->
-<!--}-->
-
-<!--.category_th:nth-child(even) {-->
-<!--    background-color: #f9f9f9;-->
-<!--}-->
-
-<!--.category_tr:nth-child(even) {-->
-<!--    background-color: #f9f9f9;-->
-<!--}-->
-<!--.page-redirect{-->
-<!--    position: fixed;-->
-<!--    top: 75%;-->
-<!--    left: 67%;-->
-<!--}-->
-<!--.page-number{-->
-<!--    position: fixed;-->
-<!--    top: 77%;-->
-<!--    left: 62%;-->
-<!--    display: inline-flex;-->
-<!--}-->
-<!--.category-list-prev{-->
-<!--    position: relative;-->
-<!--    width: 200px;-->
-<!--    height: 200px;-->
-<!--}-->
-<!--.category-list-next{-->
-<!--    position: absolute;-->
-<!--    margin-left: 200px;-->
-<!--}-->
-<!--.category-redirect-href{-->
-<!--    text-decoration: none;-->
-<!--    color: #000;-->
-<!--    font-weight: bold;-->
-<!--}-->
-<!--.category-action{-->
-<!--    width: 80px;-->
-<!--    height: 5px;-->
-<!--    display: flex;-->
-<!--    list-style-type: none;-->
-<!--    padding-right: 14px;-->
-<!--}-->
-<!--.category-action li {-->
-<!--    justify-content: center;-->
-<!--    align-item: center;-->
-<!--    margin-top: -12px;-->
-<!--}-->
-<!--.category-action li a {-->
-<!--    text-decoration: none;-->
-<!--    color: #000;-->
-<!--}-->
-<!--.category-icon{-->
-<!--    width: 10px;-->
-<!--}-->
-
-.pop-up-message-container {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-.pop-up-container {
-    text-align: center;
-}
-.pop-up-message {
-    position: fixed;
-    width: 300px;
-    top: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 5px;
-    color: #fff;
-    font-weight: bold;
+/* Modal Styling */
+.modal {
     display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
 }
-.success { background: #28a745; }
-.error { background: #dc3545; }
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    cursor: pointer;
+}
+
+.modal-actions {
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #45a049;
+}
+
+.cancel-btn:hover {
+    background-color: #e41c21;
+}
+
+/* Form Styling */
+.product-form {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.category_form-group {
+    margin-bottom: 15px;
+}
+
+.category_label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.category_input,
+.category_textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.category_textarea {
+    height: 100px;
+}
+
+/* Buttons */
+.update_button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.update_button:hover {
+    background-color: #45a049;
+}
+
 
     </style>
 </head>
 <body>
+<!-- Trigger Buttons -->
+<button type="button" onclick="showModal('create')">Create Product</button>
+<button type="button" onclick="showModal('update')">Update Product</button>
+<button type="button" onclick="showModal('delete')">Delete Product</button>
 
-<div class="pop-up-message-container">
-    <div class="pop-up-container">
-        <button onclick="showPopUpMessage('success')">Save Data (Success)</button>
-        <button onclick="showPopUpMessage('error')">Save Data (Error)</button>
+<!-- Modal Structure -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Are you sure?</h2>
+        <p id="modalText">Do you want to proceed with this action?</p>
+        <div class="modal-actions">
+            <button class="confirm-btn" onclick="confirmAction()">Yes</button>
+            <button class="cancel-btn" onclick="closeModal()">No</button>
+        </div>
     </div>
-    <div id="pop_up_message" class="pop-up-message"></div>
 </div>
+
+<!-- Form to Create / Update Product -->
+<div id="productForm" class="product-form">
+    <form id="popupForm" class="pop-up" onsubmit="submitForm(event)">
+        <div class="category_form-group">
+            <label for="id_edit" class="category_label">ID:</label>
+            <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="ID" readonly>
+        </div>
+        <div class="category_form-group">
+            <label for="name_en_edit" class="category_label">Name (English):</label>
+            <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="Enter Product Name in English">
+        </div>
+        <div class="category_form-group">
+            <label for="name_kh_edit" class="category_label">Name (Khmer):</label>
+            <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="Enter Product Name in Khmer">
+        </div>
+        <div class="category_form-group">
+            <label for="sale_price_edit" class="category_label">Price:</label>
+            <input type="text" id="sale_price_edit" name="sale_price" class="category_input" placeholder="Enter Price">
+        </div>
+        <div class="category_form-group">
+            <label for="currency_edit" class="category_label">Currency:</label>
+            <input type="text" id="currency_edit" name="currency" class="category_input" placeholder="Enter Currency">
+        </div>
+        <div class="category_form-group">
+            <label for="description_edit" class="category_label">Description:</label>
+            <textarea id="description_edit" name="description" placeholder="Additional Information" class="category_textarea"></textarea>
+        </div>
+        <div class="category_form-group">
+            <label for="category_select" class="category_label">Category:</label>
+            <select id="category_select" name="category_id" class="category_input">
+                <!-- Categories will be populated here -->
+            </select>
+        </div>
+        <button type="submit" class="update_button" id="category-edit-btn">Submit</button>
+    </form>
+</div>
+
 <script>
-        function showPopUpMessage(type) {
-            const popup = document.getElementById('pop_up_message');
-            popup.className = `pop-up-message ${type}`;
-            popup.textContent = type === 'success' ? 'Data saved successfully!' : 'Failed to save data!';
-            popup.style.display = 'block';
-            setTimeout(() => popup.style.opacity = '1', 2000);
+    // Show Modal
+function showModal(action) {
+    document.getElementById("myModal").style.display = "block";
+    const modalText = document.getElementById("modalText");
 
-            setTimeout(() => {
-                popup.style.opacity = '0';
-                setTimeout(() => popup.style.display = 'none', 2000);
-            }, 3000);
-        }
-    </script>
-
-<!--<a href="#" onclick="openModal()">Open Modal Form</a>-->
-
-<!--<div id="myModal" class="modal">-->
-<!--    <div class="modal-content">-->
-<!--        <span class="close" onclick="closeModal()">&times;</span>-->
-<!--        <form id="popupForm">-->
-<!--            <div class="category_form-group">-->
-<!--                <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>-->
-<!--                <input type="text" id="name" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">-->
-<!--            </div>-->
-<!--            <div class="category_form-group">-->
-<!--                <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>-->
-<!--                <input type="text" id="name_kh" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
-<!--            </div>-->
-<!--            <div class="category_form-group">-->
-<!--                <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>-->
-<!--                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>-->
-<!--            </div>-->
-<!--            <button type="submit" onclick="createNewCategory()" class="category_button">បញ្ជូល</button>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
-
-<script>
-    // Function to open the modal
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
+    // Customize modal text based on the action
+    if (action === 'create') {
+        modalText.textContent = 'Are you sure you want to create a new product?';
+    } else if (action === 'update') {
+        modalText.textContent = 'Are you sure you want to update this product?';
+    } else if (action === 'delete') {
+        modalText.textContent = 'Are you sure you want to delete this product?';
     }
 
-    // Function to close the modal
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
+    // Store action for later use
+    window.currentAction = action;
+}
+
+// Close Modal
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+}
+
+// Confirm Action (Create, Update, Delete)
+function confirmAction() {
+    if (window.currentAction === 'create') {
+        alert('Creating product...');
+    } else if (window.currentAction === 'update') {
+        alert('Updating product...');
+    } else if (window.currentAction === 'delete') {
+        alert('Deleting product...');
     }
+    closeModal();
+}
+
+// Fetch Categories and Populate the Select Dropdown
+function fetchCategories() {
+    fetch('/category/list/v2')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById("category_select");
+            data.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category.id;
+                option.text = category.name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching categories:', error));
+}
+
+// Populate Categories when the page loads
+window.onload = function() {
+    fetchCategories();
+}
+
+// Handle Form Submission for Create/Update Product
+function submitForm(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("popupForm");
+    const formData = new FormData(form);
+    const productData = {};
+
+    formData.forEach((value, key) => {
+        productData[key] = value;
+    });
+
+    if (window.currentAction === 'create') {
+        alert('Product Created: ' + JSON.stringify(productData));
+    } else if (window.currentAction === 'update') {
+        alert('Product Updated: ' + JSON.stringify(productData));
+    }
+
+    closeModal(); // Close the modal after action
+}
+
 </script>
-
 </body>
 </html>

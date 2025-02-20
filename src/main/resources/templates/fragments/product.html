@@ -87,22 +87,76 @@
                     <label for="name_kh_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
                     <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
-                <div class="category_form-group">
-                    <label for="sale_price_edit" class="category_label">តម្លៃ:</label>
-                    <input type="text" id="sale_price_edit" name="sale_price" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                <div class="product-info-ipt">
+                    <div class="category_form-group flex-item">
+                        <div style="margin-top: 3px"></div>
+                        <label for="category_select" class="category_label">ប្រភេទទំនិញ:</label>
+                        <select id="category_select" name="category_id" class="category_input" style="padding: 2px;">
+                        </select>
+                    </div>
+                    <div class="category_form-group flex-item">
+                        <label for="sale_price_edit" class="category_label product-price-ipt">តម្លៃ:</label>
+                        <input type="text" id="sale_price_edit" name="sale_price" class="product-price-ipt" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                    </div>
+
+                    <div class="category_form-group flex-item">
+                        <label for="currency_edit">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
+                        <div style="margin-top: 8px"></div>
+                        <select name="currency_edit" id="currency_edit" style="padding: 2px;">
+                            <option value="USD" selected disabled hidden>USD</option>
+                            <option value="USD">USD</option>
+                            <option value="KHR">KHR</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="category_form-group">
-                    <label for="currency_edit" class="category_label">រូបីយប័ណ្ណ:</label>
-                    <input type="text" id="currency_edit" name="currency" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
-                </div>
+
+
+<!--                <div class="price-customize">-->
+<!--                    -->
+<!--                   -->
+<!--                </div>-->
                 <div class="category_form-group">
                     <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>
-                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea"></textarea>
                 </div>
                 <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn">កែប្រែ</button>
             </form>
         </div>
     </div>
+
+
+    <!--    <div id="myProductModal" class="product-create-modal">-->
+<!--        <div class="product-create-modal-content">-->
+<!--            <span class="close" onclick="closeCreateProductModal()">X</span>-->
+<!--            <form id="popupForm" class="pop-up" onsubmit="updateProduct(event)">-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="id_edit" class="category_label">លេខរៀង:</label>-->
+<!--                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>-->
+<!--                </div>-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="name_en_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>-->
+<!--                    <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">-->
+<!--                </div>-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="name_kh_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>-->
+<!--                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
+<!--                </div>-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="sale_price_edit" class="category_label">តម្លៃ:</label>-->
+<!--                    <input type="text" id="sale_price_edit" name="sale_price" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
+<!--                </div>-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="currency_edit" class="category_label">រូបីយប័ណ្ណ:</label>-->
+<!--                    <input type="text" id="currency_edit" name="currency" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">-->
+<!--                </div>-->
+<!--                <div class="category_form-group">-->
+<!--                    <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>-->
+<!--                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>-->
+<!--                </div>-->
+<!--                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn">កែប្រែ</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
     <div class="product-page-redirect">

@@ -1,25 +1,25 @@
 package com.group.tks_store.product.category.controller;
 
-import com.group.tks_store.common.dto.ID;
-import com.group.tks_store.product.category.dto.CategoryListDTO;
-import com.group.tks_store.product.category.dto.CategoryUpdateDto;
+import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/rest/category")
 public class CategoryRestController {
 
-//    @Autowired
-//    private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-    //    @GetMapping("/list")
-//    public List<CategoryEntity> list() {
-//        return categoryService.list();
-//    }
+    @GetMapping("/list")
+    public List<CategoryEntity> list() {
+        return categoryService.list();
+    }
 //
 //    @PostMapping("/update")
 //    public void update(@RequestBody CategoryUpdateDto payloadRequest) {

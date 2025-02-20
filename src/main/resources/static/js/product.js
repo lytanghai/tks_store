@@ -23,6 +23,7 @@ function createNewProduct() {
         body: JSON.stringify(formData)
     })
     .then(data => {
+        clearCacheAndRefreshCategories();
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'create');
         location.reload();
@@ -43,6 +44,7 @@ function deleteProduct(element) {
         body: JSON.stringify({ id: productId })
     })
     .then(data => {
+         clearCacheAndRefreshCategories();
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'delete');
         location.reload();
@@ -76,6 +78,7 @@ function updateProduct(event) {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
+        clearCacheAndRefreshCategories();
     })
     .catch(error => {
         showPopUpMessage('error', 'update');
@@ -145,4 +148,61 @@ function clearStartDate() {
 function clearEndDate() {
     document.getElementById("productEndDate").value = "";
     filterResults();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchCategories();
+});
+
+
+function fetchCategories() {
+    const cachedData = localStorage.getItem("categories");
+    const cachedTimestamp = localStorage.getItem("categories_timestamp");
+
+    const currentTime = new Date().getTime();
+
+    if (cachedData && cachedTimestamp && (currentTime - cachedTimestamp < 3600000)) {
+        const categories = JSON.parse(cachedData);
+        populateCategoryDropdown(categories);
+    } else {
+        // Fetch data from the API and cache it
+        fetch("/rest/category/list")
+            .then(response => response.json())
+            .then(categories => {
+                // Cache the new data with the current timestamp
+                localStorage.setItem("categories", JSON.stringify(categories));
+                localStorage.setItem("categories_timestamp", currentTime);
+
+                populateCategoryDropdown(categories);
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+            });
+    }
+}
+
+function populateCategoryDropdown(categories) {
+
+    const categorySelect = document.getElementById("category_select");
+
+    categorySelect.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.text = "ជ្រើសរើសប្រភេទទំនិញ";
+    defaultOption.value = "";
+    categorySelect.appendChild(defaultOption);
+
+    categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category.id;
+        option.text = category.name + ' / ' + category.name_kh;
+        categorySelect.appendChild(option);
+    });
+}
+
+function clearCacheAndRefreshCategories() {
+    localStorage.removeItem("categories");
+    localStorage.removeItem("categories_timestamp");
+
+    fetchCategories();
 }

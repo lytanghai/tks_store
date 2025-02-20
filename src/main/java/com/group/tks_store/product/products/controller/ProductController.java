@@ -1,6 +1,9 @@
 package com.group.tks_store.product.products.controller;
 
 import com.group.tks_store.common.dto.ID;
+import com.group.tks_store.product.category.dto.CategoryDTO;
+import com.group.tks_store.product.category.entity.CategoryEntity;
+import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.products.dto.ProductCreateDTO;
 import com.group.tks_store.product.products.dto.ProductListDTO;
 import com.group.tks_store.product.products.dto.ProductUpdateDto;
@@ -14,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/product")
@@ -21,6 +26,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @PostMapping("/create")
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
@@ -39,6 +47,21 @@ public class ProductController {
         productService.update(productUpdateDto);
         System.out.println("1 UPDATED");
         return "redirect:/product";
+    }
+
+    @GetMapping("/api/categories")
+    @ResponseBody
+    public List<CategoryDTO> getCategories() {
+        List<CategoryDTO> list = new ArrayList<>();
+        List<CategoryEntity> listEntity = new ArrayList<>();
+
+        for(int i=0;i<listEntity.size();i++) {
+            CategoryDTO categoryDTO = new CategoryDTO();
+            categoryDTO.setId(listEntity.get(i).getId());
+            categoryDTO.setName(listEntity.get(i).getName());
+            list.set(i, categoryDTO);
+        }
+        return list;
     }
 
     @GetMapping("/list")

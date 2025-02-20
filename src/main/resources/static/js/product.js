@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function createNewProduct() {
     var nameEn = document.getElementById('name_en_edit').value;
     var nameKh = document.getElementById('name_kh_edit').value;
+    var code = document.getElementById('code_edit').value;
     var categoryId = document.getElementById('product_select').value;
     var salePrice = document.getElementById('sale_price_edit').value;
     var currency = document.getElementById('currency_edit').value;
@@ -13,6 +14,7 @@ function createNewProduct() {
     var formData = {
         name_en: nameEn,
         name_kh: nameKh,
+        code: code,
         category: { id: categoryId },
         sale_price: parseFloat(salePrice),
         currency: currency,
@@ -61,6 +63,7 @@ function updateProduct() {
         id: document.getElementById("id_edit").value,
         name_en: document.getElementById("name_en_edit").value,
         name_kh: document.getElementById("name_kh_edit").value,
+        code: document.getElementById("code_edit").value,
         currency: document.getElementById("currency_edit").value,
         sale_price: document.getElementById("sale_price_edit").value,
         description: document.getElementById("description_edit").value
@@ -89,6 +92,7 @@ function openUpdateProductModal(element) {
     let id = element.getAttribute("id");
     let nameEn = element.getAttribute("data-name-en");
     let nameKh = element.getAttribute("data-name-kh");
+    let code = element.getAttribute("data-code");
     let currency = element.getAttribute("data-currency");
     let salePrice = element.getAttribute("data-sale-price");
     let description = element.getAttribute("data-description");
@@ -111,6 +115,7 @@ function openUpdateProductModal(element) {
     document.getElementById("id_edit").value = id;
     document.getElementById("name_en_edit").value = nameEn;
     document.getElementById("name_kh_edit").value = nameKh;
+    document.getElementById("code_edit").value = code;
     document.getElementById("description_edit").value = description;
     document.getElementById("currency_edit").value = currency;
     document.getElementById("sale_price_edit").value = salePrice;

@@ -42,6 +42,7 @@ public class ProductService {
         product.setCategory(category);
         product.setNameEn(productCreateDTO.getNameEn());
         product.setNameKh(productCreateDTO.getNameKh());
+        product.setCode(productCreateDTO.getCode());
         product.setDescription(productCreateDTO.getDescription());
         product.setCurrency(productCreateDTO.getCurrency());
         product.setSalePrice(productCreateDTO.getSalePrice());
@@ -57,6 +58,7 @@ public class ProductService {
             existProduct.setCurrency(payloadRequest.getCurrency());
             existProduct.setNameEn(payloadRequest.getNameEn());
             existProduct.setNameKh(payloadRequest.getNameKh());
+            existProduct.setCode(payloadRequest.getCode());
             existProduct.setDescription(payloadRequest.getDescription());
             existProduct.setLastUpdatedAt(DateTimeUtil.convertDate(new Date()));
             this.productRepository.save(existProduct);
@@ -81,18 +83,19 @@ public class ProductService {
             Integer id = (Integer) result[0];
             String nameEn = (String) result[1];
             String nameKh = (String) result[2];
-            BigDecimal salePrice = (BigDecimal) result[3];
-            String currency = (String) result[4];
-            String description = (String) result[5];
-            String status = (String) result[6];
-            Date createdAt = (Date) result[7];
-            Date lastUpdatedAt = (Date) result[8];
-            String categoryName = (String) result[9];
-            String categoryNameKh = (String) result[10];
+            String code = (String) result[3];
+            BigDecimal salePrice = (BigDecimal) result[4];
+            String currency = (String) result[5];
+            String description = (String) result[6];
+            String status = (String) result[7];
+            Date createdAt = (Date) result[8];
+            Date lastUpdatedAt = (Date) result[9];
+            String categoryName = (String) result[10];
+            String categoryNameKh = (String) result[11];
 
             Double salePriceDouble = salePrice != null ? salePrice.doubleValue() : null;
 
-            return new ProductListDTO(id, nameEn, nameKh, salePriceDouble, currency, description, status, createdAt, lastUpdatedAt, categoryName, categoryNameKh);
+            return new ProductListDTO(id, nameEn, nameKh, code, salePriceDouble, currency, description, status, createdAt, lastUpdatedAt, categoryName, categoryNameKh);
         });
     }
 

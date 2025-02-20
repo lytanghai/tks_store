@@ -6,6 +6,7 @@ public class ProductListDTO {
     private Integer id;
     private String nameEn;
     private String nameKh;
+    private String code;
     private Double salePrice;
     private String currency;
     private String description;
@@ -15,10 +16,11 @@ public class ProductListDTO {
     private String categoryNameEn;
     private String categoryNameKh;
 
-    public ProductListDTO(Integer id, String nameEn, String nameKh, Double salePrice, String currency, String description, String status, Date createdAt, Date lastUpdatedAt, String categoryNameEn, String categoryNameKh) {
+    public ProductListDTO(Integer id, String nameEn, String nameKh, String code, Double salePrice, String currency, String description, String status, Date createdAt, Date lastUpdatedAt, String categoryNameEn, String categoryNameKh) {
         this.id = id;
         this.nameEn = nameEn;
         this.nameKh = nameKh;
+        this.code = code;
         this.salePrice = salePrice;
         this.currency = currency;
         this.description = description;
@@ -27,6 +29,14 @@ public class ProductListDTO {
         this.lastUpdatedAt = lastUpdatedAt;
         this.categoryNameEn = categoryNameEn;
         this.categoryNameKh = categoryNameKh;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Integer getId() {

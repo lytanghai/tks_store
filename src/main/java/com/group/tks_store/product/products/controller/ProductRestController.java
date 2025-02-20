@@ -1,7 +1,5 @@
 package com.group.tks_store.product.products.controller;
 
-import com.group.tks_store.product.category.entity.CategoryEntity;
-import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.products.dto.ProductCreateDTO;
 import com.group.tks_store.product.products.dto.ProductListDTO;
 import com.group.tks_store.product.products.entity.ProductEntity;

@@ -78,13 +78,13 @@
         <label for="categoryStartDate">ចាប់ពី:</label>
         <div class="filter-date-container">
             <input type="date" id="categoryStartDate" onchange="filterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearStartDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearCategoryStartDate()">&#10005;</button>
         </div>
 
         <label for="categoryEndDate">រហូតដល់:</label>
         <div class="filter-date-container">
             <input type="date" id="categoryEndDate" onchange="filterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearEndDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearCategoryEndDate()">&#10005;</button>
         </div>
     </div>
 
@@ -112,7 +112,6 @@
             </form>
         </div>
     </div>
-
     <div class="page-redirect">
         <div th:if="${total_records < 0}">
             <p>Page: <span>0</span> of <span th:text="${total_pages}"></span></p>
@@ -127,7 +126,6 @@
                 </div>
             </div>
     </div>
-
     <div class="page-number">
         <div th:if="${current_page == 0}" class="category-list-prev">
             <a href="#" class="category-redirect-href"><</a>
@@ -141,8 +139,6 @@
             <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href"> > </a>
         </div>
     </div>
-
  </div>
-
 </div>
 

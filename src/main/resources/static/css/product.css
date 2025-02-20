@@ -152,3 +152,27 @@
     margin: 4px;
     text-align: left;
 }
+
+#product-create-container {
+    position: fixed;
+    top: 9%;
+    right: 1%;
+}
+.product-create-btn{
+    width: 100px;
+    height: 50px;
+    background-color: #e28743;
+    cursor: pointer;
+    border-radius: 6px;
+    border-color: transparent;
+}
+
+#product-confirm-modal-header{
+    display: inline-flex;
+    width: 10%;
+    margin-right: 80px;
+
+}
+#product-confirm-modal-header div , #product-confirm-modal-header h2{
+    flex: 1;
+}

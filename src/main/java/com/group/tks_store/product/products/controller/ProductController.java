@@ -6,6 +6,7 @@ import com.group.tks_store.product.products.dto.ProductListDTO;
 import com.group.tks_store.product.products.dto.ProductUpdateDto;
 import com.group.tks_store.product.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -41,22 +42,33 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String redirect2Category(Model model, @RequestParam(name = "page", defaultValue = "0") Integer pageNumber) {
+    public String getActiveProducts(@RequestParam(name = "page", defaultValue = "0") Integer pageNumber,
+                                    @RequestParam(name = "size", defaultValue = "10") Integer pageSize,
+                                    @RequestParam(name = "sort", defaultValue = "id") String sortBy,
+                                    @RequestParam(name = "direction", defaultValue = "DESC") String sortDirection,
+                                    Model model) {
 
-        ProductListDTO result = productService.findAllByPagination("ACTIVE", PageRequest.of(pageNumber, 10, Sort.Direction.DESC, "id"));
+        Page<ProductListDTO> productPage = productService.getActiveProducts(
+                PageRequest.of(
+                        pageNumber,
+                        pageSize,
+                        Sort.by(Sort.Direction.fromString(sortDirection),
+                        sortBy))
+        );
 
         model.addAttribute("page_type_en", "product");
         model.addAttribute("page_type_kh", "ផលិតផល");
-        model.addAttribute("content", result.getRecords());
-        model.addAttribute("total_records", result.getRecords().size());
-        model.addAttribute("total_pages", result.getTotalPages());
-        model.addAttribute("current_page", result.getPageNumber());
-        model.addAttribute("sort_by", result.getSortBy());
-        model.addAttribute("sort_direction", result.getSortDirection());
-        model.addAttribute("first", result.getFirst());
-        model.addAttribute("last", result.getLast());
+        model.addAttribute("content", productPage.getContent());
+        model.addAttribute("total_records", productPage.getTotalElements());
+        model.addAttribute("total_pages", productPage.getTotalPages());
+        model.addAttribute("current_page", productPage.getNumber());
+        model.addAttribute("sort_by", sortBy);
+        model.addAttribute("sort_direction", sortDirection);
+        model.addAttribute("first", productPage.isFirst());
+        model.addAttribute("last", productPage.isLast());
 
         return "home";
     }
+
 
 }

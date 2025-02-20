@@ -61,7 +61,6 @@ function updateProduct(event) {
         name_kh: document.getElementById("name_kh_edit").value,
         currency: document.getElementById("currency_edit").value,
         sale_price: document.getElementById("sale_price_edit").value,
-        category_id: document.getElementById("category_id_edit").value,
         description: document.getElementById("description_edit").value
     };
 
@@ -109,14 +108,13 @@ function closeCreateProductModal() {
 
 function productFilterResults() {
     let searchValue = document.getElementById("search_input_product").value.toLowerCase();
-
     let startDate = document.getElementById("productStartDate").value;
     let endDate = document.getElementById("productEndDate").value;
     let rows = document.querySelectorAll("#productTable tr");
 
     rows.forEach(row => {
         let rowText = row.textContent.toLowerCase();
-        let rowDate = row.cells[5].textContent.trim();
+        let rowDate = row.cells[6].textContent.trim();
         let showRow = rowText.includes(searchValue);
 
         let rowDateTime = new Date(rowDate);

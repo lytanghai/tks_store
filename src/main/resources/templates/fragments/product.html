@@ -29,7 +29,8 @@
     <table class="product_table_list_container">
         <thead>
         <tr>
-            <th class="product_th">លេខរៀង</th>
+<!--            <th class="product_th">លេខរៀង</th>-->
+            <th class="product_th">លេខកូដ</th>
             <th class="product_th">ឈ្មោះទំនិញ</th>
             <th class="product_th">ប្រភេទទំនិញ</th>
             <th class="product_th">តម្លៃ</th>
@@ -42,7 +43,8 @@
         <tbody id="productTable">
         <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <div th:if="${content != null}">
-                <td class="product_td" th:text="${row.id}"></td>
+<!--                <td class="product_td" th:text="${row.id}"></td>-->
+                <td class="product_td" th:text="${row.code}"></td>
                 <td class="product_td" th:text="${row.nameEn + ' (' + row.nameKh +')'}"></td>
                 <td class="product_td" th:text="${row.categoryNameEn + ' (' + row.categoryNameKh +')'}"></td>
                 <td class="product_td" th:text="${row.salePrice + ' ' + row.currency}"></td>
@@ -61,7 +63,9 @@
                         <li> <span>|</span> </li>
                         &nbsp;
                         <li>
-                            <a th:id="${row.id}"
+                            <a
+                               th:id="${row.id}"
+                               th:data-code="${row.code}"
                                th:data-name-en="${row.nameEn}"
                                th:data-name-kh="${row.nameKh}"
                                th:data-sale-price="${row.salePrice}"
@@ -101,6 +105,10 @@
                 <div class="general-form-group">
                     <label for="name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
                     <input type="text" id="name_kh_edit" name="name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
+                </div>
+                <div class="general-form-group">
+                    <label for="code_edit" class="general_label">លេខកូដ:</label>
+                    <input type="text" id="code_edit" name="code" class="general_input" placeholder="លេខកូដ">
                 </div>
                 <div class="product-info-ipt">
                     <div class="general-form-group flex-item">

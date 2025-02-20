@@ -153,6 +153,12 @@
     text-align: left;
 }
 
+#product-edit-btn {
+    position:fixed;
+    right:27%;
+    width:75px;
+}
+
 #product-create-container {
     position: fixed;
     top: 9%;

@@ -85,36 +85,36 @@
         <div class="product-create-modal-content">
             <span class="close" onclick="closeUpdateProductModal()">X</span>
             <div class="service-type-title">
-                <img class="icon-service-type" src="/icon/category-icon.png">
+                <img class="icon-service-type">
                 <h2 id="form-modal-product-title">create</h2>
             </div>
 
             <form id="popupForm" class="pop-up" onsubmit="handleFormSubmit(event)">
-                <div class="category_form-group">
-                    <label for="id_edit" class="category_label">លេខរៀង:</label>
-                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
+                <div class="general-form-group">
+                    <label for="id_edit" class="general_label">លេខរៀង:</label>
+                    <input type="text" id="id_edit" name="id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
                 </div>
-                <div class="category_form-group">
-                    <label for="name_en_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                    <input type="text" id="name_en_edit" name="name_en" class="category_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
+                <div class="general-form-group">
+                    <label for="name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                    <input type="text" id="name_en_edit" name="name_en" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
                 </div>
-                <div class="category_form-group">
-                    <label for="name_kh_edit" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
+                <div class="general-form-group">
+                    <label for="name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <input type="text" id="name_kh_edit" name="name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
                 </div>
                 <div class="product-info-ipt">
-                    <div class="category_form-group flex-item">
+                    <div class="general-form-group flex-item">
                         <div style="margin-top: 3px"></div>
-                        <label for="category_select" class="category_label">ប្រភេទទំនិញ:</label>
-                        <select id="category_select" name="category_id" class="category_input" style="padding: 2px;">
+                        <label for="product_select" class="general_label">ប្រភេទទំនិញ:</label>
+                        <select id="product_select" name="product_id" class="general_input" style="padding: 2px;">
                         </select>
                     </div>
-                    <div class="category_form-group flex-item">
-                        <label for="sale_price_edit" class="category_label product-price-ipt">តម្លៃ:</label>
+                    <div class="general-form-group flex-item">
+                        <label for="sale_price_edit" class="general_label product-price-ipt">តម្លៃ:</label>
                         <input type="text" id="sale_price_edit" name="sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                     </div>
 
-                    <div class="category_form-group flex-item">
+                    <div class="general-form-group flex-item">
                         <label for="currency_edit">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
                         <div style="margin-top: 8px"></div>
                         <select name="currency_edit" id="currency_edit" style="padding: 2px;">
@@ -125,11 +125,11 @@
                     </div>
                 </div>
 
-                <div class="category_form-group">
-                    <label for="description_edit" class="category_label">ពត៍មានបន្ថែម:</label>
-                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea"></textarea>
+                <div class="general-form-group">
+                    <label for="description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
+                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
                 </div>
-                <button type="submit" class="update_button" style="margin-right: 3%;" id="category-edit-btn"></button>
+                <button type="submit" class="update_button" style="margin-right: 3%;" id="product-edit-btn"></button>
             </form>
         </div>
     </div>

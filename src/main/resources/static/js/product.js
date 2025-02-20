@@ -194,8 +194,8 @@ function populateCategoryDropdown(categories) {
 }
 
 function showConfirmationModal(action, id) {
-    document.getElementById("confirmation-modal").style.display = "block";
-    const modalText = document.getElementById("confirm-modal-text");
+    document.getElementById("product-confirmation-modal").style.display = "block";
+    const modalText = document.getElementById("product-confirm-modal-text");
     if (action === 'create') {
 //        modalText.textContent = 'Are you sure you want to create a new product?';
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលផលិតផលថ្មីមែនទេ?';
@@ -210,7 +210,7 @@ function showConfirmationModal(action, id) {
     window.productId = id;
 }
 function closeConfirmationModal() {
-    document.getElementById("confirmation-modal").style.display = "none";
+    document.getElementById("product-confirmation-modal").style.display = "none";
 }
 
 function confirmProductActionConfirmation() {

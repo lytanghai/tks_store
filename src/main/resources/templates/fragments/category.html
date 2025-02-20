@@ -5,7 +5,7 @@
             <img th:src="@{/icon/category-icon.png}" class="icon-service-type" alt="category-icon.png">
             <h2> ប្រភេទទំនិញ</h2>
         </div>
-        <form id="createCategory">
+        <form id="createCategory" onsubmit="handleCategoryFormSubmit(event)">
             <div class="general-form-group">
                 <label for="name" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
                 <input type="text" id="name" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
@@ -18,7 +18,7 @@
                 <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
                 <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
             </div>
-            <button type="submit" onclick="createNewCategory()" class="update_button">បញ្ជូល</button>
+            <button type="submit" class="update_button" style="margin-right: 3%;">បញ្ជូល</button>
         </form>
     </div>
 
@@ -46,7 +46,7 @@
                 <td class="category_td">
                     <ul class="category-action">
                         <li>
-                            <a th:id="${row.id}" th:href="'#'" onclick="deleteCategory(this)">
+                            <a th:id="${row.id}" th:href="'#'" th:onclick="'showCategoryConfirmationModal(\'delete\', ' + ${row.id} + ')'">
                                 <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
                                 <span th:text="លុប"></span>
                             </a>
@@ -59,8 +59,9 @@
                                th:data-name="${row.name}"
                                th:data-name-kh="${row.nameKh}"
                                th:data-description="${row.description}"
+                               th:data-form-title="'Update'"
                                th:href="'#'"
-                               onclick="openCreateCategoryModal(this)">
+                               onclick="openUpdateCategoryModal(this)">
                                 <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -91,7 +92,13 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeCreateCategoryModal()">X</span>
-            <form id="popupForm" class="pop-up" onsubmit="updateCategory(event)">
+            <div class="service-type-title">
+                <img class="icon-service-type" src="/icon/edit.png">
+                <h2 id="form-modal-category-title"></h2>
+            </div>
+
+            <form id="popupForm" class="pop-up" onsubmit="handleCategoryFormSubmit(event)">
+                <span style="margin-top: -15%;"></span>
                 <div class="general-form-group">
                     <label for="id_edit" class="general_label">លេខរៀង:</label>
                     <input type="text" id="id_edit" name="id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
@@ -112,6 +119,22 @@
             </form>
         </div>
     </div>
+
+    <div id="category-confirmation-modal" class="confirm-modal" style="z-index:999">
+        <div class="confirm-modal-content">
+            <span class="close-confirm-modal" onclick="closeConfirmationCategoryModal()">&times;</span>
+            <div id="category-confirm-modal-header">
+                <img th:src="@{/icon/exclamation-mark.png}"class="flex-item" alt="exclamation-mark.png" style="width: 40px; margin-left: 10%;">
+                <h2 class="flex-item">សំខាន់</h2>
+            </div>
+            <p id="category-confirm-modal-text">Do you want to proceed with this action?</p>
+            <div class="modal-actions">
+                <button class="confirm-cancel-btn" onclick="closeConfirmationCategoryModal()">ទេ</button>
+                <button class="confirm-btn" onclick="confirmCategoryActionConfirmation()">បាទ/ចាស់</button>
+            </div>
+        </div>
+    </div>
+
     <div class="page-redirect">
         <div th:if="${total_records < 0}">
             <p>Page: <span>0</span> of <span th:text="${total_pages}"></span></p>

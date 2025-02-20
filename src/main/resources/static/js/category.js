@@ -30,15 +30,14 @@ function createNewCategory() {
     })
 }
 
-function deleteCategory(element) {
-    var categoryId = element.id;
+function deleteCategory(id) {
 
     fetch('/category/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: categoryId })
+        body: JSON.stringify({ id: id })
     })
     .then(data => {
         sessionStorage.setItem('popupMessage', 'success');
@@ -50,8 +49,7 @@ function deleteCategory(element) {
     });
 }
 
-function updateCategory(event) {
-    event.preventDefault();
+function updateCategory() {
 
     let formData = {
         id: document.getElementById("id_edit").value,
@@ -137,4 +135,73 @@ function clearCategoryStartDate() {
 function clearCategoryEndDate() {
     document.getElementById("categoryEndDate").value = "";
     filterResults();
+}
+
+function openUpdateCategoryModal(element) {
+
+    let id = element.getAttribute("id");
+    let name = element.getAttribute("data-name");
+    let nameKh = element.getAttribute("data-name-kh");
+    let description = element.getAttribute("data-description");
+
+    var iconElement = document.querySelector(".icon-service-type");
+    var formTitle = element.getAttribute("data-form-title");
+
+    if(formTitle === 'Create') {
+        document.getElementById("form-modal-category-title").textContent = 'បញ្ជូលប្រភេទទំនិញថ្មី';
+        document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
+        iconElement.src = "/icon/new-product-icon.png";
+        iconElement.alt = "new-product-icon.png";
+    } else if(formTitle == 'Update') {
+        document.getElementById("form-modal-category-title").textContent = 'កែប្រែទិន្ន័យប្រភេទផលិតផលចាស់';
+        document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
+        iconElement.src = "/icon/edit-product-icon.png";
+        iconElement.alt = "edit-product-icon.png";
+    }
+
+    document.getElementById("id_edit").value = id;
+    document.getElementById("name_edit").value = name;
+    document.getElementById("name_kh_edit").value = nameKh;
+    document.getElementById("description_edit").value = description;
+    document.getElementById("myModal").style.display = "block";
+}
+
+function showCategoryConfirmationModal(action, id) {
+    document.getElementById("category-confirmation-modal").style.display = "block";
+    const modalText = document.getElementById("category-confirm-modal-text");
+    if (action === 'create') {
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលប្រភេទផលិតផលថ្មីមែនទេ?';
+    } else if (action === 'update') {
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការកែប្រែប្រភេទផលិតផលនេះទេ?';
+    } else if (action === 'delete') {
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការលុបប្រភេទផលិតផលនេះទេ?';
+    }
+    window.currentAction = action;
+    window.categoryId = id;
+}
+
+function closeConfirmationCategoryModal() {
+    document.getElementById("category-confirmation-modal").style.display = "none";
+}
+
+function confirmCategoryActionConfirmation() {
+    if (window.currentAction === 'create') {
+        createNewCategory();
+    } else if (window.currentAction === 'update') {
+        updateCategory();
+    } else if (window.currentAction === 'delete') {
+        deleteCategory(window.categoryId);
+    }
+    updateServiceIcon();
+    closeConfirmationCategoryModal();
+}
+
+function handleCategoryFormSubmit(event) {
+    event.preventDefault();
+    const titleText = document.getElementById("form-modal-category-title").textContent.toLowerCase();
+    if(titleText.includes("បញ្ជូលប្រភេទទំនិញថ្មី")) {
+        showCategoryConfirmationModal('create');
+    } else {
+        showCategoryConfirmationModal('update');
+    }
 }

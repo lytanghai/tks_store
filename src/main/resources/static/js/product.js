@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function createNewProduct() {
     var nameEn = document.getElementById('name_en_edit').value;
     var nameKh = document.getElementById('name_kh_edit').value;
-    var categoryId = document.getElementById('category_select').value;
+    var categoryId = document.getElementById('product_select').value;
     var salePrice = document.getElementById('sale_price_edit').value;
     var currency = document.getElementById('currency_edit').value;
     var description = document.getElementById('description_edit').value;
@@ -98,12 +98,12 @@ function openUpdateProductModal(element) {
 
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បញ្ជូលផលិតថ្មី';
-        document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
+        document.getElementById("product-edit-btn").textContent = 'បញ្ជូល';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
     } else if(formTitle == 'Update') {
         document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
-        document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
+        document.getElementById("product-edit-btn").textContent = 'កែប្រែ';
         iconElement.src = "/icon/edit-product-icon.png";
         iconElement.alt = "edit-product-icon.png";
     }
@@ -166,8 +166,6 @@ function fetchCategories() {
     fetch("/rest/category/list")
         .then(response => response.json())
         .then(categories => {
-            localStorage.setItem("categories", JSON.stringify(categories));
-            localStorage.setItem("categories_timestamp", currentTime);
 
             populateCategoryDropdown(categories);
         })
@@ -178,7 +176,7 @@ function fetchCategories() {
 
 function populateCategoryDropdown(categories) {
 
-    const categorySelect = document.getElementById("category_select");
+    const categorySelect = document.getElementById("product_select");
 
     categorySelect.innerHTML = "";
 

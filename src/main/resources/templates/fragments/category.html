@@ -6,17 +6,17 @@
             <h2> ប្រភេទទំនិញ</h2>
         </div>
         <form id="createCategory">
-            <div class="category_form-group">
-                <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                <input type="text" id="name" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+            <div class="general-form-group">
+                <label for="name" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                <input type="text" id="name" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
             </div>
-            <div class="category_form-group">
-                <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                <input type="text" id="name_kh" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+            <div class="general-form-group">
+                <label for="name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                <input type="text" id="name_kh" name="name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
             </div>
-            <div class="category_form-group">
-                <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
-                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+            <div class="general-form-group">
+                <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
+                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
             </div>
             <button type="submit" onclick="createNewCategory()" class="update_button">បញ្ជូល</button>
         </form>
@@ -92,21 +92,21 @@
         <div class="modal-content">
             <span class="close" onclick="closeCreateCategoryModal()">X</span>
             <form id="popupForm" class="pop-up" onsubmit="updateCategory(event)">
-                <div class="category_form-group">
-                    <label for="id_edit" class="category_label">លេខរៀង:</label>
-                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
+                <div class="general-form-group">
+                    <label for="id_edit" class="general_label">លេខរៀង:</label>
+                    <input type="text" id="id_edit" name="id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
                 </div>
-                <div class="category_form-group">
-                    <label for="name_edit" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                    <input type="text" id="name_edit" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+                <div class="general-form-group">
+                    <label for="name_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                    <input type="text" id="name_edit" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
                 </div>
-                <div class="category_form-group">
-                    <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                <div class="general-form-group">
+                    <label for="name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <input type="text" id="name_kh_edit" name="name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
-                <div class="category_form-group">
-                    <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
-                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+                <div class="general-form-group">
+                    <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
+                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
                 </div>
                 <button type="submit" class="update_button" id="category-edit-btn">កែប្រែ</button>
             </form>

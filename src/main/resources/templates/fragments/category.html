@@ -6,19 +6,19 @@
             <h2> ប្រភេទទំនិញ</h2>
         </div>
         <form id="createCategory">
-            <div class="category_form-group">
-                <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                <input type="text" id="name" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+            <div class="general-form-group">
+                <label for="name" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                <input type="text" id="name" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
             </div>
-            <div class="category_form-group">
-                <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                <input type="text" id="name_kh" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+            <div class="general-form-group">
+                <label for="name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                <input type="text" id="name_kh" name="name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
             </div>
-            <div class="category_form-group">
-                <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
-                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+            <div class="general-form-group">
+                <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
+                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
             </div>
-            <button type="submit" onclick="createNewCategory()" class="category_button">បញ្ជូល</button>
+            <button type="submit" onclick="createNewCategory()" class="update_button">បញ្ជូល</button>
         </form>
     </div>
 
@@ -78,42 +78,40 @@
         <label for="categoryStartDate">ចាប់ពី:</label>
         <div class="filter-date-container">
             <input type="date" id="categoryStartDate" onchange="filterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearStartDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearCategoryStartDate()">&#10005;</button>
         </div>
 
         <label for="categoryEndDate">រហូតដល់:</label>
         <div class="filter-date-container">
             <input type="date" id="categoryEndDate" onchange="filterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearEndDate()">&#10005;</button>
+            <button type="button" class="clear-btn" onclick="clearCategoryEndDate()">&#10005;</button>
         </div>
-
     </div>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeCreateCategoryModal()">X</span>
             <form id="popupForm" class="pop-up" onsubmit="updateCategory(event)">
-                <div class="category_form-group">
-                    <label for="name" class="category_label">លេខរៀង:</label>
-                    <input type="text" id="id_edit" name="id" class="category_input ready-only-field" placeholder="លេខរៀង" readonly>
+                <div class="general-form-group">
+                    <label for="id_edit" class="general_label">លេខរៀង:</label>
+                    <input type="text" id="id_edit" name="id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
                 </div>
-                <div class="category_form-group">
-                    <label for="name" class="category_label">ឈ្មោះ(អង់គ្លេស):</label>
-                    <input type="text" id="name_edit" name="name" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+                <div class="general-form-group">
+                    <label for="name_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                    <input type="text" id="name_edit" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
                 </div>
-                <div class="category_form-group">
-                    <label for="name_kh" class="category_label">ឈ្មោះ(ខ្មែរ):</label>
-                    <input type="text" id="name_kh_edit" name="name_kh" class="category_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                <div class="general-form-group">
+                    <label for="name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                    <input type="text" id="name_kh_edit" name="name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
                 </div>
-                <div class="category_form-group">
-                    <label for="description" class="category_label">ពត៍មានបន្ថែម:</label>
-                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="category_textarea" ></textarea>
+                <div class="general-form-group">
+                    <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
+                    <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
                 </div>
-                <button type="submit" class="category_button" id="category-edit-btn">កែប្រែ</button>
+                <button type="submit" class="update_button" id="category-edit-btn">កែប្រែ</button>
             </form>
         </div>
     </div>
-
     <div class="page-redirect">
         <div th:if="${total_records < 0}">
             <p>Page: <span>0</span> of <span th:text="${total_pages}"></span></p>
@@ -128,7 +126,6 @@
                 </div>
             </div>
     </div>
-
     <div class="page-number">
         <div th:if="${current_page == 0}" class="category-list-prev">
             <a href="#" class="category-redirect-href"><</a>

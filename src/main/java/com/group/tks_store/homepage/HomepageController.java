@@ -19,7 +19,7 @@ public class HomepageController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("page_type_kh", "ទំព័រដើម");
-        model.addAttribute("page_type_en", "product");
+        model.addAttribute("page_type_en", "home");
         return "home";
     }
 
@@ -28,6 +28,13 @@ public class HomepageController {
         model.addAttribute("page_type_kh", "ទំព័រដើម");
         model.addAttribute("page_type_en", "product");
         return "index";
+    }
+
+    @GetMapping("/test")
+    public String test(Model model) {
+        model.addAttribute("page_type_kh", "ទំព័រដើម");
+        model.addAttribute("page_type_en", "product");
+        return "test";
     }
 
 }

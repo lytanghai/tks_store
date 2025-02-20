@@ -1,30 +1,38 @@
-package com.group.tks_store.product.category.entity;
+package com.group.tks_store.product.products.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.group.tks_store.product.products.entity.ProductEntity;
+import com.group.tks_store.product.category.entity.CategoryEntity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "category")
+@Table(name = "product")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CategoryEntity {
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name_en", nullable = false)
+    private String nameEn;
 
-    @Column(name = "name_kh")
-    @JsonProperty("name_kh")
+    @Column(name = "name_kh", nullable = false)
     private String nameKh;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
+    @JsonBackReference
+    private CategoryEntity category;
+
+    @Column(name = "sale_price")
+    private Double salePrice;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "description")
     private String description;
@@ -33,16 +41,21 @@ public class CategoryEntity {
     private String status;
 
     @Column(name = "created_at")
-    @JsonProperty("created_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(name = "last_updated_at")
-    @JsonProperty("last_updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedAt;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<ProductEntity> products;
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
 
     public Integer getId() {
         return id;
@@ -52,12 +65,12 @@ public class CategoryEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEn() {
+        return nameEn;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
     }
 
     public String getNameKh() {
@@ -66,6 +79,22 @@ public class CategoryEntity {
 
     public void setNameKh(String nameKh) {
         this.nameKh = nameKh;
+    }
+
+    public Double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(Double salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getDescription() {

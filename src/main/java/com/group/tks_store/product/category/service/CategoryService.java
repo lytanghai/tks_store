@@ -27,8 +27,13 @@ import java.util.Objects;
 public class CategoryService {
 
     private final Logger log = LoggerFactory.getLogger(CategoryService.class);
+
     @Autowired
     private CategoryRepository categoryRepository;
+
+    public List<CategoryEntity> getAllCategories() {
+        return categoryRepository.findAll();
+    }
 
     public void create(CategoryCreateDTO payloadRequest) throws ParseException {
         CategoryEntity category = new CategoryEntity();

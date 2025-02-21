@@ -78,6 +78,7 @@ function updateCategory() {
 }
 
 function openCreateCategoryModal(element) {
+    alert('openCreateCategoryModal:: ' + globalAction)
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
     let nameKh = element.getAttribute("data-name-kh");
@@ -89,7 +90,6 @@ function openCreateCategoryModal(element) {
     document.getElementById("description_edit").value = description;
 
 }
-
 
 function filterResults() {
     let searchValue = document.getElementById("search_input_category").value.toLowerCase();
@@ -133,6 +133,7 @@ function clearCategoryEndDate() {
 }
 
 function openCreateCategoryModal(element) {
+    alert('openCreateCategoryModal:: ' + globalAction)
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
     let nameKh = element.getAttribute("data-name-kh");
@@ -178,6 +179,17 @@ function openCreateCategoryModal(element) {
 }
 
 function resetToCreateMode(element) {
+    globalAction = 'Create';
+    alert('resetToCreateMode:: ' + globalAction)
+
+    let allElements = document.querySelectorAll('.category-edit-href');
+    // Re-enable clicking on all elements
+    allElements.forEach(function(el) {
+        el.style.pointerEvents = 'auto'; // Re-enable clicking
+        el.style.cursor = 'pointer'; // Change the cursor back to 'pointer'
+    });
+    document.getElementById("createCategory").reset();
+
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
     let spanElement = element.querySelector("span");
@@ -207,6 +219,21 @@ function resetToCreateMode(element) {
 
 function openUpdateCategoryModal(element) {
     globalAction = 'Update';
+
+    element.style.pointerEvents = 'none'; // Disable clicking
+    element.style.cursor = 'not-allowed'; // Change the cursor to 'not-allowed'
+
+        // Disable clicking on all other elements with the same class
+        let allElements = document.querySelectorAll('.category-edit-href');
+        allElements.forEach(function(el) {
+            if (el !== element) {
+                el.style.pointerEvents = 'none'; // Disable clicking
+                el.style.cursor = 'not-allowed'; // Change the cursor to 'not-allowed'
+            }
+        });
+
+    alert('openUpdateCategoryModal:: ' + globalAction);
+
 
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
@@ -249,24 +276,28 @@ function openUpdateCategoryModal(element) {
 }
 
 function showCategoryConfirmationModal(action, id) {
+    alert('showCategoryConfirmationModal:: ' + globalAction);
     document.getElementById("category-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("category-confirm-modal-text");
     if (action === 'create') {
-        modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលប្រភេទផលិតផលថ្មីមែនទេ?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលប្រភេទទំនិញថ្មីមែនទេ?';
     } else if (action === 'update') {
-        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការកែប្រែប្រភេទផលិតផលនេះទេ?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការកែប្រែប្រភេទទំនិញនេះទេ?';
     } else if (action === 'delete') {
-        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការលុបប្រភេទផលិតផលនេះទេ?';
+        modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការលុបប្រភេទទំនិញនេះទេ?';
     }
     window.currentAction = action;
     window.categoryId = id;
 }
 
 function closeConfirmationCategoryModal() {
+    alert('closeConfirmationCategoryModal:: ' + globalAction);
     document.getElementById("category-confirmation-modal").style.display = "none";
 }
 
 function confirmCategoryActionConfirmation() {
+    alert('confirmCategoryActionConfirmation:: ' + globalAction);
+
     if (window.currentAction === 'create') {
         createNewCategory();
     } else if (window.currentAction === 'update') {
@@ -279,6 +310,8 @@ function confirmCategoryActionConfirmation() {
 }
 
 function handleCategoryFormSubmit(event) {
+    alert('handleCategoryFormSubmit:: ' + globalAction);
+
     event.preventDefault();
     if(globalAction === 'Create') {
         showCategoryConfirmationModal('create');

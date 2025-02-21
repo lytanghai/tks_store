@@ -1,6 +1,7 @@
 window.addEventListener('load', function() {
-    closeCreateCategoryModal();
 })
+
+let globalAction = 'Create';
 
 function createNewCategory() {
     var name = document.getElementById('name').value;
@@ -52,10 +53,10 @@ function deleteCategory(id) {
 function updateCategory() {
 
     let formData = {
-        id: document.getElementById("id_edit").value,
-        name: document.getElementById("name_edit").value,
-        name_kh: document.getElementById("name_kh_edit").value,
-        description: document.getElementById("description_edit").value
+        id: document.getElementById("id").value,
+        name: document.getElementById("name").value,
+        name_kh: document.getElementById("name_kh").value,
+        description: document.getElementById("description").value
     };
 
     fetch('/category/update', {
@@ -67,7 +68,6 @@ function updateCategory() {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById("myModal").style.display = "none";
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
@@ -78,7 +78,6 @@ function updateCategory() {
 }
 
 function openCreateCategoryModal(element) {
-
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
     let nameKh = element.getAttribute("data-name-kh");
@@ -89,12 +88,8 @@ function openCreateCategoryModal(element) {
     document.getElementById("name_kh_edit").value = nameKh;
     document.getElementById("description_edit").value = description;
 
-    document.getElementById("myModal").style.display = "block";
 }
 
-function closeCreateCategoryModal() {
-    document.getElementById("myModal").style.display = "none";
-}
 
 function filterResults() {
     let searchValue = document.getElementById("search_input_category").value.toLowerCase();
@@ -137,7 +132,81 @@ function clearCategoryEndDate() {
     filterResults();
 }
 
+function openCreateCategoryModal(element) {
+    let id = element.getAttribute("id");
+    let name = element.getAttribute("data-name");
+    let nameKh = element.getAttribute("data-name-kh");
+    let description = element.getAttribute("data-description");
+
+    var iconElement = document.querySelector(".icon-service-type");
+    var formTitle = element.getAttribute("data-form-title");
+
+    let spanElement = element.querySelector("span");
+    let newTitle;
+    if(formTitle === 'Create') {
+        document.getElementById('categoryIdFieldGroup').style.display = 'block';
+        document.getElementById("category-back").style.display = 'none';
+        document.getElementById("form-modal-category-title").textContent = 'បញ្ជូលប្រភេទទំនិញថ្មី';
+        document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
+        iconElement.src = "/icon/new-product-icon.png";
+        iconElement.alt = "new-product-icon.png";
+        newTitle = "Update";
+        element.setAttribute("data-form-title", "Update"); // Change the value
+        document.getElementById("id").value = '';
+        document.getElementById("name").value = '';
+        document.getElementById("name_kh").value = '';
+        document.getElementById("description").value = '';
+        spanElement.textContent = "កែ";
+        globalAction = 'Create';
+
+    } else if(formTitle == 'Update') {
+        document.getElementById('categoryIdFieldGroup').style.display = 'block';
+        document.getElementById("form-modal-category-title").textContent = 'កែប្រែប្រភេទទំនិញចាស់';
+        document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
+        iconElement.src = "/icon/edit-product-icon.png";
+        iconElement.alt = "edit-product-icon.png";
+        newTitle = "Create";
+        element.setAttribute("data-form-title", "Create");
+        document.getElementById("id").value = id;
+        document.getElementById("name").value = name;
+        document.getElementById("name_kh").value = nameKh;
+        document.getElementById("description").value = description;
+        document.getElementById("category-back").style.display = 'block';
+        element.setAttribute("data-form-title", newTitle);
+        globalAction = 'Update';
+    }
+}
+
+function resetToCreateMode(element) {
+    var iconElement = document.querySelector(".icon-service-type");
+    var formTitle = element.getAttribute("data-form-title");
+    let spanElement = element.querySelector("span");
+    globalAction = formTitle;
+    let newTitle;
+    if(formTitle === 'Create') {
+        document.getElementById('categoryIdFieldGroup').style.display = 'block';
+        document.getElementById("category-back").style.display = 'none';
+        document.getElementById("id").style.display = 'none';
+        document.getElementById("category-form-ipt-id").style.display = 'none';
+        document.getElementById("form-modal-category-title").textContent = 'បញ្ជូលប្រភេទទំនិញថ្មី';
+        document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
+        iconElement.src = "/icon/new-product-icon.png";
+        iconElement.alt = "new-product-icon.png";
+        newTitle = "Update";
+        element.setAttribute("data-form-title", "Update");
+        document.getElementById("id").value = '';
+        document.getElementById("name").value = '';
+        document.getElementById("name_kh").value = '';
+        document.getElementById("description").value = '';
+        spanElement.textContent = "កែ";
+        globalAction = 'Create';
+    } else {
+        globalAction = 'Update';
+    }
+}
+
 function openUpdateCategoryModal(element) {
+    globalAction = 'Update';
 
     let id = element.getAttribute("id");
     let name = element.getAttribute("data-name");
@@ -147,23 +216,36 @@ function openUpdateCategoryModal(element) {
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
 
+    let spanElement = element.querySelector("#category-edit-btn");
     if(formTitle === 'Create') {
+        document.getElementById("category-back").style.display = 'none';
+        document.getElementById('categoryIdFieldGroup').style.display = 'block';
         document.getElementById("form-modal-category-title").textContent = 'បញ្ជូលប្រភេទទំនិញថ្មី';
         document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
+        element.setAttribute("data-form-title", "Update"); // Change the value
+        document.getElementById("id").value = '';
+        document.getElementById("name").value = '';
+        document.getElementById("name_kh").value = '';
+        document.getElementById("description").value = '';
+        spanElement.textContent = "កែ";
+        globalAction = 'Create';
+
     } else if(formTitle == 'Update') {
-        document.getElementById("form-modal-category-title").textContent = 'កែប្រែទិន្ន័យប្រភេទផលិតផលចាស់';
+        document.getElementById('categoryIdFieldGroup').style.display = 'block';
+        document.getElementById("form-modal-category-title").textContent = 'កែប្រែប្រភេទទំនិញចាស់';
         document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
         iconElement.src = "/icon/edit-product-icon.png";
         iconElement.alt = "edit-product-icon.png";
+        element.setAttribute("data-form-title", "Create");
+        document.getElementById("id").value = id;
+        document.getElementById("name").value = name;
+        document.getElementById("name_kh").value = nameKh;
+        document.getElementById("description").value = description;
+        document.getElementById("category-back").style.display = 'block';
+        globalAction = 'Update';
     }
-
-    document.getElementById("id_edit").value = id;
-    document.getElementById("name_edit").value = name;
-    document.getElementById("name_kh_edit").value = nameKh;
-    document.getElementById("description_edit").value = description;
-    document.getElementById("myModal").style.display = "block";
 }
 
 function showCategoryConfirmationModal(action, id) {
@@ -198,8 +280,7 @@ function confirmCategoryActionConfirmation() {
 
 function handleCategoryFormSubmit(event) {
     event.preventDefault();
-    const titleText = document.getElementById("form-modal-category-title").textContent.toLowerCase();
-    if(titleText.includes("បញ្ជូលប្រភេទទំនិញថ្មី")) {
+    if(globalAction === 'Create') {
         showCategoryConfirmationModal('create');
     } else {
         showCategoryConfirmationModal('update');

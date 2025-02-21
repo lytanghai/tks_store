@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Window Dimensions</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #dimensions {
+            font-size: 18px;
+            margin: 20px;
+        }
+
+        #showButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Browser Window Dimensions</h1>
+<p>Current Width: <span id="width"></span>px</p>
+<p>Current Height: <span id="height"></span>px</p>
+<button id="showButton">Show Dimensions</button>
+
+<script>
+        const widthSpan = document.getElementById('width');
+        const heightSpan = document.getElementById('height');
+
+        function updateDimensions() {
+            widthSpan.textContent = window.innerWidth;
+            heightSpan.textContent = window.innerHeight;
+        }
+
+        updateDimensions();
+
+        window.addEventListener('resize', updateDimensions);
+
+        const showButton = document.getElementById('showButton');
+        showButton.addEventListener('click', function() {
+            alert(`Current Width: ${window.innerWidth}px\nCurrent Height: ${window.innerHeight}px`);
+        });
+    </script>
+</body>
+
+</html>

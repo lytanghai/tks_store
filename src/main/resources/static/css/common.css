@@ -1,141 +1,157 @@
-.service-type-title{
-    display: flex;
-    width: 99%;
-}
+@media only screen and (min-width: 1280px) and (min-height: 720px) and (max-width: 1920px) and (max-height: 1080px) {
+    .main-body {
+        position: fixed;
+        left: 13.1%;
+        top: 7%;
+        width: 89%;
+        height: 100%;
+    }
 
-.icon-service-type{
-    margin-top: 22px;
-    margin-right: 10px;
-    width: 40px;
-    height: 40px;
-}
+    .service-type-title{
+        display: flex;
+        width: 99%;
+    }
 
-.icon{
-    width: 10px;
-}
-.pop-up-message-container {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-.pop-up-container {
-    text-align: center;
-}
-.pop-up-message {
-    position: fixed;
-    width: 300px;
-    top: 8%;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 5px;
-    color: #fff;
-    font-weight: bold;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 30;
-}
-.success { background: #28a745; }
-.error { background: #dc3545; }
+    .icon-service-type{
+        margin-top: 22px;
+        margin-right: 10px;
+        width: 40px;
+        height: 40px;
+    }
 
-.search-ipt{
-    width: 35%;
-    padding: 4px;
-    border-radius: 3px;
-}
-.date-obj{
-    width: 110px;
-    height: 25px;
-    padding: 4px;
-    text-align: center;
-    border-radius: 3px;
-}
+    .icon{
+        width: 10px;
+    }
+    .pop-up-message-container {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 500px;
+        height: 100vh;
+        background-color: #f4f4f4;
+    }
+    .pop-up-container {
+        text-align: center;
+    }
+    .pop-up-message {
+        position: fixed;
+        width: 300px;
+        top: 8%;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        z-index: 30;
+    }
+    .success { background: #28a745; }
+    .error { background: #dc3545; }
 
-.filter-date-container {
-    position: relative;
-    display: inline-block;
-}
-.filter-date-container input[type="date"] {
-    padding-right: 30px;
-}
-.clear-btn {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 16px;
-    color: #888;
-}
+    .search-ipt{
+        width: 35%;
+        padding: 4px;
+        border-radius: 3px;
+    }
+    .date-obj{
+        width: 110px;
+        height: 25px;
+        padding: 4px;
+        text-align: center;
+        border-radius: 3px;
+    }
 
-.confirm-modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.4);
-    padding-top: 60px;
-}
+    .filter-date-container {
+        position: relative;
+        display: inline-block;
+    }
+    .filter-date-container input[type="date"] {
+        padding-right: 30px;
+    }
+    .clear-btn {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: #888;
+    }
 
-.confirm-modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    border-radius: 8px;
-}
+    .confirm-modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
 
-.close-confirm-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+    .confirm-modal-content {
+        background-color: #fefefe;
+        margin-left: 37%;
+        margin-top: 10%
 
-.close-confirm-modal:hover,
-.close-confirm-modal:focus {
-    color: black;
-    cursor: pointer;
-}
+        border: 5px solid #000;
+        width: 40%;
+        max-width: 500px;
+        text-align: center;
+        border-radius: 8px;
+        margin-top: 10%;
+        height: 30%;
+        padding-top: 2%;
+        padding-right: 1%
+    }
 
-.modal-actions {
-    margin-top: 20px;
-}
+    .close-confirm-modal {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-.modal-actions button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-}
+    .close-confirm-modal:hover,
+    .close-confirm-modal:focus {
+        color: black;
+        cursor: pointer;
+    }
 
-.confirm-btn {
-    background-color: #4CAF50;
-    color: white;
-}
+    .modal-actions {
+        margin-top: 20px;
+    }
 
-.confirm-cancel-btn {
-    background-color: #f44336;
-    color: white;
-}
+    .modal-actions button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
 
-.confirm-btn:hover {
-    background-color: #45a049;
-}
+    .confirm-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
 
-.confirm-cancel-btn:hover {
-    background-color: #e41c21;
+    .confirm-cancel-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .confirm-btn:hover {
+        background-color: #45a049;
+    }
+
+    .confirm-cancel-btn:hover {
+        background-color: #e41c21;
+    }
+
 }

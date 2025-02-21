@@ -10,19 +10,7 @@ CREATE table tks.public.category (
 );
 
 -- Products Table
-CREATE TABLE tks.public.product (
-    id SERIAL PRIMARY KEY,
-    name_en VARCHAR(255) NOT NULL,
-    name_kh VARCHAR(255) NOT NULL,
-    code VARCHAR(100),
-    category_id INT REFERENCES category(id) ON DELETE SET NULL,
-    sale_price DECIMAL(10,2),
-    currency VARCHAR(5),
-    description TEXT,
-    status VARCHAR(10),
-    created_at TIMESTAMP,
-    last_updated_at TIMESTAMP
-);
+sd
 
 -- Product Images (Stored as Base64)
 CREATE table tks.public.product_images (

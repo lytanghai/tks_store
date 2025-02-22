@@ -5,7 +5,7 @@
            th:href="'#'"
            style="display:none;"
            id="category-back"
-           onclick="resetToCreateMode(this)">
+           onclick="resetToCreateCategoryMode(this)">
             <img th:src="@{/icon/back-icon.png}" class="icon" alt="back-icon.png">
             <span> Back </span>
         </a>
@@ -77,7 +77,7 @@
                                th:data-form-title="'Update'"
                                th:href="'#'"
                                class="category-edit-href"
-                               onclick="openUpdateCategoryModal(this)">
+                               onclick="resetToUpdateCategoryMode(this)">
                                 <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -122,15 +122,15 @@
 
     <div class="page-redirect">
         <div th:if="${total_records < 0}">
-            <p>Page: <span>0</span> of <span th:text="${total_pages}"></span></p>
+            <p>ទំព័រ: <span>0</span> of <span th:text="${total_pages}"></span></p>
         </div>
         <div th:unless="${total_records < 0}">
             <div th:if="${total_records == 0}">
-                <p>Page: 0</span> of <span th:text="${total_pages}"></span></p>
+                <p>ទំព័រ: 0</span> of <span th:text="${total_pages}"></span></p>
             </div>
             <div th:unless="${total_records == 0}">
                 <div th:if="${total_records > 0}">
-                    <p>Page: <span th:text="${current_page + 1}"></span> of <span th:text="${total_pages}"></span></p>
+                    <p>ទំព័រ: <span th:text="${current_page + 1}"></span> of <span th:text="${total_pages}"></span></p>
                 </div>
             </div>
     </div>

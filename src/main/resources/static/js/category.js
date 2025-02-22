@@ -1,15 +1,15 @@
 let categoryGlobalAction = 'Create';
 
 function clearCategoryModalInput() {
-    document.getElementById("name").value = '';
-    document.getElementById("name_kh").value = '';
-    document.getElementById("description").value = '';
+    document.getElementById("category_name").value = '';
+    document.getElementById("category_name_kh").value = '';
+    document.getElementById("category_description").value = '';
 }
 
 function createNewCategory() {
-    var name = document.getElementById('name').value;
-    var nameKh = document.getElementById('name_kh').value;
-    var description = document.getElementById('description').value;
+    var name = document.getElementById('category_name').value;
+    var nameKh = document.getElementById('category_name_kh').value;
+    var description = document.getElementById('category_description').value;
 
     var formData = {
         name: name,
@@ -54,10 +54,10 @@ function deleteCategory(id) {
 
 function updateCategory() {
     let formData = {
-        id: document.getElementById("id").value,
-        name: document.getElementById("name").value,
-        name_kh: document.getElementById("name_kh").value,
-        description: document.getElementById("description").value
+        id: document.getElementById("category_id").value,
+        name: document.getElementById("category_name").value,
+        name_kh: document.getElementById("category_name_kh").value,
+        description: document.getElementById("category_description").value
     };
 
     fetch('/category/update', {
@@ -138,10 +138,10 @@ function resetToCreateCategoryMode(element) {
     iconElement.src = "/icon/new-product-icon.png";
     iconElement.alt = "new-product-icon.png";
     element.setAttribute("data-form-title", "Update");
-    document.getElementById("id").value = '';
-    document.getElementById("name").value = '';
-    document.getElementById("name_kh").value = '';
-    document.getElementById("description").value = '';
+    document.getElementById("category_id").value = '';
+    document.getElementById("category_name").value = '';
+    document.getElementById("category_name_kh").value = '';
+    document.getElementById("category_description").value = '';
     spanElement.textContent = "បញ្ជូល";
     window.currentAction = 'Create';
 }
@@ -165,17 +165,17 @@ function resetToUpdateCategoryMode(element) {
     document.getElementById("createCategory").reset();
     document.getElementById('categoryIdFieldGroup').style.display = 'none';
     document.getElementById("category-back").style.display = 'block';
-    document.getElementById("id").style.display = 'block';
+    document.getElementById("category_id").style.display = 'block';
     document.getElementById("category-form-ipt-id").style.display = 'block';
     document.getElementById("form-modal-category-title").textContent = 'កែប្រភេទទំនិញចាស់';
     document.getElementById("category-edit-btn").textContent = 'កែប្រែ';
     iconElement.src = "/icon/edit-product-icon.png";
     iconElement.alt = "edit-product-icon.png";
     element.setAttribute("data-form-title", "Update");
-    document.getElementById("id").value = id;
-    document.getElementById("name").value = name;
-    document.getElementById("name_kh").value = nameKh;
-    document.getElementById("description").value = description;
+    document.getElementById("category_id").value = id;
+    document.getElementById("category_name").value = name;
+    document.getElementById("category_name_kh").value = nameKh;
+    document.getElementById("category_description").value = description;
     spanElement.textContent = "កែ";
     categoryGlobalAction = 'Create';
     window.currentAction = 'Update';

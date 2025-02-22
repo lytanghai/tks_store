@@ -1,16 +1,16 @@
-//document.addEventListener("DOMContentLoaded", function() {
-//    fetchCategories();
-//});
+document.addEventListener("DOMContentLoaded", function() {
+    fetchCategories();
+});
 
 function createNewProduct() {
     var formData = {
-        name_en: document.getElementById('name_en_edit').value,
-        name_kh: document.getElementById('name_kh_edit').value,
-        code: document.getElementById('code_edit').value,
+        name_en: document.getElementById('product_name_en_edit').value,
+        name_kh: document.getElementById('product_name_kh_edit').value,
+        code: document.getElementById('product_code_edit').value,
         category: { id: document.getElementById('product_select').value },
-        sale_price: parseFloat(document.getElementById('sale_price_edit').value),
-        currency: document.getElementById('currency_edit').value,
-        description: document.getElementById('description_edit').value
+        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
+        currency: document.getElementById('product_currency_edit').value,
+        description: document.getElementById('product_description_edit').value
     };
 
     fetch('/product/create', {
@@ -50,13 +50,13 @@ function deleteProduct(id) {
 
 function updateProduct() {
     let formData = {
-        id: document.getElementById("id_edit").value,
-        name_en: document.getElementById("name_en_edit").value,
-        name_kh: document.getElementById("name_kh_edit").value,
-        code: document.getElementById("code_edit").value,
-        currency: document.getElementById("currency_edit").value,
-        sale_price: document.getElementById("sale_price_edit").value,
-        description: document.getElementById("description_edit").value
+        id: document.getElementById("product_id_edit").value,
+        name_en: document.getElementById("product_name_en_edit").value,
+        name_kh: document.getElementById("product_name_kh_edit").value,
+        code: document.getElementById("product_code_edit").value,
+        currency: document.getElementById("product_currency_edit").value,
+        sale_price: document.getElementById("product_sale_price_edit").value,
+        description: document.getElementById("product_description_edit").value
     };
 
     fetch('/product/update', {
@@ -101,13 +101,13 @@ function openUpdateProductModal(element) {
         iconElement.alt = "edit-product-icon.png";
     }
 
-    document.getElementById("id_edit").value = id;
-    document.getElementById("name_en_edit").value = nameEn;
-    document.getElementById("name_kh_edit").value = nameKh;
-    document.getElementById("code_edit").value = code;
-    document.getElementById("description_edit").value = description;
-    document.getElementById("currency_edit").value = currency;
-    document.getElementById("sale_price_edit").value = salePrice;
+    document.getElementById("product_id_edit").value = id;
+    document.getElementById("product_name_en_edit").value = nameEn;
+    document.getElementById("product_name_kh_edit").value = nameKh;
+    document.getElementById("product_code_edit").value = code;
+    document.getElementById("product_description_edit").value = description;
+    document.getElementById("product_currency_edit").value = currency;
+    document.getElementById("product_sale_price_edit").value = salePrice;
     document.getElementById("myProductModal").style.display = "block";
 }
 

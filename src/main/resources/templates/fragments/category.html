@@ -17,21 +17,21 @@
 
         <form id="createCategory" onsubmit="handleCategoryFormSubmit(event)">
             <div class="general-form-group" id="categoryIdFieldGroup" style="display:none;">
-                <label for="id" class="general_label" id="category-form-ipt-id">លេខរៀង:</label>
-                <input type="text" id="id" name="id" class="general_input" placeholder="លេខរៀង" readonly>
+                <label for="category_id" class="general_label" id="category-form-ipt-id">លេខរៀង:</label>
+                <input type="text" id="category_id" name="category_id" class="general_input" placeholder="លេខរៀង" readonly>
             </div>
 
             <div class="general-form-group">
-                <label for="name" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
-                <input type="text" id="name" name="name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
+                <label for="category_name" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                <input type="text" id="category_name" name="category_name" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាអង់គ្លេស">
             </div>
             <div class="general-form-group">
-                <label for="name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
-                <input type="text" id="name_kh" name="name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
+                <label for="category_name_kh" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                <input type="text" id="category_name_kh" name="category_name_kh" class="general_input" placeholder="បញ្ជូលប្រភេទទំនិញ ជាភាសាខ្មែរ">
             </div>
             <div class="general-form-group">
-                <label for="description" class="general_label">ពត៍មានបន្ថែម:</label>
-                <textarea id="description" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
+                <label for="category_description" class="general_label">ពត៍មានបន្ថែម:</label>
+                <textarea id="category_description" name="category_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea" ></textarea>
             </div>
             <button type="submit" id="category-edit-btn" class="update_button category_create_btn_container" style="margin-right: 3%;">បញ្ជូល</button>
         </form>

@@ -99,23 +99,23 @@
             <form id="popupForm" class="pop-up" onsubmit="handleFormSubmit(event)">
                 <div class="group-product-pop-up">
                     <div class="general-form-group">
-                        <label for="id_edit" class="general_label">លេខរៀង:</label>
-                        <input type="text" id="id_edit" name="id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
+                        <label for="product_id_edit" class="general_label">លេខរៀង:</label>
+                        <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
                     </div>
 
                     <div class="group-product-name">
                         <div class="general-form-group">
-                            <label for="name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
-                            <input type="text" id="name_en_edit" name="name_en" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
+                            <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                            <input type="text" id="product_name_en_edit" name="product_name_en" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
                         </div>
                         <div class="general-form-group" style="margin-left: 10%">
-                            <label for="name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
-                            <input type="text" id="name_kh_edit" name="name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
+                            <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                            <input type="text" id="product_name_kh_edit" name="product_name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
                         </div>
                     </div>
                     <div class="general-form-group">
-                        <label for="code_edit" class="general_label">លេខកូដ:</label>
-                        <input type="text" id="code_edit" name="code" class="general_input" placeholder="លេខកូដ">
+                        <label for="product_code_edit" class="general_label">លេខកូដ:</label>
+                        <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
                     </div>
                     <div class="product-info-ipt">
                         <div class="general-form-group flex-item">
@@ -125,14 +125,14 @@
                             </select>
                         </div>
                         <div class="general-form-group flex-item">
-                            <label for="sale_price_edit" class="general_label product-price-ipt">តម្លៃ:</label>
-                            <input type="text" id="sale_price_edit" name="sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
+                            <label for="product_sale_price_edit" class="general_label product-price-ipt">តម្លៃ:</label>
+                            <input type="text" id="product_sale_price_edit" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                         </div>
 
                         <div class="general-form-group flex-item">
-                            <label for="currency_edit">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
+                            <label for="product_currency_edit">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
                             <div style="margin-top: 8px"></div>
-                            <select name="currency_edit" id="currency_edit" style="padding: 2px;">
+                            <select name="product_currency_edit" id="product_currency_edit" style="padding: 2px;">
                                 <option value="USD" selected disabled hidden>USD</option>
                                 <option value="USD">USD</option>
                                 <option value="KHR">KHR</option>
@@ -141,8 +141,8 @@
                     </div>
 
                     <div class="general-form-group">
-                        <label for="description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
-                        <textarea id="description_edit" name="description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
+                        <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
+                        <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
                     </div>
                     <button type="submit" class="update_button product-update-btn" style="margin-right: 3%;" id="product-edit-btn"></button>
                 </div>

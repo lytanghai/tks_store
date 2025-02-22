@@ -43,6 +43,8 @@ public class CategoryController {
     @GetMapping("/list")
     public String redirect2Category(Model model, @RequestParam(name = "page", defaultValue = "0") Integer pageNumber) {
 
+        System.out.println("Calling Category List API");
+
         CategoryListDTO result = categoryService.findAllByPagination("ACTIVE", PageRequest.of(pageNumber, 10, Sort.Direction.DESC, "id"));
 
         model.addAttribute("page_type_en", "category");

@@ -13,9 +13,11 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/product.css}">
     <link rel="stylesheet" th:href="@{/css/category.css}">
+    <link rel="stylesheet" th:href="@{/css/attribute.css}">
 
     <script th:src="@{/js/date.js}" type="text/javascript" defer></script>
     <script th:src="@{/js/category.js}" type="text/javascript" defer></script>
+    <script th:src="@{/js/attribute.js}" type="text/javascript" defer></script>
     <script th:src="@{/js/product.js}" type="text/javascript" defer></script>
     <script th:src="@{/js/common.js}" type="text/javascript" defer></script>
 
@@ -26,7 +28,7 @@
         <!-- Header Fragment -->
         <div th:replace="fragments/header :: header"></div>
 
-        <div id="dimensions"></div>
+<!--        <div id="dimensions"></div>-->
 
         <div id="pop_up_message" class="pop-up-message"></div>
 
@@ -40,6 +42,10 @@
 
                 <div th:case="'category'">
                     <div th:replace="fragments/category :: category"></div>
+                </div>
+
+                <div th:case="'attribute'">
+                    <div th:replace="fragments/attribute :: attribute"></div>
                 </div>
             </div>
         </div>

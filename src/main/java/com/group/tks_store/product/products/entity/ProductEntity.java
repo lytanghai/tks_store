@@ -22,6 +22,8 @@ public class ProductEntity {
 
     @Column(name = "name_kh", nullable = false)
     private String nameKh;
+    @Column(name = "code")
+    private String code;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
@@ -48,6 +50,13 @@ public class ProductEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedAt;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public CategoryEntity getCategory() {
         return category;

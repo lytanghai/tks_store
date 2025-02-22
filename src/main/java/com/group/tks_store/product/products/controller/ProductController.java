@@ -70,6 +70,7 @@ public class ProductController {
                                     @RequestParam(name = "sort", defaultValue = "id") String sortBy,
                                     @RequestParam(name = "direction", defaultValue = "DESC") String sortDirection,
                                     Model model) {
+        System.out.println("Calling Product List API");
 
         Page<ProductListDTO> productPage = productService.getActiveProducts(
                 PageRequest.of(

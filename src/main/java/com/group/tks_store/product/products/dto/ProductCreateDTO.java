@@ -5,11 +5,20 @@ import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 public class ProductCreateDTO {
     private String nameEn;
     private String nameKh;
+    private String code;
     private CategoryCreateDTO category;
     private Double salePrice;
     private String currency;
     private String description;
     private String status;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getNameEn() {
         return nameEn;

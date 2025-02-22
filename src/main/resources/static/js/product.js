@@ -3,20 +3,14 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function createNewProduct() {
-    var nameEn = document.getElementById('name_en_edit').value;
-    var nameKh = document.getElementById('name_kh_edit').value;
-    var categoryId = document.getElementById('product_select').value;
-    var salePrice = document.getElementById('sale_price_edit').value;
-    var currency = document.getElementById('currency_edit').value;
-    var description = document.getElementById('description_edit').value;
-
     var formData = {
-        name_en: nameEn,
-        name_kh: nameKh,
-        category: { id: categoryId },
-        sale_price: parseFloat(salePrice),
-        currency: currency,
-        description: description
+        name_en: document.getElementById('product_name_en_edit').value,
+        name_kh: document.getElementById('product_name_kh_edit').value,
+        code: document.getElementById('product_code_edit').value,
+        category: { id: document.getElementById('product_select').value },
+        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
+        currency: document.getElementById('product_currency_edit').value,
+        description: document.getElementById('product_description_edit').value
     };
 
     fetch('/product/create', {
@@ -37,14 +31,12 @@ function createNewProduct() {
 }
 
 function deleteProduct(id) {
-    var productId = id;
-
     fetch('/product/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: productId })
+        body: JSON.stringify({ id: id })
     })
     .then(data => {
         sessionStorage.setItem('popupMessage', 'success');
@@ -58,12 +50,13 @@ function deleteProduct(id) {
 
 function updateProduct() {
     let formData = {
-        id: document.getElementById("id_edit").value,
-        name_en: document.getElementById("name_en_edit").value,
-        name_kh: document.getElementById("name_kh_edit").value,
-        currency: document.getElementById("currency_edit").value,
-        sale_price: document.getElementById("sale_price_edit").value,
-        description: document.getElementById("description_edit").value
+        id: document.getElementById("product_id_edit").value,
+        name_en: document.getElementById("product_name_en_edit").value,
+        name_kh: document.getElementById("product_name_kh_edit").value,
+        code: document.getElementById("product_code_edit").value,
+        currency: document.getElementById("product_currency_edit").value,
+        sale_price: document.getElementById("product_sale_price_edit").value,
+        description: document.getElementById("product_description_edit").value
     };
 
     fetch('/product/update', {
@@ -85,10 +78,10 @@ function updateProduct() {
 }
 
 function openUpdateProductModal(element) {
-
     let id = element.getAttribute("id");
     let nameEn = element.getAttribute("data-name-en");
     let nameKh = element.getAttribute("data-name-kh");
+    let code = element.getAttribute("data-code");
     let currency = element.getAttribute("data-currency");
     let salePrice = element.getAttribute("data-sale-price");
     let description = element.getAttribute("data-description");
@@ -108,12 +101,13 @@ function openUpdateProductModal(element) {
         iconElement.alt = "edit-product-icon.png";
     }
 
-    document.getElementById("id_edit").value = id;
-    document.getElementById("name_en_edit").value = nameEn;
-    document.getElementById("name_kh_edit").value = nameKh;
-    document.getElementById("description_edit").value = description;
-    document.getElementById("currency_edit").value = currency;
-    document.getElementById("sale_price_edit").value = salePrice;
+    document.getElementById("product_id_edit").value = id;
+    document.getElementById("product_name_en_edit").value = nameEn;
+    document.getElementById("product_name_kh_edit").value = nameKh;
+    document.getElementById("product_code_edit").value = code;
+    document.getElementById("product_description_edit").value = description;
+    document.getElementById("product_currency_edit").value = currency;
+    document.getElementById("product_sale_price_edit").value = salePrice;
     document.getElementById("myProductModal").style.display = "block";
 }
 
@@ -130,6 +124,11 @@ function productFilterResults() {
     rows.forEach(row => {
         let rowText = row.textContent.toLowerCase();
         let rowDate = row.cells[6].textContent.trim();
+
+       let textareaElements = row.querySelectorAll(".product_desc");
+            textareaElements.forEach(textarea => {
+                rowText += " " + textarea.value.toLowerCase();
+        });
         let showRow = rowText.includes(searchValue);
 
         let rowDateTime = new Date(rowDate);
@@ -166,7 +165,6 @@ function fetchCategories() {
     fetch("/rest/category/list")
         .then(response => response.json())
         .then(categories => {
-
             populateCategoryDropdown(categories);
         })
         .catch(error => {
@@ -175,11 +173,8 @@ function fetchCategories() {
 }
 
 function populateCategoryDropdown(categories) {
-
     const categorySelect = document.getElementById("product_select");
-
     categorySelect.innerHTML = "";
-
     const defaultOption = document.createElement("option");
     defaultOption.text = "ទូទៅ";
     defaultOption.value = "General";
@@ -197,13 +192,10 @@ function showConfirmationModal(action, id) {
     document.getElementById("product-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("product-confirm-modal-text");
     if (action === 'create') {
-//        modalText.textContent = 'Are you sure you want to create a new product?';
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលផលិតផលថ្មីមែនទេ?';
     } else if (action === 'update') {
-//        modalText.textContent = 'Are you sure you want to update this product?';
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការកែប្រែផលិតផលនេះទេ?';
     } else if (action === 'delete') {
-//        modalText.textContent = 'Are you sure you want to delete this product?';
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់ធ្វើការលុបផលិតផលនេះទេ?';
     }
     window.currentAction = action;
@@ -228,7 +220,6 @@ function confirmProductActionConfirmation() {
 function handleFormSubmit(event) {
     event.preventDefault();
     const titleText = document.getElementById("form-modal-product-title").textContent.toLowerCase();
-
     if(titleText.includes("បញ្ជូលផលិតថ្មី")) {
         showConfirmationModal('create');
     } else {
@@ -239,7 +230,6 @@ function handleFormSubmit(event) {
 function updateServiceIcon() {
     const titleElement = document.getElementById("form-modal-product-title");
     const iconElement = document.querySelector(".icon-service-type");
-
     const titleText = titleElement.textContent.trim().toLowerCase();
 
     if (titleText === "create") {

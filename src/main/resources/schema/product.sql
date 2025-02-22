@@ -14,6 +14,7 @@ CREATE TABLE tks.public.product (
     id SERIAL PRIMARY KEY,
     name_en VARCHAR(255) NOT NULL,
     name_kh VARCHAR(255) NOT NULL,
+    code VARCHAR(255),
     category_id INT REFERENCES category(id) ON DELETE SET NULL,
     sale_price DECIMAL(10,2),
     currency VARCHAR(5),
@@ -35,9 +36,9 @@ CREATE table tks.public.product_images (
 -- Product Variants Table (E.g., Red Shirt, Blue Shirt)
 CREATE TABLE tks.public.product_variants (
     id SERIAL PRIMARY KEY,
-    product_id INT REFERENCES products(id) ON DELETE CASCADE,
-    sku VARCHAR(255) UNIQUE NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    product_id INT REFERENCES product(id) ON DELETE CASCADE,
+    sku VARCHAR(255) UNIQUE,
+    base_price DECIMAL(10,2),
     currency VARCHAR(5),
     stock_quantity INT,
     created_at TIMESTAMP,
@@ -57,11 +58,11 @@ Sizes Available: 7, 8, 9, 10, 11
 CREATE TABLE tks.public.attributes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
+    name_kh VARCHAR(100),
     status VARCHAR(10)
 );
 
 
-Variant 1:
 Color:
 Size:
 Price:

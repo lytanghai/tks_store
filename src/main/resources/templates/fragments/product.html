@@ -21,8 +21,8 @@
                 th:data-form-title="Create"
                 onclick="openUpdateProductModal(this)"
                 class="product-create-btn">
-            <img th:src="@{/icon/add-icon.png}" style="width:12px; color: #0a0a0a" alt="Trash Icon">
-            <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; color: #0a0a0a"></span>
+            <span class="unicode-icon">&plus;</span>
+            <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; font-size: 1.5rem;color: #0a0a0a"></span>
         </button>
     </div>
 
@@ -58,7 +58,8 @@
                     <ul class="product-action ">
                         <li>
                             <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-                                <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
+<!--                                <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">-->
+                                <span class="unicode-icon">&#128465</span>
                                 <span th:text="លុប"></span>
                             </a>
                         </li>
@@ -77,7 +78,8 @@
                                th:data-form-title="'Update'"
                                th:href="'#'"
                                onclick="openUpdateProductModal(this)">
-                                <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
+<!--                                <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">-->
+                                <span class="unicode-icon">&#x270E;</span>
                                 <span th:text="'កែ'"></span>
                             </a>
                         </li>

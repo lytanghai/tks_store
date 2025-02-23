@@ -24,7 +24,15 @@ CREATE TABLE tks.public.product (
     last_updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- 3. Product Variants Table (Now images will be linked to variants)
+-- 3. Attributes Table (No Changes)
+CREATE TABLE tks.public.attributes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE,
+    name_kh VARCHAR(100),
+    status VARCHAR(10)
+);
+
+-- 4. Product Variants Table (Now images will be linked to variants)
 CREATE TABLE tks.public.product_variants (
     id SERIAL PRIMARY KEY,
     product_id INT REFERENCES tks.public.product(id) ON DELETE CASCADE,
@@ -36,7 +44,7 @@ CREATE TABLE tks.public.product_variants (
     last_updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- 4. Product Variant Images Table (NEW: Links images to product variants)
+-- 5. Product Variant Images Table (NEW: Links images to product variants)
 CREATE TABLE tks.public.product_variant_images (
     id SERIAL PRIMARY KEY,
     variant_id INT REFERENCES tks.public.product_variants(id) ON DELETE CASCADE,
@@ -44,13 +52,7 @@ CREATE TABLE tks.public.product_variant_images (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 5. Attributes Table (No Changes)
-CREATE TABLE tks.public.attributes (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE,
-    name_kh VARCHAR(100),
-    status VARCHAR(10)
-);
+
 
 -- 6. Variant Attributes Table (Links attributes to variants)
 CREATE TABLE tks.public.variant_attributes (

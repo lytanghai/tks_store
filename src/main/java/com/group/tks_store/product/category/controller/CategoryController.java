@@ -23,25 +23,25 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping(CommonKey.CREATE)
+    @PostMapping("/create")
     public String create(@RequestBody CategoryCreateDTO category) throws ParseException {
         categoryService.create(category);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @PostMapping(CommonKey.DELETE)
+    @PostMapping("/delete")
     public String delete(@RequestBody ID id) {
         categoryService.delete(id);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @PostMapping(CommonKey.UPDATE)
-    public String delete(@RequestBody CategoryUpdateDto categoryUpdateDto) throws ParseException {
+    @PostMapping("/update")
+    public String update(@RequestBody CategoryUpdateDto categoryUpdateDto) throws ParseException {
         categoryService.update(categoryUpdateDto);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @GetMapping(CommonKey.LIST)
+    @GetMapping("/list")
     public String redirect2Category(Model model, @RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber) {
         CategoryListDTO result = categoryService.findAllByPagination(
                 CommonKey.STATUS,
@@ -51,16 +51,16 @@ public class CategoryController {
                         CommonKey.ID)
         );
 
-        model.addAttribute(CommonKey.PAGE_TYPE_EN, AddressRedirect.CATEGORY);
-        model.addAttribute(CommonKey.PAGE_TYPE_KH, AddressRedirect.CATEGORY_KH);
-        model.addAttribute(CommonKey.CONTENT, result.getRecords());
-        model.addAttribute(CommonKey.TOTAL_RECORDS, result.getRecords().size());
-        model.addAttribute(CommonKey.TOTAL_PAGES, result.getTotalPages());
-        model.addAttribute(CommonKey.CURRENT_PAGE, result.getPageNumber());
-        model.addAttribute(CommonKey.SORT_BY, result.getSortBy());
-        model.addAttribute(CommonKey.SORT_DIRECTION, result.getSortDirection());
-        model.addAttribute(CommonKey.FIRST, result.getFirst());
-        model.addAttribute(CommonKey.LAST, result.getLast());
+        model.addAttribute("page_type_en", AddressRedirect.CATEGORY);
+        model.addAttribute("page_type_kh", AddressRedirect.CATEGORY_KH);
+        model.addAttribute("content", result.getRecords());
+        model.addAttribute("total_records", result.getRecords().size());
+        model.addAttribute("total_pages", result.getTotalPages());
+        model.addAttribute("current_page", result.getPageNumber());
+        model.addAttribute("sort_by", result.getSortBy());
+        model.addAttribute("sort_direction", result.getSortDirection());
+        model.addAttribute("first", result.getFirst());
+        model.addAttribute("last", result.getLast());
 
         return AddressRedirect.HOME;
     }

@@ -80,16 +80,16 @@ public class ProductController {
                         sortBy))
         );
 
-        model.addAttribute(CommonKey.PAGE_TYPE_EN, AddressRedirect.PRODUCT);
-        model.addAttribute(CommonKey.PAGE_TYPE_KH, AddressRedirect.PRODUCT_KH);
-        model.addAttribute(CommonKey.CONTENT, productPage.getContent());
-        model.addAttribute(CommonKey.TOTAL_RECORDS, productPage.getTotalElements());
-        model.addAttribute(CommonKey.TOTAL_PAGES, productPage.getTotalPages());
-        model.addAttribute(CommonKey.CURRENT_PAGE, productPage.getNumber());
-        model.addAttribute(CommonKey.SORT_BY, sortBy);
-        model.addAttribute(CommonKey.SORT_DIRECTION, sortDirection);
-        model.addAttribute(CommonKey.FIRST, productPage.isFirst());
-        model.addAttribute(CommonKey.LAST, productPage.isLast());
+        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
+        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
+        model.addAttribute("content", productPage.getContent());
+        model.addAttribute("total_records", productPage.getTotalElements());
+        model.addAttribute("total_pages", productPage.getTotalPages());
+        model.addAttribute("current_page", productPage.getNumber());
+        model.addAttribute("sort_by", sortBy);
+        model.addAttribute("sort_direction", sortDirection);
+        model.addAttribute("first", productPage.isFirst());
+        model.addAttribute("last", productPage.isLast());
 
 
         return AddressRedirect.HOME;

@@ -1,5 +1,7 @@
 package com.group.tks_store.product.product.controller;
 
+import com.group.tks_store.common.static_key.AddressRedirect;
+import com.group.tks_store.common.static_key.CommonKey;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
@@ -16,20 +18,20 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/rest/product")
+@RequestMapping(AddressRedirect.INTERNAL + AddressRedirect.PRODUCT)
 public class ProductRestController {
 
     @Autowired
     private ProductService productService;
 
 
-    @PostMapping("/create")
+    @PostMapping(CommonKey.CREATE)
     public void create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
         productService.create(productCreateDTO);
     }
 
     // 🔹 Get all products
-    @GetMapping("/list")
+    @GetMapping(CommonKey.LIST)
     public List<ProductEntity> getAllProducts() {
         return productService.getAllProducts();
     }

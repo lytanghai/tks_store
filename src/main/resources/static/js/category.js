@@ -17,7 +17,7 @@ function createNewCategory() {
         description: description
     };
 
-    fetch('/api/category/create', {
+    fetch('/category/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function createNewCategory() {
 }
 
 function deleteCategory(id) {
-    fetch('/api/category/delete', {
+    fetch('/category/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ function updateCategory() {
         description: document.getElementById("category_description").value
     };
 
-    fetch('/api/category/update', {
+    fetch('/category/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

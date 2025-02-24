@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody id="categoryTable">
-        <tr th:each="row,iterStat  : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
+        <tr th:each="row, iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <div th:if="${content != null}">
                 <td class="category_td" th:text="${row.id}"></td>
                 <td class="category_td" th:text="${row.name}"></td>
@@ -140,11 +140,11 @@
         </div>
 
         <div th:if="${current_page != 0}" class="category-list-prev">
-            <a th:if="${current_page > 0}" th:href="@{/category/list/(page=${current_page - 1})}" class="category-redirect-href"> < </a>
+            <a th:if="${current_page > 0}" th:href="@{/api/category/list/(page=${current_page - 1})}" class="category-redirect-href"> < </a>
         </div>
 
         <div th:if="${current_page < total_pages}" class="category-list-next">
-            <a th:if="${current_page < total_pages - 1}" th:href="@{/category/list/(page=${current_page + 1})}" class="category-redirect-href"> > </a>
+            <a th:if="${current_page < total_pages - 1}" th:href="@{/api/category/list/(page=${current_page + 1})}" class="category-redirect-href"> > </a>
         </div>
     </div>
  </div>

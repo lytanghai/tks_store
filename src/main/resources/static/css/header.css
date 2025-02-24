@@ -9,32 +9,29 @@
         position: absolute;
         width: 85.5%;
         height: 5%;
-        top: 1%;
+        top: 0%;
         left: 14.2%;
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid #000;
         -moz-user-select: none;
         -khtml-user-select: none;
-        -webkit-user-select: none;
-        -o-user-select: none;
+        -webkit-user-select: none
     }
 
     .page_type {
-        width: 4%;
-        padding-top: 2px;
+        width: 9%;
         padding-left: 3rem;
         color: #000;
         font-weight: bold;
+        background-color: #e28743;
         font-size: 1.5rem;
+        height: 100%;
     }
     .announcement {
         padding-left: 12px;
         padding-top: 1px;
         width: 70%;
-        height: 38px;
-        text-align: center;
-        justify-content: center;
         align-item: center;
         font-weight: bold;
         color: #000;
@@ -43,11 +40,12 @@
         font-size: 1.5rem;
     }
     .date{
-        width: 18%;
+        width: 20%;
         padding-top: 1px;
         padding-right: 0rem;
         color: #000;
         font-size: 1.5rem;
         font-weight: bold;
+        padding-left: 11px;
     }
 }

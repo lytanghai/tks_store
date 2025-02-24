@@ -1,12 +1,15 @@
 package com.group.tks_store.product.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.category.entity.CategoryEntity;
+import com.group.tks_store.product.variant.entity.VariantEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -26,9 +29,13 @@ public class ProductEntity {
     private String code;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @JsonBackReference
     private CategoryEntity category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<VariantEntity> variants;
 
     @Column(name = "sale_price")
     private Double salePrice;
@@ -136,5 +143,13 @@ public class ProductEntity {
 
     public void setLastUpdatedAt(Date lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public List<VariantEntity> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<VariantEntity> variants) {
+        this.variants = variants;
     }
 }

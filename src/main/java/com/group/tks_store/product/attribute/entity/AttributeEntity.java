@@ -3,8 +3,10 @@ package com.group.tks_store.product.attribute.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "attributes")
@@ -24,6 +26,9 @@ public class AttributeEntity {
 
     @Column(name = "status")
     private String status;
+
+    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VariantAttributeEntity> variantAttributes;
 
     public Integer getId() {
         return id;
@@ -57,4 +62,11 @@ public class AttributeEntity {
         this.status = status;
     }
 
+    public List<VariantAttributeEntity> getVariantAttributes() {
+        return variantAttributes;
+    }
+
+    public void setVariantAttributes(List<VariantAttributeEntity> variantAttributes) {
+        this.variantAttributes = variantAttributes;
+    }
 }

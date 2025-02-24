@@ -3,6 +3,7 @@ package com.group.tks_store.product.product.dto;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 
 public class ProductCreateDTO {
+    private Integer id;
     private String nameEn;
     private String nameKh;
     private String code;
@@ -11,6 +12,14 @@ public class ProductCreateDTO {
     private String currency;
     private String description;
     private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;

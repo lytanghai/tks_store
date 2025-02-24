@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.util.DateTimeUtil;
+import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.dto.CategoryListDTO;
 import com.group.tks_store.product.category.dto.CategoryUpdateDto;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.repository.CategoryRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +25,6 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CategoryService {
 
-    private final Logger log = LoggerFactory.getLogger(CategoryService.class);
-
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -36,6 +33,11 @@ public class CategoryService {
     }
 
     public void create(CategoryCreateDTO payloadRequest) throws ParseException {
+
+        if(categoryRepository.findByName(payloadRequest.getName()) > 0) {
+            throw new ServiceException("CT-001", "ឈ្មោះ " + payloadRequest.getName() + " មានរួចរាល់ហើយ!");
+        }
+
         CategoryEntity category = new CategoryEntity();
         category.setName(payloadRequest.getName());
         category.setNameKh(payloadRequest.getNameKh());
@@ -53,6 +55,8 @@ public class CategoryService {
             existCategory.setDescription(payloadRequest.getDescription());
             existCategory.setLastUpdatedAt(DateTimeUtil.convertDate(new Date()));
             this.categoryRepository.save(existCategory);
+        } else {
+            throw new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + payloadRequest.getId());
         }
     }
 
@@ -65,7 +69,6 @@ public class CategoryService {
     }
 
     public CategoryListDTO findAllByPagination(String status, PageRequest pageRequest) {
-        log.info(status);
         Page<CategoryEntity> result  = categoryRepository.findAllByPagination(status, pageRequest);
         CategoryListDTO response = new CategoryListDTO();
         response.setRecords(result.getContent());

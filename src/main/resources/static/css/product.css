@@ -28,6 +28,10 @@
         text-overflow: ellipsis;
     }
 
+    #form-modal-product-title {
+        font-size: 2rem;
+    }
+
     #productTable {
         height: 10px;
     }
@@ -117,10 +121,10 @@
     }
     .product-create-modal-content{
         position: absolute;
-        width: 40%;
-        height: 85%;
-        left: 25%;
-        top: 8%;
+        width: 70%;
+        height: 88%;
+        left: 10%;
+        top: 7%;
         background-color: #FBFBF9;
         padding: 24px;
         border: 1px solid #000;
@@ -165,22 +169,17 @@
     .product-pop-up .product_form-group input, .product-pop-up .product_form-group textarea {
         margin-left: 50px;
     }
-    .close{
-        position: absolute;
-        right: 8%;
-        font-size: 1rem;
-        cursor: pointer;
-        font-weight: bold;
-    }
+
     .ready-only-field{
         pointer-events: none;
         background-color: #f0f0f0;
     }
 
     #product-edit-btn{
-        position:fixed;
-        right:27%;
-        width:75px;
+        position: fixed;
+        right: 4%;
+        width: 75px;
+        bottom: 5%;
     }
 
     .product-search-bar-container{
@@ -192,24 +191,37 @@
     }
 
     .product-price-ipt {
-        width: 100px;
-        padding: 2px;
+        width: 128px;
+        margin-bottom: -6px;
+        font-size: 1.3rem;
+        height: 47px;
     }
     .product-info-ipt{
        display: flex;
     }
 
+    .product-update-btn{
+        background-color: #e28743;
+        color: #000;
+        font-size: 1.4rem;
+    }
+
+    .submit-btn-container {
+        position: absolute;
+        width: 10%;
+        bottom: 5%;
+        right: 10%;
+    }
     .flex-item {
         flex: 1;
         margin: 4px;
         text-align: left;
+        font-size: 2.5rem;
     }
 
-    #product-edit-btn {
-        position:fixed;
-        right:19%;
-        width:75px;
-    }
+   #product-confirm-modal-text{
+    font-size: 1.6rem;
+   }
 
     #product-create-container {
         position: fixed;

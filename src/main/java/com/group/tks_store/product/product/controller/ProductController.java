@@ -1,6 +1,8 @@
 package com.group.tks_store.product.product.controller;
 
 import com.group.tks_store.common.dto.ID;
+import com.group.tks_store.common.static_key.AddressRedirect;
+import com.group.tks_store.common.static_key.CommonKey;
 import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping(CommonKey.API_CONTEXT_PATH + AddressRedirect.PRODUCT)
 public class ProductController {
 
     @Autowired
@@ -30,23 +32,22 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/create")
+    @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
         productService.create(productCreateDTO);
-        return "redirect:/product";
+        return AddressRedirect.REDIRECT_PRODUCT;
     }
 
-    @PostMapping("/delete")
+    @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {
         productService.delete(id);
-        return "redirect:/product";
+        return AddressRedirect.REDIRECT_PRODUCT;
     }
 
-    @PostMapping("/update")
-    public String delete(@RequestBody ProductUpdateDto productUpdateDto) throws ParseException {
+    @PostMapping(CommonKey.UPDATE)
+    public String update(@RequestBody ProductUpdateDto productUpdateDto) throws ParseException {
         productService.update(productUpdateDto);
-        System.out.println("1 UPDATED");
-        return "redirect:/product";
+        return AddressRedirect.REDIRECT_PRODUCT;
     }
 
     @GetMapping("/api/categories")
@@ -64,13 +65,12 @@ public class ProductController {
         return list;
     }
 
-    @GetMapping("/list")
-    public String getActiveProducts(@RequestParam(name = "page", defaultValue = "0") Integer pageNumber,
-                                    @RequestParam(name = "size", defaultValue = "10") Integer pageSize,
-                                    @RequestParam(name = "sort", defaultValue = "id") String sortBy,
-                                    @RequestParam(name = "direction", defaultValue = "DESC") String sortDirection,
+    @GetMapping(CommonKey.LIST)
+    public String getActiveProducts(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+                                    @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
+                                    @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
+                                    @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
                                     Model model) {
-        System.out.println("Calling Product List API");
 
         Page<ProductListDTO> productPage = productService.getActiveProducts(
                 PageRequest.of(
@@ -80,18 +80,19 @@ public class ProductController {
                         sortBy))
         );
 
-        model.addAttribute("page_type_en", "product");
-        model.addAttribute("page_type_kh", "ផលិតផល");
-        model.addAttribute("content", productPage.getContent());
-        model.addAttribute("total_records", productPage.getTotalElements());
-        model.addAttribute("total_pages", productPage.getTotalPages());
-        model.addAttribute("current_page", productPage.getNumber());
-        model.addAttribute("sort_by", sortBy);
-        model.addAttribute("sort_direction", sortDirection);
-        model.addAttribute("first", productPage.isFirst());
-        model.addAttribute("last", productPage.isLast());
+        model.addAttribute(CommonKey.PAGE_TYPE_EN, AddressRedirect.PRODUCT);
+        model.addAttribute(CommonKey.PAGE_TYPE_KH, AddressRedirect.PRODUCT_KH);
+        model.addAttribute(CommonKey.CONTENT, productPage.getContent());
+        model.addAttribute(CommonKey.TOTAL_RECORDS, productPage.getTotalElements());
+        model.addAttribute(CommonKey.TOTAL_PAGES, productPage.getTotalPages());
+        model.addAttribute(CommonKey.CURRENT_PAGE, productPage.getNumber());
+        model.addAttribute(CommonKey.SORT_BY, sortBy);
+        model.addAttribute(CommonKey.SORT_DIRECTION, sortDirection);
+        model.addAttribute(CommonKey.FIRST, productPage.isFirst());
+        model.addAttribute(CommonKey.LAST, productPage.isLast());
 
-        return "home";
+
+        return AddressRedirect.HOME;
     }
 
 

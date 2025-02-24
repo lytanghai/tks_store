@@ -1,0 +1,80 @@
+package com.group.tks_store.product.variant.variant_image.dto;
+
+import com.group.tks_store.product.variant.dto.VariantCreateDTO;
+
+import java.util.Date;
+
+public class VariantImageListDTO {
+    private Integer id;
+    private VariantCreateDTO variant;
+    private Integer variantId;
+    private String image;
+    private String imageType;
+    private Date createdAt;
+    private Date lastUpdatedAt;
+
+    public VariantImageListDTO(Integer id, Integer variantId, String image, String imageType, Date createdAt, Date lastUpdatedAt) {
+        this.id = id;
+        this.variantId = variantId;
+        this.image = image;
+        this.imageType = imageType;
+        this.createdAt = createdAt;
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(Integer variantId) {
+        this.variantId = variantId;
+    }
+
+    public VariantCreateDTO getVariant() {
+        return variant;
+    }
+
+    public void setVariant(VariantCreateDTO variant) {
+        this.variant = variant;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(Date lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+}

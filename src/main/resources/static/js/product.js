@@ -13,7 +13,7 @@ function createNewProduct() {
         description: document.getElementById('product_description_edit').value
     };
 
-    fetch('/product/create', {
+    fetch('/api/product/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ function createNewProduct() {
 }
 
 function deleteProduct(id) {
-    fetch('/product/delete', {
+    fetch('/api/product/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ function updateProduct() {
         description: document.getElementById("product_description_edit").value
     };
 
-    fetch('/product/update', {
+    fetch('/api/product/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -162,7 +162,7 @@ function clearProductEndDate() {
 }
 
 function fetchCategories() {
-    fetch("/rest/category/list")
+    fetch("/internal/category/list")
         .then(response => response.json())
         .then(categories => {
             populateCategoryDropdown(categories);

@@ -14,10 +14,13 @@
 
     .feature-container {
         background-color: #fafafa;
-        align-items: center;
-        width: auto;
+        border: 1px solid #000;
+        width: 98%;
         height: 60px;
         margin-top: 6%;
+        margin-left: 1%;
+        padding-top: 1%;
+        border-radius: 10px;
     }
 
     .feature-container a {
@@ -26,11 +29,11 @@
 
     .sidebar {
         position: fixed;
-        left: 0;
-        top: 0;
+        left: -4px;
+        top: -2px;
         width: 14%;
         height: 100vh;
-        background-color: #343a40;
+        background-color: #1e2738;
         color: white;
         padding-top: 20px;
         border: 2px solid #fafafa;

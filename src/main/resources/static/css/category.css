@@ -33,12 +33,6 @@
         z-index: 1;
     }
 
-    .general_label {
-        display: block;
-        font-weight: 300;
-        margin-bottom: 10px;
-    }
-
     #currency_edit{
         border: 1px solid #000;
         margin-top: 6px;

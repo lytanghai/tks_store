@@ -1,9 +1,9 @@
 let categoryGlobalAction = 'Create';
 
 function clearCategoryModalInput() {
-    document.getElementById("category_name").value = '';
-    document.getElementById("category_name_kh").value = '';
-    document.getElementById("category_description").value = '';
+//    document.getElementById("category_name").value = '';
+//    document.getElementById("category_name_kh").value = '';
+//    document.getElementById("category_description").value = '';
 }
 
 function createNewCategory() {

@@ -67,6 +67,8 @@
                             <a
                                th:id="${row.id}"
                                th:data-code="${row.code}"
+                               th:data-categoryEn="${row.categoryNameEn}"
+                               th:data-categoryKh="${row.categoryNameKh}"
                                th:data-name-en="${row.nameEn}"
                                th:data-name-kh="${row.nameKh}"
                                th:data-sale-price="${row.salePrice}"
@@ -86,72 +88,171 @@
         </tbody>
     </table>
 
-    <div id="myProductModal" class="product-create-modal">
-        <div class="product-create-modal-content">
-            <span class="close" onclick="closeUpdateProductModal()">❌</span>
-            <div class="service-type-title">
-                <img class="icon-service-type">
-                <h2 id="form-modal-product-title">create</h2>
+<!--    <div id="myProductModal" class="product-create-modal">-->
+<!--        <div class="product-create-modal-content">-->
+<!--            <span class="close" onclick="closeUpdateProductModal()">❌</span>-->
+<!--            <div class="service-type-title">-->
+<!--                <img class="icon-service-type">-->
+<!--                <h2 id="form-modal-product-title">create</h2>-->
+<!--            </div>-->
+
+<!--            <div class="form-container">-->
+<!--                <form id="gridForm" class="grid-form" onsubmit="handleFormSubmit(event)">-->
+
+<!--                    <div class="general-form-group" id="product-grid-id">-->
+<!--                        <label for="product_id_edit" class="general_label">លេខរៀង:</label>-->
+<!--                        <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>-->
+<!--                    </div>-->
+
+<!--                    <div class="group-product-name" id="product-grid-name">-->
+<!--                        <div class="general-form-group">-->
+<!--                            <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>-->
+<!--                            <input type="text" id="product_name_en_edit" name="product_name_en" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">-->
+<!--                        </div>-->
+<!--                        <div class="general-form-group" style="margin-left: 10%">-->
+<!--                            <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>-->
+<!--                            <input type="text" id="product_name_kh_edit" name="product_name_kh" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="general-form-group" id="product-grid-code">-->
+<!--                        <label for="product_code_edit" class="general_label">លេខកូដ:</label>-->
+<!--                        <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">-->
+<!--                    </div>-->
+
+<!--                    <div class="general-form-group flex-item" id="product-grid-category">-->
+<!--                        <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>-->
+<!--                        <select id="product_select" name="product_id" class="product-name">-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    <div class="general-form-group flex-item" id="product-grid-sale-price">-->
+<!--                        <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;">តម្លៃ:</label>-->
+<!--                        <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">-->
+<!--                    </div>-->
+
+<!--                    <div class="general-form-group flex-item" id="product-grid-currency">-->
+<!--                        <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">ជ្រើសរើសរូបីយប័ណ្ណ:</label>-->
+<!--                        <select id="product_currency_edit"-->
+<!--                                name="product_currency_edit"-->
+<!--                                class="product-currency-select">-->
+
+<!--                            <option value="USD" selected disabled hidden>USD</option>-->
+<!--                            <option value="USD">USD</option>-->
+<!--                            <option value="KHR">KHR</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    <div class="general-form-group" id="product-grid-description">-->
+<!--                        <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>-->
+<!--                        <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-group full-width" id="submit">-->
+<!--                        <button id="product-edit-btn" type="submit" class="submit-btn">Submit</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+    <div id="myProductModal" class="product-modal product-tab-container" onclick="outsideClick(event)">
+        <div class="product-modal-content">
+            <div class="product-close-container">
+                <span class="product-close " onclick="closeModal()">❌</span>
             </div>
+            <div class="tab">
+                <button class="tablinks active" id="tab-Product">Product</button>
+                <button class="tablinks" id="tab-Variants">Variants</button>
+                <button class="tablinks" id="tab-VariantAttribute">Attributes</button>
+            </div>
+            <div id="Product" class="tabcontent">
+                <div class="product-create-modal-content">
+<!--                    <span class="close" onclick="closeUpdateProductModal()">❌</span>-->
+<!--                    <div class="service-type-title">-->
+<!--                        <img class="icon-service-type">-->
+<!--                        <h2 id="form-modal-product-title">create</h2>-->
+<!--                    </div>-->
 
-            <form id="popupForm" class="pop-up" onsubmit="handleFormSubmit(event)">
-                <div class="group-product-pop-up">
-                    <div class="general-form-group">
-                        <label for="product_id_edit" class="general_label">លេខរៀង:</label>
-                        <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
-                    </div>
+                    <div class="form-container">
+                        <div class="product-service-type-title">
+                            <img class="icon-service-type">
+                            <h2 id="form-modal-product-title">create</h2>
+                        </div>
+                        <form id="gridForm" class="grid-form" onsubmit="handleFormSubmit(event)">
 
-                    <div class="group-product-name">
-                        <div class="general-form-group">
-                            <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
-                            <input type="text" id="product_name_en_edit" name="product_name_en" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
-                        </div>
-                        <div class="general-form-group" style="margin-left: 10%">
-                            <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
-                            <input type="text" id="product_name_kh_edit" name="product_name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
-                        </div>
-                    </div>
-                    <div class="general-form-group">
-                        <label for="product_code_edit" class="general_label">លេខកូដ:</label>
-                        <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
-                    </div>
-                    <div class="product-info-ipt">
-                        <div class="general-form-group flex-item">
-                            <div style="margin-top: 3px"></div>
-                            <label for="product_select" class="general_label">ប្រភេទទំនិញ:</label>
-                            <select id="product_select"
-                                    name="product_id"
-                                    style="padding: 2px; font-size: 1.3rem; height:50px">
-                            </select>
-                        </div>
-                        <div class="general-form-group flex-item">
-                            <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;">តម្លៃ:</label>
-                            <input type="text" id="product_sale_price_edit" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
-                        </div>
+                            <div class="general-form-group" id="product-grid-id">
+                                <label for="product_id_edit" class="general_label">លេខរៀង:</label>
+                                <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
+                            </div>
 
-                        <div class="general-form-group flex-item">
-                            <label for="product_currency_edit" style="font-size: 1.3rem; padding: 2px; font-size: 1.3rem; height:50px">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
-                            <div style="margin-top: -16px"></div>
-                            <select id="product_currency_edit"
-                                    name="product_currency_edit"
-                                    style="padding: 2px; font-size: 1.3rem; height:50px">
+                            <div class="group-product-name" id="product-grid-name">
+                                <div class="general-form-group">
+                                    <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                                    <input type="text" id="product_name_en_edit" name="product_name_en" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
+                                </div>
+                                <div class="general-form-group" style="margin-left: 10%">
+                                    <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                                    <input type="text" id="product_name_kh_edit" name="product_name_kh" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
+                                </div>
+                            </div>
+                            <div class="general-form-group" id="product-grid-code">
+                                <label for="product_code_edit" class="general_label">លេខកូដ:</label>
+                                <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
+                            </div>
 
-                                <option value="USD" selected disabled hidden>USD</option>
-                                <option value="USD">USD</option>
-                                <option value="KHR">KHR</option>
-                            </select>
-                        </div>
-                    </div>
+                            <div class="general-form-group flex-item" id="product-grid-category">
+                                <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>
+                                <select id="product_select" name="product_id" class="product-name">-->
+                                </select>
+                            </div>
 
-                    <div class="general-form-group">
-                        <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
-                        <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
-                    </div>
-                    <div class="submit-btn-container">
-                        <button type="submit" class="product-update-btn" style="margin-right: 3%;" id="product-edit-btn"></button>
+                            <div class="general-form-group flex-item" id="product-grid-sale-price">
+                                <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;">តម្លៃ:</label>
+                                <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
+                            </div>
+
+                            <div class="general-form-group flex-item" id="product-grid-currency">
+                                <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
+                                <select id="product_currency_edit"
+                                        name="product_currency_edit"
+                                        class="product-currency-select">
+                                    <option value="USD" selected disabled hidden>USD</option>
+                                    <option value="USD">USD</option>
+                                    <option value="KHR">KHR</option>
+                                </select>
+                            </div>
+
+                            <div class="general-form-group" id="product-grid-description">
+                                <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
+                                <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
+                            </div>
+
+                                <!--                            <div class="form-group full-width" id="submit">-->
+<!--                                <button id="product-edit-btn" type="submit" class="submit-btn">Submit</button>-->
+<!--                            </div>-->
+                            <div class="product-btn-container">
+                                <button disabled class="product-btn-back">Back</button>
+                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-edit-btn" type="submit">Next</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div id="Variants" class="tabcontent">
+
+                <div class="btn-container">
+                    <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
+                    <button onclick="navigateTab('Variants', 'VariantAttribute')" class="product-btn-next">Next</button>
+                </div>
+            </div>
+            <div id="VariantAttribute" class="tabcontent">
+
+                <div class="btn-container">
+                    <button onclick="navigateTab('VariantAttribute', 'Variants')" class="product-btn-back">Back</button>
+                    <button class="product-btn-next">Done</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -201,4 +302,5 @@
             </div>
         </div>
     </div>
+
 </div>

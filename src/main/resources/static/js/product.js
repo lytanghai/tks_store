@@ -49,11 +49,15 @@ function deleteProduct(id) {
 }
 
 function updateProduct() {
+alert(document.getElementById("product_select").value)
     let formData = {
         id: document.getElementById("product_id_edit").value,
         name_en: document.getElementById("product_name_en_edit").value,
         name_kh: document.getElementById("product_name_kh_edit").value,
         code: document.getElementById("product_code_edit").value,
+        category: {
+            id: document.getElementById("product_select").value
+        },
         currency: document.getElementById("product_currency_edit").value,
         sale_price: document.getElementById("product_sale_price_edit").value,
         description: document.getElementById("product_description_edit").value
@@ -82,6 +86,8 @@ function openUpdateProductModal(element) {
     let nameEn = element.getAttribute("data-name-en");
     let nameKh = element.getAttribute("data-name-kh");
     let code = element.getAttribute("data-code");
+    let categoryNameEn = element.getAttribute("data-categoryEn");
+    let categoryNameKh = element.getAttribute("data-categoryKh");
     let currency = element.getAttribute("data-currency");
     let salePrice = element.getAttribute("data-sale-price");
     let description = element.getAttribute("data-description");
@@ -91,7 +97,7 @@ function openUpdateProductModal(element) {
 
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បញ្ជូលផលិតថ្មី';
-        document.getElementById("product-edit-btn").textContent = 'បញ្ជូល';
+        document.getElementById("product-edit-btn").textContent = 'Next';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
     } else if(formTitle == 'Update') {
@@ -105,6 +111,7 @@ function openUpdateProductModal(element) {
     document.getElementById("product_name_en_edit").value = nameEn;
     document.getElementById("product_name_kh_edit").value = nameKh;
     document.getElementById("product_code_edit").value = code;
+    document.getElementById("product_select").value = categoryNameEn;
     document.getElementById("product_description_edit").value = description;
     document.getElementById("product_currency_edit").value = currency;
     document.getElementById("product_sale_price_edit").value = salePrice;
@@ -176,8 +183,8 @@ function populateCategoryDropdown(categories) {
     const categorySelect = document.getElementById("product_select");
     categorySelect.innerHTML = "";
     const defaultOption = document.createElement("option");
-    defaultOption.text = "ទូទៅ";
-    defaultOption.value = "General";
+    defaultOption.text = "";
+    defaultOption.value = "";
     categorySelect.appendChild(defaultOption);
 
     categories.forEach(category => {
@@ -243,3 +250,42 @@ function updateServiceIcon() {
         iconElement.alt = "category-icon.png";
     }
 }
+
+
+let currentTab = "Product";
+
+    function openModal() {
+        document.getElementById("myProductModal").style.display = "block";
+        showTab(currentTab);
+    }
+
+    function closeModal() {
+        document.getElementById("myProductModal").style.display = "none";
+    }
+
+    function outsideClick(event) {
+        if (event.target === document.getElementById("myProductModal")) {
+            closeModal();
+        }
+    }
+
+    function showTab(tabName) {
+        let tabcontent = document.getElementsByClassName("tabcontent");
+        let tablinks = document.getElementsByClassName("tablinks");
+
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById("tab-" + tabName).classList.add("active");
+        currentTab = tabName;
+    }
+
+    function navigateTab(current, next) {
+        showTab(next);
+    }

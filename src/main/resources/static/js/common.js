@@ -2,6 +2,8 @@ window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
     fetchCategories();
+//    openModal();
+    showTab("Product");
 
     const popupType = sessionStorage.getItem('popupMessage');
     const popupAction = sessionStorage.getItem('popupAction');

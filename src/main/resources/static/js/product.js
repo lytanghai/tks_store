@@ -1,6 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
-    fetchCategories();
-});
+
 
 function createNewProduct() {
     var formData = {
@@ -12,6 +10,9 @@ function createNewProduct() {
         currency: document.getElementById('product_currency_edit').value,
         description: document.getElementById('product_description_edit').value
     };
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchCategories();
+        });
 
     fetch('/api/product/create', {
         method: 'POST',
@@ -100,6 +101,7 @@ function openUpdateProductModal(element) {
         document.getElementById("product-edit-btn").textContent = 'Next';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
+        fetchCategories();
     } else if(formTitle == 'Update') {
         document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
         document.getElementById("product-edit-btn").textContent = 'កែប្រែ';
@@ -172,6 +174,7 @@ function fetchCategories() {
     fetch("/internal/category/list")
         .then(response => response.json())
         .then(categories => {
+        alert('calling to get category')
             populateCategoryDropdown(categories);
         })
         .catch(error => {
@@ -225,6 +228,8 @@ function confirmProductActionConfirmation() {
 }
 
 function handleFormSubmit(event) {
+alert('calling')
+
     event.preventDefault();
     const titleText = document.getElementById("form-modal-product-title").textContent.toLowerCase();
     if(titleText.includes("បញ្ជូលផលិតថ្មី")) {
@@ -255,6 +260,7 @@ function updateServiceIcon() {
 let currentTab = "Product";
 
     function openModal() {
+            fetchCategories();
         document.getElementById("myProductModal").style.display = "block";
         showTab(currentTab);
     }

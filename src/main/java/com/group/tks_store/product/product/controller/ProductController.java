@@ -91,7 +91,6 @@ public class ProductController {
         model.addAttribute("first", productPage.isFirst());
         model.addAttribute("last", productPage.isLast());
 
-
         return AddressRedirect.HOME;
     }
 

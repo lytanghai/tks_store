@@ -65,7 +65,7 @@ CREATE TABLE tks.public.attributes (
     status VARCHAR(10)
 );
 
--- 4. Product Variants Table (Now images will be linked to variants)
+-- 4. Product Variants Table (Now images will be linked to variants) use it as a tab(s) when create product
 CREATE TABLE tks.public.variants (
     id SERIAL PRIMARY KEY,
     product_id INT REFERENCES tks.public.product(id) ON DELETE CASCADE,
@@ -78,7 +78,7 @@ CREATE TABLE tks.public.variants (
     last_updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- 5. Product Variant Images Table (NEW: Links images to product variants)
+-- 5. Product Variant Images Table (NEW: Links images to product variants) store in tab(s)
 CREATE TABLE tks.public.variant_images (
     id SERIAL PRIMARY KEY,
     variant_id INT REFERENCES tks.public.variants(id) ON DELETE CASCADE,

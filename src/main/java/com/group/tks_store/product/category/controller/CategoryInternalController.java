@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(CommonKey.API_CONTEXT_PATH + AddressRedirect.CATEGORY)
+@RequestMapping(AddressRedirect.INTERNAL + AddressRedirect.CATEGORY)
 public class CategoryInternalController {
 
     @Autowired

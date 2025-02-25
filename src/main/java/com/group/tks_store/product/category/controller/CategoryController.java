@@ -1,5 +1,6 @@
 package com.group.tks_store.product.category.controller;
 
+import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.static_key.CommonKey;
@@ -23,28 +24,28 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/create")
+    @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody CategoryCreateDTO category) throws ParseException {
         categoryService.create(category);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @PostMapping("/delete")
+    @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {
         categoryService.delete(id);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @PostMapping("/update")
+    @PostMapping(CommonKey.UPDATE)
     public String update(@RequestBody CategoryUpdateDto categoryUpdateDto) throws ParseException {
         categoryService.update(categoryUpdateDto);
         return AddressRedirect.REDIRECT_CATEGORY;
     }
 
-    @GetMapping("/list")
+    @GetMapping(CommonKey.LIST)
     public String redirect2Category(Model model, @RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber) {
         CategoryListDTO result = categoryService.findAllByPagination(
-                CommonKey.STATUS,
+                Status.ACTIVE.getValue(),
                 PageRequest.of(pageNumber,
                         10,
                         Sort.Direction.DESC,

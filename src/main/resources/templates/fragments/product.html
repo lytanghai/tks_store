@@ -29,36 +29,33 @@
     <table class="product_table_list_container">
         <thead>
         <tr>
-            <th class="product_th">លេខកូដ</th>
-            <th class="product_th">ឈ្មោះទំនិញ</th>
-            <th class="product_th">ប្រភេទទំនិញ</th>
-            <th class="product_th">តម្លៃ</th>
-            <th class="product_th">ពត៍មានបន្ថែម</th>
-            <th class="product_th">ស្ថានភាព</th>
-            <th class="product_th">ថ្ងៃខែបញ្ជូល</th>
-            <th class="product_th">សកម្មភាព</th>
+            <th class="table_th">លេខកូដ</th>
+            <th class="table_th">ឈ្មោះទំនិញ</th>
+            <th class="table_th">ប្រភេទទំនិញ</th>
+            <th class="table_th">តម្លៃ</th>
+            <th class="table_th">ពត៍មានបន្ថែម</th>
+            <th class="table_th">ស្ថានភាព</th>
+            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
+            <th class="table_th">សកម្មភាព</th>
         </tr>
         </thead>
         <tbody id="productTable">
         <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <div th:if="${content != null}">
-                <td class="product_td" th:text="${row.code}"></td>
-                <td class="product_td" th:text="${row.nameEn + ' (' + row.nameKh +')'}"></td>
-                <td class="product_td" th:text="${row.categoryNameEn + ' (' + row.categoryNameKh +')'}"></td>
-<!--                <td class="product_td" th:text="${row.salePrice + ' ' + row.currency}"></td>-->
-                <td class="product_td" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
-                <td class="product_td" id="product_textarea">
+                <td class="table_td" th:text="${row.code}"></td>
+                <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEn}"></td>
+                <td class="table_td" th:text="${row.categoryNameKh != null and row.categoryNameKh != '' ? row.categoryNameEn + ' (' + row.categoryNameKh + ')' : row.categoryNameEn}"></td>
+                <td class="table_td" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
+                <td class="table_td" id="product_textarea">
                     <textarea class="product_desc" th:text="${row.description}" rows="1" cols="40" readonly></textarea>
                 </td>
-                <td class="product_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
-<!--                <td class="product_td" th:text="${row.createdAt}"></td>-->
-                <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
+                <td class="table_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
+                <td class="table_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
 
-                <td class="product_td">
+                <td class="table_td">
                     <ul class="product-action ">
                         <li>
                             <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-<!--                                <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">-->
                                 <span class="unicode-icon">&#128465</span>
                                 <span th:text="លុប"></span>
                             </a>
@@ -78,7 +75,6 @@
                                th:data-form-title="'Update'"
                                th:href="'#'"
                                onclick="openUpdateProductModal(this)">
-<!--                                <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">-->
                                 <span class="unicode-icon">&#x270E;</span>
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -170,7 +166,7 @@
             </div>
             <p id="product-confirm-modal-text">Do you want to proceed with this action?</p>
             <div class="modal-actions">
-                <button class="confirm-cancel-btn" style="font-size: 1.5rem" onclick="closeConfirmationModal()">ទេ</button>
+                <button class="confirm-cancel-btn"style="font-size: 1.5rem" onclick="closeConfirmationModal()">ទេ</button>
                 <button class="confirm-btn" style="font-size: 1.5rem" onclick="confirmProductActionConfirmation()">បាទ/ចាស់</button>
             </div>
         </div>

@@ -16,17 +16,6 @@
         table-layout: fixed;
     }
 
-    .product_td, .product_th {
-        border: 1px solid #ddd;
-        text-align: center;
-        font-size: 14px;
-        padding: 2px;
-        height: 40px;
-        width: 120px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
 
     #form-modal-product-title {
         font-size: 2rem;
@@ -36,31 +25,6 @@
         height: 10px;
     }
 
-    .product_td{
-        border: 1px solid #ddd;
-        text-align: center;
-        font-size: 1.4rem;
-        padding: 2px;
-        height: 40px;
-        width: 120px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        font-weight: 400;
-    }
-    .product_th {
-        font-weight: 500;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        text-align: center;
-        font-size: 1.5rem;
-        padding: 2px;
-        height: 40px;
-        width: 120px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
 
     .product_tr:nth-child(even) {
         background-color: #f9f9f9;
@@ -71,6 +35,7 @@
         top: 87.3%;
         left: 53%;
         font-size: 1.5rem;
+        border-bottom: 1px solid #000;
     }
     .product-page-number{
         position: fixed;
@@ -98,6 +63,7 @@
         display: flex;
         list-style-type: none;
         padding-right: 14px;
+        padding-bottom: 12px;
     }
     .product-action li {
         justify-content: center;

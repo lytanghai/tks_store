@@ -2,9 +2,6 @@
 
     .main-body {
         position: fixed;
-        border-top: 0.5px solid #000;
-        border-right: 0.5px solid #000;
-        border-bottom: 0.5px solid #000;
         left: 14.4%;
         top: 15%;
         width: 84.8%;
@@ -27,7 +24,7 @@
         font-size: 1.5rem;
     }
     .icon{
-        width: 10px;
+        width: 25px;
     }
     .pop-up-message-container {
         font-family: Arial, sans-serif;
@@ -193,7 +190,6 @@
     }
 
     .modal-actions {
-        margin-top: 20px;
         margin-top: -1%;
         width: 100%;
     }
@@ -223,6 +219,41 @@
 
     .confirm-cancel-btn:hover {
         background-color: #e41c21;
+    }
+
+   .table_td, .table_th {
+        border: 1px solid #ddd;
+        text-align: center;
+        padding: 2px;
+        height: 40px;
+        width: 120px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .table_td{
+        font-size: 1.4rem;
+        padding: 2px;
+        height: 40px;
+        width: 120px;
+        font-weight: 400;
+    }
+    .table_th {
+        font-weight: 500;
+        background-color: #f9f9f9;
+        font-size: 1.5rem;
+        padding: 2px;
+        height: 40px;
+        width: 120px;
+    }
+
+    .table_th:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .table_tr:nth-child(even) {
+        background-color: #f9f9f9;
     }
 
 }

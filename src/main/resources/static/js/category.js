@@ -17,7 +17,7 @@ function createNewCategory() {
         description: description
     };
 
-    fetch('/category/create', {
+    fetch('/api/category/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function createNewCategory() {
 }
 
 function deleteCategory(id) {
-    fetch('/category/delete', {
+    fetch('/api/category/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ function updateCategory() {
         description: document.getElementById("category_description").value
     };
 
-    fetch('/category/update', {
+    fetch('/api/category/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ function updateCategory() {
     });
 }
 
-function filterResults() {
+function categoryFilterResults() {
     let searchValue = document.getElementById("search_input_category").value.toLowerCase();
     let startDate = document.getElementById("categoryStartDate").value;
     let endDate = document.getElementById("categoryEndDate").value;
@@ -108,30 +108,31 @@ function filterResults() {
 
 function clearCategoryStartDate() {
     document.getElementById("categoryStartDate").value = "";
-    filterResults();
+    categoryFilterResults();
 }
 
 function clearCategoryEndDate() {
     document.getElementById("categoryEndDate").value = "";
-    filterResults();
+        categoryFilterResults();
 }
 
 let num = 0;
 function resetToCreateCategoryMode(element) {
     categoryGlobalAction = 'Create';
+//    alert('resetToCreateCategoryMode: Create')
+
     let allElements = document.querySelectorAll('.category-edit-href');
     allElements.forEach(function(el) {
         el.style.pointerEvents = 'auto';
         el.style.cursor = 'pointer';
     });
     document.getElementById("createCategory").reset();
-
     var iconElement = document.querySelector(".icon-service-type");
     let spanElement = element.querySelector("span");
 
-    document.getElementById('categoryIdFieldGroup').style.display = 'block';
+    document.getElementById('categoryIdFieldGroup').style.display = 'none';
     document.getElementById("category-back").style.display = 'none';
-    document.getElementById("id").style.display = 'none';
+    document.getElementById("category_id").style.display = 'none';
     document.getElementById("category-form-ipt-id").style.display = 'none';
     document.getElementById("form-modal-category-title").textContent = 'បញ្ជូលប្រភេទទំនិញថ្មី';
     document.getElementById("category-edit-btn").textContent = 'បញ្ជូល';
@@ -144,10 +145,12 @@ function resetToCreateCategoryMode(element) {
     document.getElementById("category_description").value = '';
     spanElement.textContent = "បញ្ជូល";
     window.currentAction = 'Create';
+    categoryGlobalAction = 'Update';
 }
 
 function resetToUpdateCategoryMode(element) {
     categoryGlobalAction = 'Update';
+//    alert('resetToUpdateCategoryMode: Update')
     let allElements = document.querySelectorAll('.category-edit-href');
     allElements.forEach(function(el) {
         el.style.pointerEvents = 'auto';
@@ -182,6 +185,7 @@ function resetToUpdateCategoryMode(element) {
 }
 
 function showCategoryConfirmationModal(action, id) {
+//    alert('showCategoryConfirmationModal: ' + action)
     document.getElementById("category-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("category-confirm-modal-text");
     if (action === 'create') {
@@ -200,6 +204,8 @@ function closeConfirmationCategoryModal() {
 }
 
 function confirmCategoryActionConfirmation() {
+//    alert('confirmCategoryActionConfirmation ' + window.currentAction)
+
     if (window.currentAction === 'create') {
         createNewCategory();
     } else if (window.currentAction === 'update') {
@@ -213,6 +219,7 @@ function confirmCategoryActionConfirmation() {
 
 function handleCategoryFormSubmit(event) {
     event.preventDefault();
+//    alert('handleCategoryFormSubmit ' + document.getElementById("category-edit-btn").textContent)
     if(document.getElementById("category-edit-btn").textContent === 'បញ្ជូល') {
         showCategoryConfirmationModal('create');
     } else {

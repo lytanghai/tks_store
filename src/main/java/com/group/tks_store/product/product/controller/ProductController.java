@@ -7,6 +7,7 @@ import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
+import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
@@ -39,6 +40,13 @@ public class ProductController {
     @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
         productService.create(productCreateDTO);
+        log.info("product created");
+        return AddressRedirect.REDIRECT_PRODUCT;
+    }
+
+    @PostMapping( "/full" + CommonKey.CREATE)
+    public String createFullProduct(@RequestBody ProductFullCreateDTO productCreateDTO) throws ParseException {
+        productService.createFullProduct(productCreateDTO);
         log.info("product created");
         return AddressRedirect.REDIRECT_PRODUCT;
     }

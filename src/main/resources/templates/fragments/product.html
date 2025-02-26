@@ -164,7 +164,7 @@
             <div class="tab">
                 <button class="tablinks active" id="tab-Product">Product</button>
                 <button class="tablinks" id="tab-Variants">Variants</button>
-                <button class="tablinks" id="tab-VariantAttribute">Attributes</button>
+                <button class="tablinks" id="tab-Verify">Verify</button>
             </div>
             <div id="Product" class="tabcontent">
                 <div class="product-create-modal-content">
@@ -180,7 +180,6 @@
                             <h2 id="form-modal-product-title">create</h2>
                         </div>
                         <form id="gridForm" class="grid-form" onsubmit="handleFormSubmit(event)">
-
                             <div class="general-form-group" id="product-grid-id">
                                 <label for="product_id_edit" class="general_label">លេខរៀង:</label>
                                 <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
@@ -200,7 +199,6 @@
                                 <label for="product_code_edit" class="general_label">លេខកូដ:</label>
                                 <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
                             </div>
-
                             <div class="general-form-group flex-item" id="product-grid-category">
                                 <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>
                                 <input type="text" disabled id="product-category-edit"
@@ -208,36 +206,29 @@
                                 <select id="product_select" name="product_id" class="product-name">
                                 </select>
                             </div>
-
                             <div class="general-form-group flex-item" id="product-grid-sale-price">
                                 <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;">តម្លៃ:</label>
                                 <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                             </div>
-
                             <div class="general-form-group flex-item" id="product-grid-currency">
                                 <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
                                 <select id="product_currency_edit"
                                         name="product_currency_edit"
                                         class="product-currency-select"
-                                        style="text-align: center"
-                                >
+                                        style="text-align: center">
                                     <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>
                             </div>
-
                             <div class="general-form-group" id="product-grid-description">
                                 <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
                                 <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
                             </div>
-
-                                <!--                            <div class="form-group full-width" id="submit">-->
-<!--                                <button id="product-edit-btn" type="submit" class="submit-btn">Submit</button>-->
-<!--                            </div>-->
                             <div class="product-btn-container">
                                 <button disabled class="product-btn-back">Back</button>
-                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-edit-btn" type="submit">Next</button>
+<!--                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-edit-btn">Next</button>-->
+                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-next-btn">Next</button>
                             </div>
                         </form>
                     </div>
@@ -247,15 +238,17 @@
 
                 <div class="btn-container">
                     <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
-                    <button onclick="navigateTab('Variants', 'VariantAttribute')" class="product-btn-next">Next</button>
+                    <button onclick="navigateTab('Variants', 'Verify')" class="product-btn-next "id="product-next-btn-2">Next</button>
                 </div>
             </div>
-            <div id="VariantAttribute" class="tabcontent">
-
+            <div id="Verify" class="tabcontent">
                 <div class="btn-container">
-                    <button onclick="navigateTab('VariantAttribute', 'Variants')" class="product-btn-back">Back</button>
-                    <button class="product-btn-next">Done</button>
+                    <button onclick="navigateTab('Verify', 'Variants')" class="product-btn-back">Back</button>
+                    <button onclick="showConfirmationModal('create')" class="product-btn-next" id="product-submit-btn" type="submit">Yes</button>
                 </div>
+            </div>
+
+            <div id="Done" class="tabcontent" style="display:none">
             </div>
         </div>
     </div>

@@ -50,6 +50,22 @@ public class VariantService {
         productVariantRepository.save(variant);
     }
 
+    public VariantEntity createVariant(VariantCreateDTO variantCreateDTO, Integer productId) throws ParseException {
+
+        ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product is not found"));
+
+        VariantEntity variant = new VariantEntity();
+        variant.setProduct(product);
+
+        variant.setBasePrice(variantCreateDTO.getBasePrice());
+        variant.setSku(variantCreateDTO.getSku());
+        variant.setCurrency(variantCreateDTO.getCurrency());
+        variant.setStockQuantity(variantCreateDTO.getStockQuantity());
+        variant.setStatus(Status.ACTIVE.getValue());
+        variant.setCreatedAt(DateTimeUtil.convertDate(new Date()));
+        return productVariantRepository.save(variant);
+    }
+
     public void update(VariantUpdateDto payloadRequest) throws ParseException {
         VariantEntity existProduct = productVariantRepository.getById(payloadRequest.getId());
         if(Objects.nonNull(existProduct)) {

@@ -47,6 +47,24 @@ public class VariantAttributeService {
         return new VariantAttributeDTO(entity.getId(), dto.getVariantId(), dto.getAttributeId(), entity.getValue(), entity.getStatus());
     }
 
+    public VariantAttributeEntity createVariantAttribute2(VariantAttributeDTO dto, Integer variantId) {
+        VariantEntity variant = variantRepository.findById(variantId)
+                .orElseThrow(() -> new RuntimeException("Variant not found"));
+
+        AttributeEntity attribute = attributeRepository.findById(dto.getAttributeId())
+                .orElseThrow(() -> new RuntimeException("Attribute not found"));
+
+        VariantAttributeEntity entity = new VariantAttributeEntity();
+        entity.setVariant(variant);
+        entity.setAttribute(attribute);
+        entity.setValue(dto.getValue());
+        entity.setStatus(dto.getStatus());
+
+        entity = variantAttributeRepository.save(entity);
+
+        return entity;
+    }
+
     // Get Variant Attribute by ID
     public VariantAttributeDTO getVariantAttributeById(Integer id) {
         VariantAttributeEntity entity = variantAttributeRepository.findById(id)

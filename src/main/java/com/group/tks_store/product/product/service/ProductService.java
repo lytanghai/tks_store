@@ -5,17 +5,25 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.util.DateTimeUtil;
+import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.repository.CategoryRepository;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
+import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.repository.ProductRepository;
+import com.group.tks_store.product.variant.entity.VariantEntity;
+import com.group.tks_store.product.variant.repository.ProductVariantRepository;
+import com.group.tks_store.product.variant.service.VariantService;
+import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
+import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -34,6 +42,15 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductVariantRepository variantRepository;
+
+    @Autowired
+    private VariantService variantService;
+
+    @Autowired
+    private VariantAttributeService variantAttributeService;
+
     public void create(ProductCreateDTO productCreateDTO) throws ParseException {
 
         CategoryEntity category = categoryRepository.findById(productCreateDTO.getCategory().getId()).orElseThrow(() -> new RuntimeException("Category Id is not found"));
@@ -49,6 +66,42 @@ public class ProductService {
         product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
         product.setStatus(Status.ACTIVE.getValue());
         productRepository.save(product);
+    }
+
+    public ProductEntity createProduct(ProductCreateDTO productCreateDTO) throws ParseException {
+
+        CategoryEntity category = categoryRepository.findById(productCreateDTO.getCategory().getId()).orElseThrow(() -> new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + productCreateDTO.getCategory().getId()));
+
+        ProductEntity product = new ProductEntity();
+        product.setCategory(category);
+        product.setNameEn(productCreateDTO.getNameEn());
+        product.setNameKh(productCreateDTO.getNameKh());
+        product.setCode(productCreateDTO.getCode());
+        product.setDescription(productCreateDTO.getDescription());
+        product.setCurrency(productCreateDTO.getCurrency());
+        product.setSalePrice(productCreateDTO.getSalePrice());
+        product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
+        product.setStatus(Status.ACTIVE.getValue());
+        return productRepository.save(product);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public void createFullProduct(ProductFullCreateDTO productCreateDTO) throws ParseException {
+
+        ProductEntity product = null;
+        if(!ObjectUtils.isEmpty(productCreateDTO.getProduct())) {
+            product = this.createProduct(productCreateDTO.getProduct());
+        }
+
+        VariantEntity variant = null;
+        if(!ObjectUtils.isEmpty(productCreateDTO.getVariant())) {
+            variant = variantService.createVariant(productCreateDTO.getVariant(), product.getId());
+        }
+
+        VariantAttributeEntity variantAttribute = null;
+        if(!ObjectUtils.isEmpty(productCreateDTO.getVariantAttribute())) {
+            variantAttribute = variantAttributeService.createVariantAttribute2(productCreateDTO.getVariantAttribute(), variant.getId());
+        }
     }
 
     public void update(ProductUpdateDto payloadRequest) throws ParseException {

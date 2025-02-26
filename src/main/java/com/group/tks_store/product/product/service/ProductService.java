@@ -17,6 +17,7 @@ import com.group.tks_store.product.product.repository.ProductRepository;
 import com.group.tks_store.product.variant.entity.VariantEntity;
 import com.group.tks_store.product.variant.repository.ProductVariantRepository;
 import com.group.tks_store.product.variant.service.VariantService;
+import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,9 @@ public class ProductService {
 
         VariantAttributeEntity variantAttribute = null;
         if(!ObjectUtils.isEmpty(productCreateDTO.getVariantAttribute())) {
-            variantAttribute = variantAttributeService.createVariantAttribute2(productCreateDTO.getVariantAttribute(), variant.getId());
+            for (VariantAttributeDTO variantAttributeDTO : productCreateDTO.getVariantAttribute()) {
+                variantAttribute = variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
+            }
         }
     }
 

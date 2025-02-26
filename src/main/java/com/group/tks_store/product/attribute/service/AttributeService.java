@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.product.attribute.dto.AttributeCreateDTO;
+import com.group.tks_store.product.attribute.dto.AttributeDTO;
 import com.group.tks_store.product.attribute.dto.AttributeListDTO;
 import com.group.tks_store.product.attribute.dto.AttributeUpdateDto;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,8 +56,21 @@ public class AttributeService {
         attributeRepository.deleteById(req.getId());
     }
 
-    public List<AttributeEntity> list() {
-        return attributeRepository.findAllByActive(Status.ACTIVE.getValue());
+    public List<AttributeDTO> list() {
+        List<AttributeDTO> result = new ArrayList<>();
+        List<AttributeEntity> response = attributeRepository.findAllByActive();
+        if(response.size() > 0) {
+            for(int i = 0 ;i<response.size();i++) {
+                AttributeDTO attributeDTO = new AttributeDTO();
+                attributeDTO.setId(response.get(i).getId());
+                attributeDTO.setName(response.get(i).getName());
+                attributeDTO.setNameKh(response.get(i).getNameKh());
+                attributeDTO.setStatus(response.get(i).getStatus());
+
+                result.add(attributeDTO);
+            }
+        }
+        return result;
     }
 
     public AttributeListDTO findAllByPagination(String status, PageRequest pageRequest) {

@@ -16,4 +16,6 @@ public class AddressRedirect {
     public static final String PRODUCT = "product";
     public static final String PRODUCT_KH = "ផលិតផល";
     public static final String REDIRECT_PRODUCT = "redirect:/product";
+
+    public static final String ATTRIBUTE = "attribute";
 }

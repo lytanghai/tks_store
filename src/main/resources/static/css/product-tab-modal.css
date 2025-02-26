@@ -1,14 +1,3 @@
-/* .product-tab-container {
-    position: fixed;
-    top:0;
-    width: 90%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-    font-family: 'Battambang';
-} */
-
-
 .product-modal {
     display: none;
     position: fixed;
@@ -125,4 +114,38 @@
 .product-modal-content button:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+.product-variant-container{
+    position: fixed;
+    width: 40%;
+    height: 59%;
+    top: 28%;
+    display: block;
+}
+
+.product-variant-container > div {
+    margin-top: 5%;
+}
+
+.product-variant-attribute-container {
+    position: fixed;
+    left: 55%;
+    width: 43%;
+    height: 59%;
+    overflow: auto;
+    border: 1px solid #000;
+}
+
+.add-attribute-btn{
+    width: 300px;
+    height: 50px;
+    margin-left: 8%;
+}
+
+.attribute-list-title{
+    position: absolute;
+    width: 50%;
+    top: 5%;
+    left: 50%
 }

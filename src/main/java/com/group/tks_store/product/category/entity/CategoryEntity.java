@@ -43,7 +43,6 @@ public class CategoryEntity {
     private Date lastUpdatedAt;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
     @JsonBackReference
     @JsonIgnore
     private List<ProductEntity> products;

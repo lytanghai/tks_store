@@ -88,28 +88,23 @@
         </tbody>
     </table>
 
-    <div id="myProductModal" class="product-modal product-tab-container" onclick="outsideClick(event)">
+    <div id="myProductModal" class="product-modal product-tab-container">
         <div class="product-modal-content">
             <div class="product-close-container">
                 <span class="product-close " onclick="closeModal()">❌</span>
             </div>
             <div class="tab">
-                <button class="tablinks active" id="tab-Product">Product</button>
-                <button class="tablinks" id="tab-Variants">Variants</button>
-                <button class="tablinks" id="tab-Verify">Verify</button>
+                <button class="tablinks active" id="tab-Product">ទំនិញ</button>
+                <button class="tablinks" id="tab-Variants">អង្គធាតុទំនិញ</button>
+                <button class="tablinks" id="tab-Verify">បញ្ជាក់</button>
             </div>
             <div id="Product" class="tabcontent">
                 <div class="product-create-modal-content">
-<!--                    <span class="close" onclick="closeUpdateProductModal()">❌</span>-->
-<!--                    <div class="service-type-title">-->
-<!--                        <img class="icon-service-type">-->
-<!--                        <h2 id="form-modal-product-title">create</h2>-->
-<!--                    </div>-->
-
                     <div class="form-container">
                         <div class="product-service-type-title">
                             <img class="icon-service-type">
-                            <h2 id="form-modal-product-title">create</h2>
+                            <h2 id="form-modal-product-title" style="display:none">create</h2>
+                            <h2 id="form-product-create-title"></h2>
                         </div>
                         <form id="gridForm" class="grid-form" onsubmit="handleFormSubmit(event)">
                             <div class="general-form-group" id="product-grid-id">
@@ -167,10 +162,70 @@
                 </div>
             </div>
             <div id="Variants" class="tabcontent">
+                <div class="product-create-modal-content">
+                    <div class="product-service-type-title">
+                        <img class="icon-service-type" th:src="@{/icon/edit-product-icon.png}">
+                        <h2 id="form-modal-product-title-2">បញ្ជូលអង្គធាតុទំនិញ</h2>
+                    </div>
+                    <form id="gridFormVariant">
+                        <div class="product-variant-container">
+                            <div id="product-grid-base-price" style="margin-top: 3%">
+                                <label for="product_sale_price_edit" style=" font-size: 1.6rem;">តម្លៃដើម:</label>
+                                <span style="margin-left: 14%"></span>
+                                <input type="text" id="product_base_price_edit"
+                                       style="border:1px solid; width: 100px; font-size: 1.6rem; text-align:center"
+                                       name="product_base_price">
+                            </div>
+                            <div id="product-base-price-grid-currency">
+                                <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
+                                <span style="margin-left: 12%"></span>
+                                <select id="product_base_price_currency_edit"
+                                        name="product_currency_edit"
+                                        style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
+                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>
+                                    <option value="USD">USD</option>
+                                    <option value="KHR">KHR</option>
+                                </select>
+                            </div>
 
-                <div class="btn-container">
-                    <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
-                    <button onclick="navigateTab('Variants', 'Verify')" class="product-btn-next "id="product-next-btn-2">Next</button>
+                            <div id="product-grid-stock-quantity">
+                                <label for="product_code_edit" style="font-size: 1.6rem" >ចំនួនស្ដុកឥវ៉ាន់:</label>
+                                <span style="margin-left: 7%"></span>
+                                <input type="text"
+                                       id="product_stock_quantity_edit"
+                                       name="product_code"
+                                       style="border:1px solid; width: 100px; font-size: 1.6rem; text-align:center">
+                            </div>
+
+                            <div id="product-grid-sky">
+                                <label for="product_code_edit" style="font-size: 1.6rem"> SKU Code:</label>
+                                <span style="margin-left: 8%"></span>
+                                <input type="text"
+                                       id="product_stock_sku"
+                                       name="product_code"
+                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center"
+                                       placeholder="SKU Code">
+                            </div>
+
+                            <div class="add-attribute-btn">
+                                <button onclick="addAttribute()"
+                                        style="width: 270px; background-color: #e28743;color: #000;">
+                                         បន្ថែមអង្គធាតុទំនិញ</button>
+                            </div>
+                        </div>
+
+                        <div class="attribute-list-title">
+                            <h2 style="margin-top: 5%;font-weight:normal"> អង្គធាតុទំនិញ: </h2>
+                        </div>
+                        <div style="margin-top: 8%; margin-left: 7%"></div>
+                        <div id="product-variant-attribute-container" class="product-variant-attribute-container">
+
+                        </div>
+                        <div class="btn-container">
+                            <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
+                            <button onclick="navigateTab('Variants', 'Verify'); showLog()" class="product-btn-next">Next</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div id="Verify" class="tabcontent">
@@ -178,9 +233,6 @@
                     <button onclick="navigateTab('Verify', 'Variants')" class="product-btn-back">Back</button>
                     <button onclick="checkButtonAction()" class="product-btn-next" id="product-submit-btn" type="submit">Submit</button>
                 </div>
-            </div>
-
-            <div id="Done" class="tabcontent" style="display:none">
             </div>
         </div>
     </div>

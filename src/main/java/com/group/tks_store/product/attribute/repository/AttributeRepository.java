@@ -1,5 +1,6 @@
 package com.group.tks_store.product.attribute.repository;
 
+import com.group.tks_store.product.attribute.dto.AttributeDTO;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface AttributeRepository extends JpaRepository<AttributeEntity, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM attributes where status = 'ACTIVE'")
-    List<AttributeEntity> findAllByActive(String status);
+    List<AttributeEntity> findAllByActive();
 
     @Query(value = "SELECT * FROM attributes " +
             "WHERE (status = :status) ",

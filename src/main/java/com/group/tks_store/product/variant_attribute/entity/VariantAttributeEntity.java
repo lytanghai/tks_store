@@ -1,5 +1,7 @@
 package com.group.tks_store.product.variant_attribute.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
@@ -16,13 +18,15 @@ public class VariantAttributeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attribute_id", nullable = false)
+    @JsonBackReference
+    private AttributeEntity attribute;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "variant_id", nullable = false)
     private VariantEntity variant;
 
-    @ManyToOne
-    @JoinColumn(name = "attribute_id", nullable = false)
-    private AttributeEntity attribute;
 
     @Column(name = "value", nullable = false)
     private String value;

@@ -2,6 +2,7 @@ window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
     fetchCategories();
+    fetchAttributes();
 //    openModal();
     showTab("Product");
 
@@ -34,6 +35,12 @@ window.onload = function() {
     }
 
 };
+document.addEventListener("click", function(event) {
+      let modal = document.getElementById("myProductModal");
+      if (event.target === modal) {
+          event.stopPropagation(); // Prevent closing the modal
+      }
+  });
 
     document.addEventListener('keydown', function (event) {
       if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '0')) {

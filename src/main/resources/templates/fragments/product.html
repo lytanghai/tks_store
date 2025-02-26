@@ -203,6 +203,8 @@
 
                             <div class="general-form-group flex-item" id="product-grid-category">
                                 <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>
+                                <input type="text" disabled id="product-category-edit"
+                                       style="display: none; margin-left:9%; width:190px; height: 50px; text-align:center">
                                 <select id="product_select" name="product_id" class="product-name">
                                 </select>
                             </div>
@@ -216,8 +218,10 @@
                                 <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
                                 <select id="product_currency_edit"
                                         name="product_currency_edit"
-                                        class="product-currency-select">
-                                    <option value="USD" selected disabled hidden>USD</option>
+                                        class="product-currency-select"
+                                        style="text-align: center"
+                                >
+                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>

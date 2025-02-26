@@ -10,6 +10,8 @@ import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,21 +34,26 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    private final Logger log = LoggerFactory.getLogger(ProductController.class);
+
     @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
         productService.create(productCreateDTO);
+        log.info("product created");
         return AddressRedirect.REDIRECT_PRODUCT;
     }
 
     @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {
         productService.delete(id);
+        log.info("product {} deleted", id);
         return AddressRedirect.REDIRECT_PRODUCT;
     }
 
     @PostMapping(CommonKey.UPDATE)
     public String update(@RequestBody ProductUpdateDto productUpdateDto) throws ParseException {
         productService.update(productUpdateDto);
+        log.info("product {} updated", productUpdateDto.getId());
         return AddressRedirect.REDIRECT_PRODUCT;
     }
 
@@ -62,6 +69,7 @@ public class ProductController {
             categoryDTO.setName(listEntity.get(i).getName());
             list.set(i, categoryDTO);
         }
+        log.info("fetch categories");
         return list;
     }
 
@@ -90,6 +98,7 @@ public class ProductController {
         model.addAttribute("sort_direction", sortDirection);
         model.addAttribute("first", productPage.isFirst());
         model.addAttribute("last", productPage.isLast());
+        log.info("list pagination product");
 
         return AddressRedirect.HOME;
     }

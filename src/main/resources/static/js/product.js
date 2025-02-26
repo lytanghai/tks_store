@@ -101,19 +101,19 @@ function openUpdateProductModal(element) {
         document.getElementById("product-edit-btn").textContent = 'Next';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
-        fetchCategories();
     } else if(formTitle == 'Update') {
         document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
         document.getElementById("product-edit-btn").textContent = 'កែប្រែ';
         iconElement.src = "/icon/edit-product-icon.png";
         iconElement.alt = "edit-product-icon.png";
+        document.getElementById("product-category-edit").style.display = "block";
+        document.getElementById("product-category-edit").value = categoryNameEn;
     }
 
     document.getElementById("product_id_edit").value = id;
     document.getElementById("product_name_en_edit").value = nameEn;
     document.getElementById("product_name_kh_edit").value = nameKh;
     document.getElementById("product_code_edit").value = code;
-    document.getElementById("product_select").value = categoryNameEn;
     document.getElementById("product_description_edit").value = description;
     document.getElementById("product_currency_edit").value = currency;
     document.getElementById("product_sale_price_edit").value = salePrice;
@@ -174,7 +174,6 @@ function fetchCategories() {
     fetch("/internal/category/list")
         .then(response => response.json())
         .then(categories => {
-        alert('calling to get category')
             populateCategoryDropdown(categories);
         })
         .catch(error => {
@@ -228,10 +227,10 @@ function confirmProductActionConfirmation() {
 }
 
 function handleFormSubmit(event) {
-alert('calling')
-
     event.preventDefault();
     const titleText = document.getElementById("form-modal-product-title").textContent.toLowerCase();
+        alert('handleFormSubmit ' + titleText)
+
     if(titleText.includes("បញ្ជូលផលិតថ្មី")) {
         showConfirmationModal('create');
     } else {
@@ -257,7 +256,7 @@ function updateServiceIcon() {
 }
 
 
-let currentTab = "Product";
+    let currentTab = "Product";
 
     function openModal() {
             fetchCategories();

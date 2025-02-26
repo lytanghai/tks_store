@@ -6,6 +6,8 @@ import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,18 +23,21 @@ import java.util.Map;
 @RequestMapping(AddressRedirect.INTERNAL + AddressRedirect.PRODUCT)
 public class ProductRestController {
 
+    private final Logger log = LoggerFactory.getLogger(ProductRestController.class);
     @Autowired
     private ProductService productService;
 
 
     @PostMapping(CommonKey.CREATE)
     public void create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
+        log.info("product created");
         productService.create(productCreateDTO);
     }
 
     // 🔹 Get all products
     @GetMapping(CommonKey.LIST)
     public List<ProductEntity> getAllProducts() {
+        log.info("product listed");
         return productService.getAllProducts();
     }
 
@@ -46,13 +51,14 @@ public class ProductRestController {
         response.put("currentPage", productPage.getNumber());
         response.put("totalItems", productPage.getTotalElements());
         response.put("totalPages", productPage.getTotalPages());
-
+        log.info("product list active");
         return ResponseEntity.ok(response);
     }
 
     // 🔹 Create a new product
     @PostMapping("/products")
     public ProductEntity createProduct(@RequestBody ProductEntity product) {
+        log.info("product created");
         return productService.createProduct(product);
     }
 }

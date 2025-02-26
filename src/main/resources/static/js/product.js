@@ -1,5 +1,3 @@
-
-
 function createNewProduct() {
     var formData = {
         name_en: document.getElementById('product_name_en_edit').value,
@@ -102,13 +100,17 @@ function openUpdateProductModal(element) {
 //        document.getElementById("product-edit-btn").textContent = 'Next';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
+        document.getElementById("product-submit-btn").value = "create";
+        showTab("Product");
     } else if(formTitle == 'Update') {
-        document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
-//        document.getElementById("product-edit-btn").textContent = 'កែប្រែ';
+//        document.getElementById("form-modal-product-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
+        document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         iconElement.src = "/icon/edit-product-icon.png";
         iconElement.alt = "edit-product-icon.png";
         document.getElementById("product-category-edit").style.display = "block";
         document.getElementById("product-category-edit").value = categoryNameEn;
+        document.getElementById("product-submit-btn").value = "update";
+        showTab("Product");
     }
 
     document.getElementById("product_id_edit").value = id;
@@ -233,7 +235,7 @@ function confirmProductActionConfirmation() {
 function handleFormSubmit(event) {
     event.preventDefault();
     const titleText = document.getElementById("form-modal-product-title").textContent.toLowerCase();
-//    alert('handleFormSubmit ' + titleText)
+    alert('handleFormSubmit ' + titleText)
     if(titleText === 'បន្ទាប់') {
 
     }
@@ -261,7 +263,16 @@ function updateServiceIcon() {
     }
 }
 
-
+function checkButtonAction() {
+    const button = document.getElementById("product-submit-btn").value;
+    if (button === "create") {
+        showConfirmationModal('create');
+    } else if (button === "update") {
+        showConfirmationModal('update');
+    } else {
+        console.error("Unknown action for product-submit-btn");
+    }
+}
     let currentTab = "Product";
 
     function openModal() {
@@ -298,19 +309,13 @@ function updateServiceIcon() {
         if(currentTab === 'Product') {
             document.getElementById("product-next-btn").value = 'បន្ទាប់';
         }
+
         if( currentTab === 'Variants') {
             document.getElementById("product-next-btn-2").value = 'បន្ទាប់';
         }
 
-        if(currentTab !== 'Product' && currentTab !== 'Variants') {
-//                alert("currentTab " + currentTab)
-        }
         if(currentTab === 'Verify') {
             document.getElementById("form-modal-product-title").value = 'បញ្ជូល';
-        }
-
-        if(currentTab === 'Done') {
-            showConfirmationModal('create');
         }
     }
 

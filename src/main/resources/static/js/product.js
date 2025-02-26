@@ -215,31 +215,6 @@ function fetchCategories() {
     });
 }
 
-let selectedAttributes = new Set(); // Stores selected attribute IDs
-
-function fetchAttributes(selectId, currentSelectedValue) {
-    fetch("/internal/attribute/list")
-        .then(response => response.json())
-        .then(attributes => {
-            populateAttributeDropdown(attributes, selectId, currentSelectedValue);
-        })
-        .catch(error => {
-            console.error("Error fetching attributes:", error);
-        });
-}
-
-
-//function fetchAttributes() {
-//    fetch("/internal/attribute/list")
-//        .then(response => response.json())
-//        .then(attributes => {
-//            populateAttributeDropdown(attributes);
-//        })
-//        .catch(error => {
-//            console.error("Error fetching categories:", error);
-//    });
-//}
-
 
 function populateCategoryDropdown(categories) {
     const categorySelect = document.getElementById("product_select");
@@ -256,51 +231,6 @@ function populateCategoryDropdown(categories) {
         categorySelect.appendChild(option);
     });
 }
-
-function populateAttributeDropdown(attributes, selectId, currentSelectedValue) {
-    const selectElement = document.getElementById(selectId);
-    if (!selectElement) return;
-
-    // Clear existing options
-    selectElement.innerHTML = `<option value="">Select Attribute</option>`;
-
-    // Filter attributes: Keep the currently selected value but exclude all other selected ones
-    const filteredAttributes = attributes.filter(attr => !selectedAttributes.has(attr.id) || attr.id == currentSelectedValue);
-
-    // Append new options
-    filteredAttributes.forEach(attr => {
-        const option = document.createElement("option");
-        option.value = attr.id;
-        option.textContent = attr.name;
-        if (attr.id == currentSelectedValue) option.selected = true;
-        selectElement.appendChild(option);
-    });
-}
-
-
-function updateAttribute(attrIndex, field, value) {
-    if (field === 'អង្គធាតុទំនិញ') { // Attribute selection changed
-        const previousValue = variant.variant_attributes[attrIndex].id;
-
-        // Update the variant object with the new selection
-        variant.variant_attributes[attrIndex].id = value;
-
-        // Update selected attributes set
-        if (previousValue) selectedAttributes.delete(previousValue); // Remove old selection
-        if (value) selectedAttributes.add(value); // Add new selection
-
-        // Re-render all dropdowns to apply updated filters
-        renderAttributes();
-    } else {
-        // Update other fields (e.g., price)
-        variant.variant_attributes[attrIndex][field] = value;
-    }
-}
-
-
-
-
-
 
 function showConfirmationModal(action, id) {
     document.getElementById("product-confirmation-modal").style.display = "block";

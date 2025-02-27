@@ -11,6 +11,10 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+#product_attribute_select option {
+    font-size: 1rem;
+}
+
 .product-modal-content {
     position: fixed;
     width: 84%;
@@ -149,6 +153,7 @@
     width: 50%;
     top: 5%;
     left: 49%
+}
 }
 
 }

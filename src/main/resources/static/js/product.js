@@ -201,16 +201,14 @@ function updateAttributeList() {
     // Create list item with two spans
     let listItem = document.createElement("li");
     listItem.style.display = "flex";
-    listItem.style.borderBottom = "1px solid #ddd";
     listItem.style.textAlign = "center";
-    listItem.style.padding = "5px 0";
-
-    // Store attribute ID in data-id
+    listItem.style.fontSize = "1.6rem";
+    listItem.style.backgroundColor = "#fff";
     listItem.setAttribute("data-id", attributeId);
 
     let attrSpan = document.createElement("span");
     attrSpan.style.flex = "1";
-    attrSpan.textContent = attributeName; // Display name instead of ID
+    attrSpan.textContent = attributeName;
 
     let valueSpan = document.createElement("span");
     valueSpan.style.flex = "1";
@@ -418,11 +416,11 @@ function checkButtonAction() {
     }
 }
 
-function openModal() {
-    fetchCategories();
-    document.getElementById("myProductModal").style.display = "block";
-    showTab(currentTab);
-}
+//function openModal() {
+//    fetchCategories();
+//    document.getElementById("myProductModal").style.display = "block";
+//    showTab(currentTab);
+//}
 
 function closeModal() {
     document.getElementById("myProductModal").style.display = "none";
@@ -439,7 +437,6 @@ function showTab(tabName) {
     for (let i = 0; i < tablinks.length; i++) {
         tablinks[i].classList.remove("active");
     }
-
     document.getElementById(tabName).style.display = "block";
     document.getElementById("tab-" + tabName).classList.add("active");
     currentTab = tabName;

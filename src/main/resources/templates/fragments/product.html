@@ -2,63 +2,68 @@
 
     <div class="product-search-bar-container">
         <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="productFilterResults()" class="search-ipt">
-
-        <label for="productStartDate">ចាប់ពី:</label>
         <div class="filter-date-container">
+        <label for="productStartDate" class="start_from">ចាប់ពី:</label>
             <input type="date" id="productStartDate" onchange="productFilterResults()" class="date-obj">
             <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
         </div>
 
-        <label for="productEndDate">រហូតដល់:</label>
         <div class="filter-date-container">
-            <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj">
+        <label for="productEndDate" class="start_to">រហូតដល់:</label>
+            <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
             <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
         </div>
-
     </div>
+
     <div id="product-create-container">
+        <button th:href="'#'"
+                th:data-form-title="Create"
+                onclick="reloadPage()"
+                class="product-create-btn">
+            <span class="unicode-icon">⭮</span>
+            <span th:text="'ផ្ទុកឡើងវិញ'" style="padding-bottom: 5px; font-size: 1.5rem;color: #0a0a0a"></span>
+        </button>
+        <span style="margin-left: 3%"></span>
         <button th:href="'#'"
                 th:data-form-title="Create"
                 onclick="openUpdateProductModal(this)"
                 class="product-create-btn">
-            <img th:src="@{/icon/add-icon.png}" style="width:12px; color: #0a0a0a" alt="Trash Icon">
-            <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; color: #0a0a0a"></span>
+            <span class="unicode-icon">&plus;</span>
+            <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; font-size: 1.5rem;color: #0a0a0a"></span>
         </button>
     </div>
 
     <table class="product_table_list_container">
         <thead>
         <tr>
-            <th class="product_th">លេខកូដ</th>
-            <th class="product_th">ឈ្មោះទំនិញ</th>
-            <th class="product_th">ប្រភេទទំនិញ</th>
-            <th class="product_th">តម្លៃ</th>
-            <th class="product_th">ពត៍មានបន្ថែម</th>
-            <th class="product_th">ស្ថានភាព</th>
-            <th class="product_th">ថ្ងៃខែបញ្ជូល</th>
-            <th class="product_th">សកម្មភាព</th>
+            <th class="table_th">លេខកូដ</th>
+            <th class="table_th">ឈ្មោះទំនិញ</th>
+            <th class="table_th">ប្រភេទទំនិញ</th>
+            <th class="table_th">តម្លៃ</th>
+            <th class="table_th">ពត៍មានបន្ថែម</th>
+            <th class="table_th">ស្ថានភាព</th>
+            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
+            <th class="table_th">សកម្មភាព</th>
         </tr>
         </thead>
         <tbody id="productTable">
         <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <div th:if="${content != null}">
-                <td class="product_td" th:text="${row.code}"></td>
-                <td class="product_td" th:text="${row.nameEn + ' (' + row.nameKh +')'}"></td>
-                <td class="product_td" th:text="${row.categoryNameEn + ' (' + row.categoryNameKh +')'}"></td>
-<!--                <td class="product_td" th:text="${row.salePrice + ' ' + row.currency}"></td>-->
-                <td class="product_td" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
-                <td class="product_td" id="product_textarea">
+                <td class="table_td" th:text="${row.code}"></td>
+                <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEn}"></td>
+                <td class="table_td" th:text="${row.categoryNameKh != null and row.categoryNameKh != '' ? row.categoryNameEn + ' (' + row.categoryNameKh + ')' : row.categoryNameEn}"></td>
+                <td class="table_td" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
+                <td class="table_td" id="product_textarea">
                     <textarea class="product_desc" th:text="${row.description}" rows="1" cols="40" readonly></textarea>
                 </td>
-                <td class="product_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
-<!--                <td class="product_td" th:text="${row.createdAt}"></td>-->
-                <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
+                <td class="table_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
+                <td class="table_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
 
-                <td class="product_td">
+                <td class="table_td">
                     <ul class="product-action ">
                         <li>
                             <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-                                <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
+                                <span class="unicode-icon">&#128465</span>
                                 <span th:text="លុប"></span>
                             </a>
                         </li>
@@ -69,6 +74,8 @@
                             <a
                                th:id="${row.id}"
                                th:data-code="${row.code}"
+                               th:data-categoryEn="${row.categoryNameEn}"
+                               th:data-categoryKh="${row.categoryNameKh}"
                                th:data-name-en="${row.nameEn}"
                                th:data-name-kh="${row.nameKh}"
                                th:data-sale-price="${row.salePrice}"
@@ -77,7 +84,7 @@
                                th:data-form-title="'Update'"
                                th:href="'#'"
                                onclick="openUpdateProductModal(this)">
-                                <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
+                                <span class="unicode-icon">&#x270E;</span>
                                 <span th:text="'កែ'"></span>
                             </a>
                         </li>
@@ -88,81 +95,224 @@
         </tbody>
     </table>
 
-    <div id="myProductModal" class="product-create-modal">
-        <div class="product-create-modal-content">
-            <span class="close" onclick="closeUpdateProductModal()">X</span>
-            <div class="service-type-title">
-                <img class="icon-service-type">
-                <h2 id="form-modal-product-title">create</h2>
+    <div id="myProductModal" class="product-modal product-tab-container">
+        <div class="product-modal-content">
+            <div class="product-close-container">
+                <span class="product-close " onclick="closeModal()">❌</span>
+            </div>
+            <div class="tab">
+                <button class="tablinks active" id="tab-Product">ទំនិញ</button>
+                <button class="tablinks" id="tab-Variants">អង្គធាតុទំនិញ</button>
+                <button class="tablinks" id="tab-Verify">បញ្ជាក់</button>
+            </div>
+            <div id="Product" class="tabcontent">
+                <div class="product-create-modal-content">
+                    <div class="form-container">
+                        <div class="product-service-type-title">
+                            <img class="icon-service-type">
+                            <h2 id="form-modal-product-title" style="display:none">create</h2>
+                            <h2 id="form-product-create-title"></h2>
+                        </div>
+                        <form id="gridForm" class="grid-form" onsubmit="handleFormSubmit(event)">
+                            <div class="general-form-group" id="product-grid-id">
+                                <label for="product_id_edit" class="general_label">លេខរៀង:</label>
+                                <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
+                            </div>
+
+                            <div class="group-product-name" id="product-grid-name">
+                                <div class="general-form-group">
+                                    <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
+                                    <input type="text" id="product_name_en_edit" name="product_name_en" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
+                                </div>
+                                <div class="general-form-group" style="margin-left: 10%">
+                                    <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
+                                    <input type="text" id="product_name_kh_edit" name="product_name_kh" class="product-name-en-kh-ipt" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
+                                </div>
+                            </div>
+                            <div class="general-form-group" id="product-grid-code">
+                                <label for="product_code_edit" class="general_label">លេខកូដ:</label>
+                                <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
+                            </div>
+                            <div class="general-form-group flex-item" id="product-grid-category">
+                                <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>
+                                <input type="text" disabled id="product-category-edit"
+                                       style="display: none; margin-left:9%; width:190px; height: 50px; text-align:center">
+                                <select id="product_select" name="product_id" class="product-name">
+                                </select>
+                            </div>
+                            <div class="general-form-group flex-item" id="product-grid-sale-price">
+                                <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;">តម្លៃ:</label>
+                                <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
+                            </div>
+                            <div class="general-form-group flex-item" id="product-grid-currency">
+                                <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
+                                <select id="product_currency_edit"
+                                        name="product_currency_edit"
+                                        class="product-currency-select"
+                                        style="text-align: center">
+                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>
+                                    <option value="USD">USD</option>
+                                    <option value="KHR">KHR</option>
+                                </select>
+                            </div>
+                            <div class="general-form-group" id="product-grid-description">
+                                <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
+                                <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
+                            </div>
+                            <div class="product-btn-container">
+                                <button class="product-btn-back" onclick="closeModal()">បិទ</button>
+                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-next-btn">បន្ទាប់</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="Variants" class="tabcontent">
+                <div class="product-create-modal-content">
+                    <div class="product-service-type-title">
+                        <img class="icon-service-type" th:src="@{/icon/edit-product-icon.png}">
+                        <h2 id="form-modal-product-title-2">បញ្ជូលអង្គធាតុទំនិញ</h2>
+                    </div>
+                    <form id="gridFormVariant">
+                        <div class="product-variant-container">
+                            <div id="product-grid-base-price" style="margin-top: 3%">
+                                <label for="product_sale_price_edit" style=" font-size: 1.6rem;">តម្លៃដើម:</label>
+                                <span style="margin-left: 14%"></span>
+                                <input type="text" id="product_base_price_edit"
+                                       style="border:1px solid; width: 350px; font-size: 1.6rem; text-align:center"
+                                       name="product_base_price">
+                            </div>
+                            <div id="product-base-price-grid-currency">
+                                <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
+                                <span style="margin-left: 12%"></span>
+                                <select id="product_base_price_currency_edit"
+                                        name="product_currency_edit"
+                                        style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
+                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>
+                                    <option value="USD">USD</option>
+                                    <option value="KHR">KHR</option>
+                                </select>
+                            </div>
+
+                            <div id="product-grid-stock-quantity">
+                                <label for="product_code_edit" style="font-size: 1.6rem" >ចំនួនស្ដុកឥវ៉ាន់:</label>
+                                <span style="margin-left: 7%"></span>
+                                <input type="text"
+                                       id="product_stock_quantity_edit"
+                                       name="product_code"
+                                       style="border:1px solid; width: 100px; font-size: 1.6rem; text-align:center">
+                            </div>
+
+                            <div id="product-grid-sky">
+                                <label for="product_code_edit" style="font-size: 1.6rem"> SKU Code:</label>
+                                <span style="margin-left: 8%"></span>
+                                <input type="text"
+                                       id="product_stock_sku"
+                                       name="product_code"
+                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center">
+                            </div>
+
+                            <div style="font-size: 1.6rem">អង្គធាតុ
+                                <label style="font-size: 1.6rem;">
+                                    <select id="product_attribute_select"
+                                            style="width: 120px; font-size: 1.5rem; height: 50px">
+                                    </select>
+                                </label>
+                                <label style="font-size: 1.6rem">តម្លៃ:
+                                    <input type="text" id="product_attribute_value"
+                                           class="product-variant-attribute-value">
+                                </label>
+                            </div>
+
+                            <div class="add-attribute-btn">
+                                <button type="button" onclick="addAttribute()"
+                                        style="width: 270px; background-color: #e28743;color: #000;">
+                                         បន្ថែមអង្គធាតុទំនិញ</button>
+                            </div>
+                        </div>
+
+                        <div class="attribute-list-title">
+                            <h2 class="product-attribute-list-table"> អង្គធាតុទំនិញ: </h2>
+                        </div>
+                        <div style="margin-top: 8%; margin-left: 7%"></div>
+                        <div id="product-variant-attribute-container" class="product-variant-attribute-container">
+                            <div class="product-attribute-list-contain">
+                                <div style="display: flex;">
+                                    <span class="product-attribute-header">អង្គធាតុ</span>
+                                    <span class="product-attribute-header">តម្លៃ</span>
+                                    <span class="product-attribute-header">សកម្មភាព</span>
+                                </div>
+                            </div>
+                                <ul id="attribute-list" class="product-attribute-ul"></ul>
+
+                        </div>
+                        <div class="product-btn-container">
+                            <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">ថយក្រោយ</button>
+                            <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">បន្ទាប់</button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <form id="popupForm" class="pop-up" onsubmit="handleFormSubmit(event)">
-                <div class="group-product-pop-up">
-                    <div class="general-form-group">
-                        <label for="product_id_edit" class="general_label">លេខរៀង:</label>
-                        <input type="text" id="product_id_edit" name="product_id" class="general_input ready-only-field" placeholder="លេខរៀង" readonly>
+            <div id="Verify" class="tabcontent">
+                <div class="product-verify-tab-content-container">
+                    <div class="product-verify-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">ទំនិញ</h2>
+                        <label>លេខរៀង:</label>
+                        <label id="verify-product-id" style="margin-left: 29%;" class="common-label"></label> <br>
+                        <label>ឈ្មោះទំនិញជាភាសាអង្គគ្លេស:</label>
+                        <label id="verify-product-nameEn" class="common-label"></label><br>
+                        <label>ឈ្មោះទំនិញជាភាសាខ្មែរ:</label>
+                        <label id="verify-product-nameKh" style="margin-left: 7%;" class="common-label"></label><br>
+                        <label>លេខកូដទំនិញ:</label>
+                        <label id="verify-product-code" style="margin-left: 21%;" class="common-label"></label><br>
+                        <label>ប្រភេទទំនិញ:</label>
+                        <label id="verify-product-category" style="margin-left: 23%;" class="common-label"></label><br>
+                        <label>តម្លៃទំនិញ:</label>
+                        <label id="verify-product-sale-price" style="margin-left: 26.5%;" class="common-label"></label><br>
+                        <label>រូបីយប័ណ្ណ:</label>
+                        <label id="verify-product-currency" style="margin-left: 26.5%;" class="common-label"></label><br>
+                        <label>ពត៍មានបន្ថែម:</label> <br>
+                        <label id="verify-product-description" style="text-align: center;" class="common-label"></label>
                     </div>
-
-                    <div class="group-product-name">
-                        <div class="general-form-group">
-                            <label for="product_name_en_edit" class="general_label">ឈ្មោះ(អង់គ្លេស):</label>
-                            <input type="text" id="product_name_en_edit" name="product_name_en" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាអង់គ្លេស">
-                        </div>
-                        <div class="general-form-group" style="margin-left: 10%">
-                            <label for="product_name_kh_edit" class="general_label">ឈ្មោះ(ខ្មែរ):</label>
-                            <input type="text" id="product_name_kh_edit" name="product_name_kh" class="general_input" placeholder="បញ្ជូលផលិតផល ជាភាសាខ្មែរ">
-                        </div>
+                    <div class="product-variant-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">វ៉ារ្យ៉ង់</h2>
+                        <label>តម្លៃដើម:</label>
+                        <label id="verify-variant-base-price" style="margin-left: 18%;" class="common-label"></label> <br>
+                        <label>រូបីយប័ណ្ណ:</label>
+                        <label id="verify-variant-currency" style="margin-left: 15%;" class="common-label"></label><br>
+                        <label>ចំនួនស្ដុកឥវ៉ាន់:</label>
+                        <label id="verify-variant-stock-quantity" style="margin-left: 7%;" class="common-label"></label><br>
+                        <label>SKU Code:</label>
+                        <label id="verify-variant-sku-code" style="margin-left: 9%;" class="common-label"></label><br>
                     </div>
-                    <div class="general-form-group">
-                        <label for="product_code_edit" class="general_label">លេខកូដ:</label>
-                        <input type="text" id="product_code_edit" name="product_code" class="general_input" placeholder="លេខកូដ">
+                    <div class="product-variant-attribute-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">អង្គធាតុទំនិញ</h2>
+                        <label id="verify-variant-attribute-name" style="font-size: 1.3rem;text-align:center;" class="common-label"></label> <br>
                     </div>
-                    <div class="product-info-ipt">
-                        <div class="general-form-group flex-item">
-                            <div style="margin-top: 3px"></div>
-                            <label for="product_select" class="general_label">ប្រភេទទំនិញ:</label>
-                            <select id="product_select" name="product_id" class="general_input" style="padding: 2px;">
-                            </select>
-                        </div>
-                        <div class="general-form-group flex-item">
-                            <label for="product_sale_price_edit" class="general_label product-price-ipt">តម្លៃ:</label>
-                            <input type="text" id="product_sale_price_edit" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
-                        </div>
-
-                        <div class="general-form-group flex-item">
-                            <label for="product_currency_edit">ជ្រើសរើសរូបីយប័ណ្ណ:</label>
-                            <div style="margin-top: 8px"></div>
-                            <select name="product_currency_edit" id="product_currency_edit" style="padding: 2px;">
-                                <option value="USD" selected disabled hidden>USD</option>
-                                <option value="USD">USD</option>
-                                <option value="KHR">KHR</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="general-form-group">
-                        <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
-                        <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
-                    </div>
-                    <button type="submit" class="update_button product-update-btn" style="margin-right: 3%;" id="product-edit-btn"></button>
                 </div>
-            </form>
+
+                <div class="product-btn-container">
+                    <button onclick="navigateTab('Verify', 'Variants')" class="product-btn-back">ថយក្រោយ</button>
+                    <button onclick="checkButtonAction()" class="product-btn-next" id="product-submit-btn" type="submit">បន្ថែមទំនិញ</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="product-confirmation-modal" class="confirm-modal" style="z-index:999">
         <div class="confirm-modal-content">
             <div class="close-confirm-modal-container">
-                <span class="close-confirm-modal" onclick="closeConfirmationModal()">&times;</span>
+                <span class="close-confirm-modal" onclick="closeConfirmationModal()">❌</span>
             </div>
             <div id="confirm-modal-header">
-                <img th:src="@{/icon/exclamation-mark.png}"class="flex-item" alt="exclamation-mark.png" style="width: 40px; margin-left: 10%;">
+                <img th:src="@{/icon/exclamation-mark.png}"class="flex-item" alt="exclamation-mark.png" style="width: 70px; margin-left: 10%;">
                 <h2 class="flex-item">សំខាន់</h2>
             </div>
             <p id="product-confirm-modal-text">Do you want to proceed with this action?</p>
             <div class="modal-actions">
-                <button class="confirm-cancel-btn" onclick="closeConfirmationModal()">ទេ</button>
-                <button class="confirm-btn" onclick="confirmProductActionConfirmation()">បាទ/ចាស់</button>
+                <button class="confirm-cancel-btn"style="font-size: 1.5rem" onclick="closeConfirmationModal()">ទេ</button>
+                <button class="confirm-btn" style="font-size: 1.5rem" onclick="confirmProductActionConfirmation()">បាទ/ចាស់</button>
             </div>
         </div>
     </div>
@@ -188,12 +338,13 @@
             </div>
 
             <div th:if="${current_page != 0}" class="product-list-prev">
-                <a th:if="${current_page > 0}" th:href="@{/product/list/(page=${current_page - 1})}" class="product-redirect-href"> < </a>
+                <a th:if="${current_page > 0}" th:href="@{/api/product/list/(page=${current_page - 1})}" class="product-redirect-href"> < </a>
             </div>
 
             <div th:if="${current_page < total_pages}" class="product-list-next">
-                <a th:if="${current_page < total_pages - 1}" th:href="@{/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
+                <a th:if="${current_page < total_pages - 1}" th:href="@{/api/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
             </div>
         </div>
     </div>
+
 </div>

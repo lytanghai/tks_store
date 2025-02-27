@@ -1,8 +1,9 @@
 let attributeGlobalAction = 'Create';
+//1920 x 963
 
 function clearAttributeModalInput() {
-    document.getElementById("attribute_name").value = '';
-    document.getElementById("attribute_name_kh").value = '';
+//    document.getElementById("attribute_name").value = '';
+//    document.getElementById("attribute_name_kh").value = '';
 }
 
 function createNewAttribute() {

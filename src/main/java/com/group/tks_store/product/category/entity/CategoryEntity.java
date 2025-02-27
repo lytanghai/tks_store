@@ -1,10 +1,12 @@
 package com.group.tks_store.product.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.group.tks_store.product.products.entity.ProductEntity;
+import com.group.tks_store.product.product.entity.ProductEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -41,7 +43,8 @@ public class CategoryEntity {
     private Date lastUpdatedAt;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
+    @JsonIgnore
     private List<ProductEntity> products;
 
     public Integer getId() {

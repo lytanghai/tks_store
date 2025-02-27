@@ -1,4 +1,3 @@
-<!-- Sidebar -->
 <div class="sidebar" th:fragment="sidebar" xmlns:th="http://www.w3.org/1999/xhtml">
     <h4 class="text-center">XXXXStore</h4>
     <br>
@@ -8,11 +7,11 @@
     </div>
 
     <div class="feature-container">
-        <a th:href="@{/product/list?page=0}" style="font-weight:500;">Products / ទំនិញ</a>
+        <a th:href="@{/api/product/list?page=0}" style="font-weight:500;">Products / ទំនិញ</a>
     </div>
 
     <div class="feature-container">
-        <a th:href="@{/category/list?page=0}" style="font-weight:500;">Category / ប្រភេទទំនិញ</a>
+        <a th:href="@{/api/category/list?page=0}" style="font-weight:500;">Category / ប្រភេទទំនិញ</a>
     </div>
 
     <div class="feature-container">
@@ -30,6 +29,4 @@
     <div class="feature-container">
         <a href="#" style="font-weight:500;">Report / របាយការណ៍</a>
     </div>
-
-
 </div>

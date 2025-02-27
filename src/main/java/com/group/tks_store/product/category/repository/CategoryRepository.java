@@ -21,4 +21,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
             nativeQuery = true)
     Page<CategoryEntity> findAllByPagination(@Param("status") String status,
                                              Pageable pageable);
+
+    @Query(value = "SELECT COUNT(1) FROM category WHERE (name = :name)", nativeQuery = true)
+    Integer findByName(@Param("name")String name);
 }

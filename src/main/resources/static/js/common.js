@@ -1,8 +1,9 @@
-
 window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
     fetchCategories();
+    fetchAttributes();
+    showTab("Product");
 
     const popupType = sessionStorage.getItem('popupMessage');
     const popupAction = sessionStorage.getItem('popupAction');
@@ -33,8 +34,40 @@ window.onload = function() {
     }
 };
 
+document.addEventListener("click", function(event) {
+      let modal = document.getElementById("myProductModal");
+      if (event.target === modal) {
+          event.stopPropagation(); // Prevent closing the modal
+      }
+  });
+
+document.addEventListener('keydown', function (event) {
+  if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '0')) {
+    event.preventDefault();
+  }
+});
+
+document.addEventListener('wheel', function (event) {
+  if (event.ctrlKey) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
 function showPopUpMessage(type, action) {
     sessionStorage.setItem('popupMessage', type);
     sessionStorage.setItem('popupAction', action);
     location.reload();
+}
+
+function reloadPage() {
+    location.reload();
+}
+
+function getSelectOptionTextByValue(selectElement, selectedValue) {
+    for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value === selectedValue) {
+            return selectElement.options[i].text;
+        }
+    }
+    return null;
 }

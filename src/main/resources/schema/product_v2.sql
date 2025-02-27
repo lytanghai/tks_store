@@ -97,3 +97,20 @@ CREATE TABLE tks.public.variant_attributes (
     value VARCHAR(255) NOT NULL,  -- Example: "Red", "M", "Cotton, Adidas"
     status VARCHAR(10)
 );
+
+--Init
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Color', 'ពណ៍', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Size', 'ទំហំ', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Number', 'លេខ', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Length', 'ប្រវែង', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Material', 'សមាសភាគ', 'ACTIVE');

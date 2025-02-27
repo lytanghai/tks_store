@@ -15,6 +15,9 @@
         border-collapse: collapse;
         table-layout: fixed;
     }
+    .custom-sale-price{
+        text-align: right;
+    }
 
     #form-modal-product-title {
         font-size: 2rem;

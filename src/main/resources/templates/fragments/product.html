@@ -52,7 +52,7 @@
                 <td class="table_td" th:text="${row.code}"></td>
                 <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEn}"></td>
                 <td class="table_td" th:text="${row.categoryNameKh != null and row.categoryNameKh != '' ? row.categoryNameEn + ' (' + row.categoryNameKh + ')' : row.categoryNameEn}"></td>
-                <td class="table_td" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
+                <td class="table_td custom-sale-price" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
                 <td class="table_td" id="product_textarea">
                     <textarea class="product_desc" th:text="${row.description}" rows="1" cols="40" readonly></textarea>
                 </td>

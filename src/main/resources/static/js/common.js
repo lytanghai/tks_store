@@ -3,7 +3,6 @@ window.onload = function() {
     clearCategoryModalInput();
     fetchCategories();
     fetchAttributes();
-//    openModal();
     showTab("Product");
 
     const popupType = sessionStorage.getItem('popupMessage');
@@ -33,8 +32,8 @@ window.onload = function() {
             }, 2000);
         }, 500);
     }
-
 };
+
 document.addEventListener("click", function(event) {
       let modal = document.getElementById("myProductModal");
       if (event.target === modal) {
@@ -42,20 +41,33 @@ document.addEventListener("click", function(event) {
       }
   });
 
-    document.addEventListener('keydown', function (event) {
-      if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '0')) {
-        event.preventDefault();
-      }
-    });
+document.addEventListener('keydown', function (event) {
+  if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '0')) {
+    event.preventDefault();
+  }
+});
 
-    document.addEventListener('wheel', function (event) {
-      if (event.ctrlKey) {
-        event.preventDefault();
-      }
-    }, { passive: false });
+document.addEventListener('wheel', function (event) {
+  if (event.ctrlKey) {
+    event.preventDefault();
+  }
+}, { passive: false });
 
 function showPopUpMessage(type, action) {
     sessionStorage.setItem('popupMessage', type);
     sessionStorage.setItem('popupAction', action);
     location.reload();
+}
+
+function reloadPage() {
+    location.reload();
+}
+
+function getSelectOptionTextByValue(selectElement, selectedValue) {
+    for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value === selectedValue) {
+            return selectElement.options[i].text;
+        }
+    }
+    return null;
 }

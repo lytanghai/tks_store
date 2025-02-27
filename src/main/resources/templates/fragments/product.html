@@ -2,7 +2,6 @@
 
     <div class="product-search-bar-container">
         <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="productFilterResults()" class="search-ipt">
-
         <div class="filter-date-container">
         <label for="productStartDate" class="start_from">ចាប់ពី:</label>
             <input type="date" id="productStartDate" onchange="productFilterResults()" class="date-obj">
@@ -14,9 +13,17 @@
             <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
             <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
         </div>
-
     </div>
+
     <div id="product-create-container">
+        <button th:href="'#'"
+                th:data-form-title="Create"
+                onclick="reloadPage()"
+                class="product-create-btn">
+            <span class="unicode-icon">⭮</span>
+            <span th:text="'ផ្ទុកឡើងវិញ'" style="padding-bottom: 5px; font-size: 1.5rem;color: #0a0a0a"></span>
+        </button>
+        <span style="margin-left: 3%"></span>
         <button th:href="'#'"
                 th:data-form-title="Create"
                 onclick="openUpdateProductModal(this)"
@@ -153,8 +160,8 @@
                                 <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
                             </div>
                             <div class="product-btn-container">
-                                <button disabled class="product-btn-back">Back</button>
-                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-next-btn">Next</button>
+                                <button class="product-btn-back" onclick="closeModal()">បិទ</button>
+                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-next-btn">បន្ទាប់</button>
                             </div>
                         </form>
                     </div>
@@ -172,7 +179,7 @@
                                 <label for="product_sale_price_edit" style=" font-size: 1.6rem;">តម្លៃដើម:</label>
                                 <span style="margin-left: 14%"></span>
                                 <input type="text" id="product_base_price_edit"
-                                       style="border:1px solid; width: 100px; font-size: 1.6rem; text-align:center"
+                                       style="border:1px solid; width: 350px; font-size: 1.6rem; text-align:center"
                                        name="product_base_price">
                             </div>
                             <div id="product-base-price-grid-currency">
@@ -213,7 +220,7 @@
                                 </label>
                                 <label style="font-size: 1.6rem">តម្លៃ:
                                     <input type="text" id="product_attribute_value"
-                                           style="border:1px solid; width: 100px; font-size: 1.6rem;">
+                                           class="product-variant-attribute-value">
                                 </label>
                             </div>
 
@@ -233,22 +240,61 @@
                                 <div style="display: flex;">
                                     <span class="product-attribute-header">អង្គធាតុ</span>
                                     <span class="product-attribute-header">តម្លៃ</span>
+                                    <span class="product-attribute-header">សកម្មភាព</span>
                                 </div>
                             </div>
                                 <ul id="attribute-list" class="product-attribute-ul"></ul>
 
                         </div>
-                        <div class="btn-container">
-                            <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
-                            <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">Next</button>
+                        <div class="product-btn-container">
+                            <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">ថយក្រោយ</button>
+                            <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">បន្ទាប់</button>
                         </div>
                     </form>
                 </div>
             </div>
+
             <div id="Verify" class="tabcontent">
-                <div class="btn-container">
-                    <button onclick="navigateTab('Verify', 'Variants')" class="product-btn-back">Back</button>
-                    <button onclick="checkButtonAction()" class="product-btn-next" id="product-submit-btn" type="submit">Submit</button>
+                <div class="product-verify-tab-content-container">
+                    <div class="product-verify-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">ទំនិញ</h2>
+                        <label>លេខរៀង:</label>
+                        <label id="verify-product-id" style="margin-left: 29%;" class="common-label"></label> <br>
+                        <label>ឈ្មោះទំនិញជាភាសាអង្គគ្លេស:</label>
+                        <label id="verify-product-nameEn" class="common-label"></label><br>
+                        <label>ឈ្មោះទំនិញជាភាសាខ្មែរ:</label>
+                        <label id="verify-product-nameKh" style="margin-left: 7%;" class="common-label"></label><br>
+                        <label>លេខកូដទំនិញ:</label>
+                        <label id="verify-product-code" style="margin-left: 21%;" class="common-label"></label><br>
+                        <label>ប្រភេទទំនិញ:</label>
+                        <label id="verify-product-category" style="margin-left: 23%;" class="common-label"></label><br>
+                        <label>តម្លៃទំនិញ:</label>
+                        <label id="verify-product-sale-price" style="margin-left: 26.5%;" class="common-label"></label><br>
+                        <label>រូបីយប័ណ្ណ:</label>
+                        <label id="verify-product-currency" style="margin-left: 26.5%;" class="common-label"></label><br>
+                        <label>ពត៍មានបន្ថែម:</label> <br>
+                        <label id="verify-product-description" style="text-align: center;" class="common-label"></label>
+                    </div>
+                    <div class="product-variant-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">វ៉ារ្យ៉ង់</h2>
+                        <label>តម្លៃដើម:</label>
+                        <label id="verify-variant-base-price" style="margin-left: 18%;" class="common-label"></label> <br>
+                        <label>រូបីយប័ណ្ណ:</label>
+                        <label id="verify-variant-currency" style="margin-left: 15%;" class="common-label"></label><br>
+                        <label>ចំនួនស្ដុកឥវ៉ាន់:</label>
+                        <label id="verify-variant-stock-quantity" style="margin-left: 7%;" class="common-label"></label><br>
+                        <label>SKU Code:</label>
+                        <label id="verify-variant-sku-code" style="margin-left: 9%;" class="common-label"></label><br>
+                    </div>
+                    <div class="product-variant-attribute-tab-container">
+                        <h2 style="text-align: center; font-weight: normal">អង្គធាតុទំនិញ</h2>
+                        <label id="verify-variant-attribute-name" style="font-size: 1.3rem;text-align:center;" class="common-label"></label> <br>
+                    </div>
+                </div>
+
+                <div class="product-btn-container">
+                    <button onclick="navigateTab('Verify', 'Variants')" class="product-btn-back">ថយក្រោយ</button>
+                    <button onclick="checkButtonAction()" class="product-btn-next" id="product-submit-btn" type="submit">បន្ថែមទំនិញ</button>
                 </div>
             </div>
         </div>

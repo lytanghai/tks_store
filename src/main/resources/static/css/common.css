@@ -256,4 +256,9 @@
         background-color: #f9f9f9;
     }
 
+    .common-label {
+        background-color:#e28743;
+        color: #000;
+    }
+
 }

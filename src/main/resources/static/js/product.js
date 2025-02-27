@@ -162,6 +162,30 @@ function fillVariantObject() {
     };
 }
 
+function showProductVerify() {
+//Product
+    document.getElementById("verify-product-id").innerHTML = document.getElementById("product_id_edit").value
+    document.getElementById("verify-product-nameEn").innerHTML = document.getElementById("product_name_en_edit").value
+    document.getElementById("verify-product-nameKh").innerHTML = document.getElementById("product_name_kh_edit").value
+    document.getElementById("verify-product-code").innerHTML = document.getElementById("product_code_edit").value
+
+    let selectElement = document.getElementById("product_select");
+    let selectedValue = selectElement.value;
+
+    document.getElementById("verify-product-category").innerHTML = getSelectOptionTextByValue(selectElement, selectedValue);
+    document.getElementById("verify-product-sale-price").innerHTML = document.getElementById("product_sale_price_edit").value
+    document.getElementById("verify-product-currency").innerHTML = document.getElementById("product_currency_edit").value
+    document.getElementById("verify-product-description").innerHTML = document.getElementById("product_description_edit").value
+
+//    Variant
+    document.getElementById("verify-variant-base-price").innerHTML = parseFloat(document.getElementById('product_base_price_edit').value);
+    document.getElementById("verify-variant-currency").innerHTML = document.getElementById('product_base_price_currency_edit').value;
+    document.getElementById("verify-variant-stock-quantity").innerHTML = parseInt(document.getElementById('product_stock_quantity_edit').value);
+    document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
+
+    getLiElementsContentAsArray();
+    document.getElementById("verify-variant-attribute-name").innerHTML = resultList.join('</br>');
+}
 function addAttribute() {
     let selectElement = document.getElementById("product_attribute_select");
     let attributeId = parseInt(selectElement.value);
@@ -187,7 +211,6 @@ function addAttribute() {
 }
 
 function updateAttributeList() {
-
     let selectElement = document.getElementById("product_attribute_select");
     let attributeId = selectElement.value; // Get selected attribute ID
     let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
@@ -198,29 +221,54 @@ function updateAttributeList() {
         return;
     }
 
-    // Create list item with two spans
     let listItem = document.createElement("li");
     listItem.style.display = "flex";
     listItem.style.textAlign = "center";
     listItem.style.fontSize = "1.6rem";
+    listItem.style.paddingLeft = "5%";
     listItem.style.backgroundColor = "#fff";
     listItem.setAttribute("data-id", attributeId);
 
     let attrSpan = document.createElement("span");
+    attrSpan.classList.add("attribute-name");
     attrSpan.style.flex = "1";
     attrSpan.textContent = attributeName;
 
     let valueSpan = document.createElement("span");
+    valueSpan.classList.add("attribute-value");
     valueSpan.style.flex = "1";
+    valueSpan.style.paddingLeft = "8%";
     valueSpan.textContent = value;
+
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.style.flex = "1";
+    deleteButton.style.backgroundColor = "#fff";
+    deleteButton.style.width = "100px";
+    deleteButton.style.paddingLeft = "8%";
+    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+    deleteButton.addEventListener("click", function() {
+        removeAttributeItem(listItem);
+    });
 
     listItem.appendChild(attrSpan);
     listItem.appendChild(valueSpan);
+    listItem.appendChild(deleteButton);
 
     document.getElementById("attribute-list").appendChild(listItem);
 
-    // Clear input after adding
+    document.getElementById("product_attribute_select").value = "";
     document.getElementById("product_attribute_value").value = "";
+}
+
+function removeAttributeItem(listItem) {
+    listItem.parentNode.removeChild(listItem);
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = parseInt(selectElement.value);
+    let existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
+    if (existingIndex !== -1) {
+        variantAttributes.splice(existingIndex, 1);
+    }
 }
 
 function submitProduct() {
@@ -365,6 +413,7 @@ function closeConfirmationModal() {
 function confirmProductActionConfirmation() {
     if (window.currentAction === 'create') {
         submitProduct();
+        closeModal();
     } else if (window.currentAction === 'update') {
         updateProduct();
     } else if (window.currentAction === 'delete') {
@@ -440,9 +489,42 @@ function showTab(tabName) {
     document.getElementById(tabName).style.display = "block";
     document.getElementById("tab-" + tabName).classList.add("active");
     currentTab = tabName;
+
+    if(currentTab === 'Verify') {
+        showProductVerify();
+        truncateTextIfLongerThan200();
+    }
     event.preventDefault();
 }
 
 function navigateTab(current, next) {
     showTab(next);
 }
+
+function truncateTextIfLongerThan200() {
+    const labelElement = document.getElementById("verify-product-description");
+    const text = labelElement.textContent;
+
+    if (text.length > 200) {
+        labelElement.textContent = text.slice(0, 200) + ".....";
+    }
+}
+
+let resultList = [];
+
+function getLiElementsContentAsArray() {
+    let ulElement = document.getElementById('attribute-list');
+    let liElements = ulElement.querySelectorAll('li');
+
+    liElements.forEach((liElement, index) => {
+        let attributeName = liElement.querySelector('.attribute-name').textContent;
+        let attributeValue = liElement.querySelector('.attribute-value').textContent;
+        let content = `អង្គធាតុទី ${index + 1}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
+
+        if (!resultList.includes(content)) {
+            resultList.push(content);
+        }
+    });
+
+}
+

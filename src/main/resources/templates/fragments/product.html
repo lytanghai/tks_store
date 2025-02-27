@@ -154,7 +154,6 @@
                             </div>
                             <div class="product-btn-container">
                                 <button disabled class="product-btn-back">Back</button>
-<!--                                <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-edit-btn">Next</button>-->
                                 <button onclick="navigateTab('Product', 'Variants')" class="product-btn-next" id="product-next-btn">Next</button>
                             </div>
                         </form>
@@ -203,8 +202,19 @@
                                 <input type="text"
                                        id="product_stock_sku"
                                        name="product_code"
-                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center"
-                                       placeholder="SKU Code">
+                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center">
+                            </div>
+
+                            <div style="font-size: 1.6rem">អង្គធាតុ
+                                <label style="font-size: 1.6rem;">
+                                    <select id="product_attribute_select"
+                                            style="width: 120px; font-size: 1rem; height: 50px">
+                                    </select>
+                                </label>
+                                <label style="font-size: 1.6rem">តម្លៃ:
+                                    <input type="text" id="product_attribute_value"
+                                           style="border:1px solid; width: 100px; font-size: 1.6rem;">
+                                </label>
                             </div>
 
                             <div class="add-attribute-btn">
@@ -215,14 +225,22 @@
                         </div>
 
                         <div class="attribute-list-title">
-                            <h2 style="margin-top: 5%;font-weight:normal"> អង្គធាតុទំនិញ: </h2>
+                            <h2 class="product-attribute-list-table"> អង្គធាតុទំនិញ: </h2>
                         </div>
                         <div style="margin-top: 8%; margin-left: 7%"></div>
                         <div id="product-variant-attribute-container" class="product-variant-attribute-container">
+                            <div class="product-attribute-list-contain">
+                                <div style="display: flex;">
+                                    <span class="product-attribute-header">អង្គធាតុ</span>
+                                    <span class="product-attribute-header">តម្លៃ</span>
+                                </div>
+                                <ul id="attribute-list" class="product-attribute-ul"></ul>
+                            </div>
+
                         </div>
                         <div class="btn-container">
                             <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">Back</button>
-                            <button onclick="navigateTab('Variants', 'Verify'); showLog()" class="product-btn-next">Next</button>
+                            <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">Next</button>
                         </div>
                     </form>
                 </div>

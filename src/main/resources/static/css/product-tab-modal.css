@@ -1,3 +1,4 @@
+@media only screen and (max-width: 1921px) and (max-height: 954px) {
 .product-modal {
     display: none;
     position: fixed;
@@ -147,5 +148,7 @@
     position: absolute;
     width: 50%;
     top: 5%;
-    left: 50%
+    left: 49%
+}
+
 }

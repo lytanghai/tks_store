@@ -69,7 +69,7 @@ CREATE TABLE tks.public.attributes (
 CREATE TABLE tks.public.variants (
     id SERIAL PRIMARY KEY,
     product_id INT REFERENCES tks.public.product(id) ON DELETE CASCADE,
-    sku VARCHAR(255) UNIQUE,
+    sku VARCHAR(255),
     base_price DECIMAL(10,2),
     currency VARCHAR(5),
     stock_quantity INT DEFAULT 0,

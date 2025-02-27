@@ -1,3 +1,24 @@
+let productData = {
+    product: {
+        name_en: "",
+        name_kh: "",
+        code: "",
+        category: { id: null },
+        sale_price: 0,
+        currency: "",
+        description: ""
+    },
+    variant: {
+        base_price: 0,
+        currency: "",
+        stock_quantity: 0,
+        sku: ""
+    },
+    variant_attributes: []
+};
+let variantAttributes = [];
+let currentTab = "Product";
+
 function createNewProduct() {
     var formData = {
         name_en: document.getElementById('product_name_en_edit').value,
@@ -80,10 +101,6 @@ alert(document.getElementById("product_select").value)
     });
 }
 
-
-function showLog(){
-    console.log(document.getElementById('product_base_price_edit').value)
-}
 function openUpdateProductModal(element) {
     let id = element.getAttribute("id");
     let nameEn = element.getAttribute("data-name-en");
@@ -98,7 +115,6 @@ function openUpdateProductModal(element) {
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
 
-//    alert('openUpdateProductModal ' + formTitle )
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
@@ -125,37 +141,106 @@ function openUpdateProductModal(element) {
     document.getElementById("myProductModal").style.display = "block";
 }
 
-let productFullCreate = null;
-
-function createCompleteProduct() {
-    productFullCreate = {
+function fillProductObject() {
+    productData.product = {
         name_en: document.getElementById('product_name_en_edit').value,
         name_kh: document.getElementById('product_name_kh_edit').value,
         code: document.getElementById('product_code_edit').value,
-        category: { id: document.getElementById('product_select').value },
+        category: { id: parseInt(document.getElementById('product_select').value) },
         sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
         currency: document.getElementById('product_currency_edit').value,
         description: document.getElementById('product_description_edit').value
-    }
-    productFullCreate.variant = {
-        base_price: document.getElementById('product_base_price_edit').value,
-        currency: document.getElementById('product_base_price_currency_edit').value,
-        stock_quantity: document.getElementById('product_stock_quantity_edit').value,
-        sku: document.getElementById('product_stock_sku').value,
-    }
-
-//    productFullCreate.variant_attributes = [
-//    {
-//
-//    }
-//    ]
-
-    console.log(JSON.stringify(productFullCreate))
+    };
 }
 
+function fillVariantObject() {
+    productData.variant = {
+        base_price: parseFloat(document.getElementById('product_base_price_edit').value),
+        currency: document.getElementById('product_base_price_currency_edit').value,
+        stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
+        sku: document.getElementById('product_stock_sku').value
+    };
+}
 
-function closeUpdateProductModal() {
-    document.getElementById("myProductModal").style.display = "none";
+function addAttribute() {
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = parseInt(selectElement.value);
+    let attributeName = selectElement.options[selectElement.selectedIndex].text;
+    let value = document.getElementById("product_attribute_value").value.trim();
+
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
+    }
+
+    let existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
+    if (existingIndex !== -1) {
+        alert("This attribute is already added!");
+        return;
+    }
+
+    variantAttributes.push({
+        attribute_id: attributeId,
+        value: value
+    });
+    updateAttributeList();
+}
+
+function updateAttributeList() {
+
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = selectElement.value; // Get selected attribute ID
+    let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
+    let value = document.getElementById("product_attribute_value").value;
+
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
+    }
+
+    // Create list item with two spans
+    let listItem = document.createElement("li");
+    listItem.style.display = "flex";
+    listItem.style.borderBottom = "1px solid #ddd";
+    listItem.style.textAlign = "center";
+    listItem.style.padding = "5px 0";
+
+    // Store attribute ID in data-id
+    listItem.setAttribute("data-id", attributeId);
+
+    let attrSpan = document.createElement("span");
+    attrSpan.style.flex = "1";
+    attrSpan.textContent = attributeName; // Display name instead of ID
+
+    let valueSpan = document.createElement("span");
+    valueSpan.style.flex = "1";
+    valueSpan.textContent = value;
+
+    listItem.appendChild(attrSpan);
+    listItem.appendChild(valueSpan);
+
+    document.getElementById("attribute-list").appendChild(listItem);
+
+    // Clear input after adding
+    document.getElementById("product_attribute_value").value = "";
+}
+
+function submitProduct() {
+
+    fillProductObject();
+    fillVariantObject();
+    productData.variant_attributes = [...variantAttributes];
+
+    fetch("/api/product/full/create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => console.log("Product created successfully:", data))
+    .catch(error => console.error("Error creating product:", error));
 }
 
 function productFilterResults() {
@@ -215,7 +300,6 @@ function fetchCategories() {
     });
 }
 
-
 function populateCategoryDropdown(categories) {
     const categorySelect = document.getElementById("product_select");
     categorySelect.innerHTML = "";
@@ -229,6 +313,35 @@ function populateCategoryDropdown(categories) {
         option.value = category.id;
         option.text = category.name + ' / ' + category.name_kh;
         categorySelect.appendChild(option);
+    });
+}
+
+function fetchAttributes() {
+    fetch("/internal/attribute/list")
+        .then(response => response.json())
+        .then(attributes => {
+            populateAttributeDropdown(attributes);
+        })
+        .catch(error => {
+            console.error("Error fetching attributes:", error);
+    });
+}
+
+function populateAttributeDropdown(attributes) {
+    const attributeSelect = document.getElementById("product_attribute_select");
+    attributeSelect.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.text = "";
+    defaultOption.value = "";
+    attributeSelect.appendChild(defaultOption);
+
+    attributes.forEach(attr => {
+        const option = document.createElement("option");
+        option.value = attr.id;
+        option.text = attr.name_kh && attr.name_kh.trim() !== ""
+            ? attr.name + " ( " + attr.name_kh + " )"
+            : attr.name;
+        attributeSelect.appendChild(option);
     });
 }
 
@@ -246,15 +359,14 @@ function showConfirmationModal(action, id) {
     window.currentAction = action;
     window.productId = id;
 }
+
 function closeConfirmationModal() {
     document.getElementById("product-confirmation-modal").style.display = "none";
 }
 
 function confirmProductActionConfirmation() {
-//    alert('confirmProductActionConfirmation ' + window.currentAction )
     if (window.currentAction === 'create') {
-        createCompleteProduct();
-//        createNewProduct();
+        submitProduct();
     } else if (window.currentAction === 'update') {
         updateProduct();
     } else if (window.currentAction === 'delete') {
@@ -305,45 +417,35 @@ function checkButtonAction() {
         console.error("Unknown action for product-submit-btn");
     }
 }
-    let currentTab = "Product";
 
-    function openModal() {
-        fetchCategories();
-        document.getElementById("myProductModal").style.display = "block";
-        showTab(currentTab);
+function openModal() {
+    fetchCategories();
+    document.getElementById("myProductModal").style.display = "block";
+    showTab(currentTab);
+}
+
+function closeModal() {
+    document.getElementById("myProductModal").style.display = "none";
+}
+
+function showTab(tabName) {
+    let tabcontent = document.getElementsByClassName("tabcontent");
+    let tablinks = document.getElementsByClassName("tablinks");
+
+    for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
     }
 
-    function closeModal() {
-        document.getElementById("myProductModal").style.display = "none";
+    for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
     }
 
-//    function outsideClick(event) {
-//        if (event.target === document.getElementById("myProductModal")) {
-//            closeModal();
-//        }
-//    }
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById("tab-" + tabName).classList.add("active");
+    currentTab = tabName;
+    event.preventDefault();
+}
 
-    function showTab(tabName) {
-        console.log('showTab')
-
-        let tabcontent = document.getElementsByClassName("tabcontent");
-        let tablinks = document.getElementsByClassName("tablinks");
-
-        for (let i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        for (let i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-        }
-
-        document.getElementById(tabName).style.display = "block";
-        document.getElementById("tab-" + tabName).classList.add("active");
-        currentTab = tabName;
-        event.preventDefault();
-    }
-
-    function navigateTab(current, next) {
-        console.log('navigateTab current' + current + " next: " + next);
-        showTab(next);
-    }
+function navigateTab(current, next) {
+    showTab(next);
+}

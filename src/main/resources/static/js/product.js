@@ -19,37 +19,6 @@ let productData = {
 let variantAttributes = [];
 let currentTab = "Product";
 
-function createNewProduct() {
-    var formData = {
-        name_en: document.getElementById('product_name_en_edit').value,
-        name_kh: document.getElementById('product_name_kh_edit').value,
-        code: document.getElementById('product_code_edit').value,
-        category: { id: document.getElementById('product_select').value },
-        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
-        currency: document.getElementById('product_currency_edit').value,
-        description: document.getElementById('product_description_edit').value
-    };
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchCategories();
-        });
-
-    fetch('/api/product/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(data => {
-        sessionStorage.setItem('popupMessage', 'success');
-        sessionStorage.setItem('popupAction', 'create');
-        location.reload();
-    })
-    .catch(err => {
-        showPopUpMessage('error', 'create');
-    })
-}
-
 function deleteProduct(id) {
     fetch('/api/product/delete', {
         method: 'POST',

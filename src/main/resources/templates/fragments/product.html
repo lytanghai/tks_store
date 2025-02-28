@@ -26,7 +26,7 @@
         <span style="margin-left: 3%"></span>
         <button th:href="'#'"
                 th:data-form-title="Create"
-                onclick="openUpdateProductModal(this)"
+                onclick="openCreateUpdateProductModal(this)"
                 class="product-create-btn">
             <span class="unicode-icon">&plus;</span>
             <span th:text="'បញ្ជូលថ្មី'" style="padding-bottom: 5px; font-size: 1.5rem;color: #0a0a0a"></span>
@@ -83,7 +83,7 @@
                                th:data-description="${row.description}"
                                th:data-form-title="'Update'"
                                th:href="'#'"
-                               onclick="openUpdateProductModal(this)">
+                               onclick="openCreateUpdateProductModal(this)">
                                 <span class="unicode-icon">&#x270E;</span>
                                 <span th:text="'កែ'"></span>
                             </a>
@@ -136,8 +136,8 @@
                             <div class="general-form-group flex-item" id="product-grid-category">
                                 <label for="product_select" class="general_label custom-product-category-label">ប្រភេទទំនិញ:</label>
                                 <input type="text" disabled id="product-category-edit"
-                                       style="display: none; margin-left:9%; width:190px; height: 50px; text-align:center">
-                                <select id="product_select" name="product_id" class="product-name">
+                                       style="display: none; margin-left:9%; width:190px; height: 50px; text-align:center; font-size: 1.5rem">
+                                <select id="product_select" name="product_id" class="product-name" required>
                                 </select>
                             </div>
                             <div class="general-form-group flex-item" id="product-grid-sale-price">
@@ -150,7 +150,7 @@
                                         name="product_currency_edit"
                                         class="product-currency-select"
                                         style="text-align: center">
-                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>
+<!--                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>-->
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>
@@ -188,7 +188,7 @@
                                 <select id="product_base_price_currency_edit"
                                         name="product_currency_edit"
                                         style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
-                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>
+<!--                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>-->
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>
@@ -217,7 +217,7 @@
                                 <div style="display: block;">
                                     <div style="font-size: 1.6rem">អង្គធាតុ</div>
                                     <div>
-                                        <select id="product_attribute_select" style="width: 120px; font-size: 1.5rem; height: 50px"></select>
+                                        <select id="product_attribute_select" style="width: 150px; font-size: 1.5rem; height: 50px"></select>
                                     </div>
                                 </div>
 

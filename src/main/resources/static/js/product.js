@@ -53,27 +53,41 @@ alert(document.getElementById("product_select").value)
     });
 }
 
-function openUpdateProductModal(element) {
-    let id = element.getAttribute("id");
-    let nameEn = element.getAttribute("data-name-en");
-    let nameKh = element.getAttribute("data-name-kh");
-    let code = element.getAttribute("data-code");
-    let categoryNameEn = element.getAttribute("data-categoryEn");
-    let categoryNameKh = element.getAttribute("data-categoryKh");
-    let currency = element.getAttribute("data-currency");
-    let salePrice = element.getAttribute("data-sale-price");
-    let description = element.getAttribute("data-description");
+function openCreateUpdateProductModal(element) {
+
+        let id = '';
+        let nameEn = '';
+        let nameKh = '';
+        let code = '';
+        let categoryNameEn = '';
+        let categoryNameKh = '';
+        let currency = '';
+        let salePrice = '';
+        let description = '';
 
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
 
+    showTab("Product");
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
+        document.getElementById("product-category-edit").style.display = "none";
+        document.getElementById("product_currency_edit").value = 'USD'
         document.getElementById("product-submit-btn").value = "create";
     } else if(formTitle == 'Update') {
+        id = element.getAttribute("id");
+        nameEn = element.getAttribute("data-name-en");
+        nameKh = element.getAttribute("data-name-kh");
+        code = element.getAttribute("data-code");
+        categoryNameEn = element.getAttribute("data-categoryEn");
+        categoryNameKh = element.getAttribute("data-categoryKh");
+        currency = element.getAttribute("data-currency");
+        salePrice = element.getAttribute("data-sale-price");
+        description = element.getAttribute("data-description");
+
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
         iconElement.src = "/icon/edit-product-icon.png";
@@ -98,15 +112,39 @@ async function uploadProduct() {
     let files = fileInput.files;
     let formData = new FormData();
 
+    let prodNameEn = document.getElementById("product_name_en_edit").value;
+    let prodNameKh = document.getElementById("product_name_kh_edit").value;
+    if(prodNameEn === '' && prodNameKh === '') {
+        alert("ឈ្មោះទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
+
+    let categoryId = document.getElementById("product_select").value;
+    if(categoryId === '') {
+         alert("ប្រភេទទំនិញមិនអាចទទេរបានទេ!");
+         return;
+    }
+
+    let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
+    if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
+        alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
+
+    let salePriceCurrency = document.getElementById("product_currency_edit").value;
+    if(salePriceCurrency === '') {
+        alert("រូបីយប័ណ្ណមិនអាចទទេរបានទេ!");
+        return;
+    }
 
     let jsonData = {
         product: {
-            name_en: document.getElementById("product_name_en_edit").value,
-            name_kh: document.getElementById("product_name_kh_edit").value,
+            name_en: prodNameEn,
+            name_kh: prodNameKh,
             code: document.getElementById("product_code_edit").value,
-            category: { id: document.getElementById("product_select").value },
-            sale_price: parseFloat(document.getElementById("product_sale_price_edit").value),
-            currency: document.getElementById("product_currency_edit").value,
+            category: { id: categoryId },
+            sale_price: salePrice,
+            currency: salePriceCurrency,
             description: document.getElementById("product_description_edit").value
         },
         variant: {

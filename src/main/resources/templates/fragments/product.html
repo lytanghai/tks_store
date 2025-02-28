@@ -212,17 +212,45 @@
                                        style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center">
                             </div>
 
-                            <div style="font-size: 1.6rem">អង្គធាតុ
-                                <label style="font-size: 1.6rem;">
-                                    <select id="product_attribute_select"
-                                            style="width: 120px; font-size: 1.5rem; height: 50px">
-                                    </select>
-                                </label>
-                                <label style="font-size: 1.6rem">តម្លៃ:
-                                    <input type="text" id="product_attribute_value"
-                                           class="product-variant-attribute-value">
-                                </label>
+                            <div class="variant-attribute-container">
+
+                                <div style="display: block;">
+                                    <div style="font-size: 1.6rem">អង្គធាតុ</div>
+                                    <div>
+                                        <select id="product_attribute_select" style="width: 120px; font-size: 1.5rem; height: 50px"></select>
+                                    </div>
+                                </div>
+
+                                <div style="display: block; margin-left: 7%">
+                                    <div style="font-size: 1.6rem">តម្លៃ: </div>
+                                    <div>
+                                        <input type="text" id="product_attribute_value" class="product-variant-attribute-value">
+                                    </div>
+                                </div>
+
+                                <div style="display: block;margin-left: 7%">
+                                    <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
+                                    <div>
+                                        <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
+                                               style="width: 150px;" onchange="addImages(event)">
+                                    </div>
+
+                                    <div class="preview-image-container">
+                                        <button type="button" id="preview_button"
+                                                style="display: none; margin-left: 10px;"
+                                                onclick="openPreview()">មើល</button>
+                                    </div>
+
+                                    <div id="image_preview_modal" class="image-preview">
+                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 1.5rem; position: absolute; top: 5px; right: 10px;">×</span>
+                                        <button onclick="prevImage('preview_image')" class="preview-prev-img">◀</button>
+                                        <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
+                                        <button onclick="nextImage('preview_image')" class="preview-next-img">▶</button>
+                                    </div>
+                                </div>
+
                             </div>
+
 
                             <div class="add-attribute-btn">
                                 <button type="button" onclick="addAttribute()"
@@ -230,6 +258,7 @@
                                          បន្ថែមអង្គធាតុទំនិញ</button>
                             </div>
                         </div>
+
 
                         <div class="attribute-list-title">
                             <h2 class="product-attribute-list-table"> អង្គធាតុទំនិញ: </h2>
@@ -285,6 +314,13 @@
                         <label id="verify-variant-stock-quantity" style="margin-left: 7%;" class="common-label"></label><br>
                         <label>SKU Code:</label>
                         <label id="verify-variant-sku-code" style="margin-left: 9%;" class="common-label"></label><br>
+
+                        <h2 style="text-align: center; font-weight: normal">រូបភាព</h2>
+                        <div id="image_verify_preview_modal" class="verify_image-preview">
+                            <button onclick="prevImage('verify_preview_image')" class="preview-prev-img" style="font-size: 1.5rem">◀</button>
+                            <img id="verify_preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
+                            <button onclick="nextImage('verify_preview_image')" class="preview-next-img" style="font-size: 1.5rem">▶</button>
+                        </div>
                     </div>
                     <div class="product-variant-attribute-tab-container">
                         <h2 style="text-align: center; font-weight: normal">អង្គធាតុទំនិញ</h2>

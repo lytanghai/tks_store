@@ -71,3 +71,66 @@ function getSelectOptionTextByValue(selectElement, selectedValue) {
     }
     return null;
 }
+
+let imageUrls = [];
+let currentIndex = 0;
+function addImages(event) {
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+            imageUrls.push(URL.createObjectURL(files[i])); // Append new images
+        } else {
+            alert('សូមបញ្ជូលឯកសាររូបភាពប៉ុណ្ណោះ!');
+            return;
+        }
+    }
+
+    if (imageUrls.length > 0) {
+        document.getElementById('preview_button').style.display = 'inline-block';
+    }
+}
+
+function openPreview() {
+    if (imageUrls.length > 0) {
+        document.getElementById('preview_image').src = imageUrls[currentIndex];
+        document.getElementById('image_preview_modal').style.display = 'block';
+    }
+}
+
+function closePreview() {
+    document.getElementById('image_preview_modal').style.display = 'none';
+}
+
+function prevImage(id) {
+    if (imageUrls.length > 0) {
+        currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+        document.getElementById(id).src = imageUrls[currentIndex];
+    }
+}
+
+function nextImage(id) {
+    if (imageUrls.length > 0) {
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+        document.getElementById(id).src = imageUrls[currentIndex];
+    }
+}
+
+function showImageSlider() {
+    const modal = document.getElementById('preview_image');
+    if (event.target == modal) {
+        document.getElementById("image_preview_modal").style.display = 'none';
+    }
+}
+
+
+function showVerifyImageSlider() {
+    if (imageUrls.length > 0) {
+        document.getElementById('verify_preview_image').src = imageUrls[currentIndex];
+        document.getElementById('image_verify_preview_modal').style.display = 'block';
+    }
+}
+
+window.onclick = function(event) {
+    showImageSlider();
+}

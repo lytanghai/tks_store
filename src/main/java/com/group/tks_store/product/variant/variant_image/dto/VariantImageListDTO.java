@@ -9,15 +9,13 @@ public class VariantImageListDTO {
     private VariantCreateDTO variant;
     private Integer variantId;
     private String image;
-    private String imageType;
     private Date createdAt;
     private Date lastUpdatedAt;
 
-    public VariantImageListDTO(Integer id, Integer variantId, String image, String imageType, Date createdAt, Date lastUpdatedAt) {
+    public VariantImageListDTO(Integer id, Integer variantId, String image, Date createdAt, Date lastUpdatedAt) {
         this.id = id;
         this.variantId = variantId;
         this.image = image;
-        this.imageType = imageType;
         this.createdAt = createdAt;
         this.lastUpdatedAt = lastUpdatedAt;
     }
@@ -52,14 +50,6 @@ public class VariantImageListDTO {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
     }
 
     public Date getCreatedAt() {

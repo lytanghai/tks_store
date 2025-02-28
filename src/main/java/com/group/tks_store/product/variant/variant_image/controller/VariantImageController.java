@@ -2,9 +2,7 @@ package com.group.tks_store.product.variant.variant_image.controller;
 
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.product.variant.service.VariantService;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
 import com.group.tks_store.product.variant.variant_image.dto.VariantImageListDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageUpdateDto;
 import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 @Controller
@@ -27,8 +27,9 @@ public class VariantImageController {
     private VariantImageService variantImageService;
 
     @PostMapping("/create")
-    public String create(@RequestBody VariantImageCreateDTO variantImageCreateDTO) throws ParseException {
-        variantImageService.create(variantImageCreateDTO);
+    public String create(@RequestParam("variant_id") Integer variantId,
+                         @RequestParam("image") MultipartFile image) throws ParseException, IOException {
+        variantImageService.create(variantId, image);
         return "redirect:/variant-image";
     }
 
@@ -39,8 +40,10 @@ public class VariantImageController {
     }
 
     @PostMapping("/update")
-    public String delete(@RequestBody VariantImageUpdateDto variantImageUpdateDto) throws ParseException {
-        variantImageService.update(variantImageUpdateDto);
+    public String delete(@RequestParam("variant_image_id") Integer variantImageId,
+                         @RequestParam("variant_id") Integer variantId,
+                         @RequestParam("image") MultipartFile image) throws ParseException, IOException {
+        variantImageService.update(variantImageId, variantId,image);
         return "redirect:/variant-image";
     }
 

@@ -9,7 +9,6 @@ public class VariantImageProductListDTO {
     private Integer id;
     private VariantCreateDTO variant;
     private String image;
-    private String imageType;
     private Date createdAt;
     private Date lastUpdatedAt;
 
@@ -35,14 +34,6 @@ public class VariantImageProductListDTO {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
     }
 
     public Date getCreatedAt() {

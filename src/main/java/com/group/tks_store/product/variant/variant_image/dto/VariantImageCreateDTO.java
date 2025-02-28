@@ -1,13 +1,13 @@
 package com.group.tks_store.product.variant.variant_image.dto;
 
-import com.group.tks_store.product.variant.dto.VariantCreateDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public class VariantImageCreateDTO {
 
     private Integer id;
-    private VariantCreateDTO variant;
-    private String image;
-    private String imageType;
+    private Integer variantId;
+    private MultipartFile image;
+    private String imageType = "N/A";
 
     public Integer getId() {
         return id;
@@ -17,19 +17,19 @@ public class VariantImageCreateDTO {
         this.id = id;
     }
 
-    public VariantCreateDTO getVariant() {
-        return variant;
+    public Integer getVariantId() {
+        return variantId;
     }
 
-    public void setVariant(VariantCreateDTO variant) {
-        this.variant = variant;
+    public void setVariantId(Integer variantId) {
+        this.variantId = variantId;
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

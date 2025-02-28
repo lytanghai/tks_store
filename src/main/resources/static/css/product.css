@@ -310,4 +310,8 @@
         text-align:center
    }
 
+   .variant-attribute-container{
+        display: flex;
+   }
+
 }

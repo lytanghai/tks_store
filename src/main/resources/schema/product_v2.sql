@@ -83,7 +83,6 @@ CREATE TABLE tks.public.variant_images (
     id SERIAL PRIMARY KEY,
     variant_id INT REFERENCES tks.public.variants(id) ON DELETE CASCADE,
     image TEXT,
-    image_type VARCHAR(50),
     created_at TIMESTAMP DEFAULT NOW(),
     last_updated_at TIMESTAMP DEFAULT NOW()
 );

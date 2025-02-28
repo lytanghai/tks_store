@@ -17,6 +17,7 @@ let productData = {
     variant_attributes: []
 };
 let variantAttributes = [];
+let resultList = [];
 let currentTab = "Product";
 
 function deleteProduct(id) {
@@ -154,6 +155,9 @@ function showProductVerify() {
 
     getLiElementsContentAsArray();
     document.getElementById("verify-variant-attribute-name").innerHTML = resultList.join('</br>');
+
+//    Image
+    showVerifyImageSlider();
 }
 function addAttribute() {
     let selectElement = document.getElementById("product_attribute_select");
@@ -434,12 +438,6 @@ function checkButtonAction() {
     }
 }
 
-//function openModal() {
-//    fetchCategories();
-//    document.getElementById("myProductModal").style.display = "block";
-//    showTab(currentTab);
-//}
-
 function closeModal() {
     document.getElementById("myProductModal").style.display = "none";
 }
@@ -478,8 +476,6 @@ function truncateTextIfLongerThan200() {
         labelElement.textContent = text.slice(0, 200) + ".....";
     }
 }
-
-let resultList = [];
 
 function getLiElementsContentAsArray() {
     let ulElement = document.getElementById('attribute-list');

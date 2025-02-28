@@ -23,9 +23,6 @@ public class VariantImageEntity {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "image_type")
-    private String imageType;
-
     @Column(name = "created_at", updatable = false)
     private Date createdAt = new Date();
 
@@ -54,14 +51,6 @@ public class VariantImageEntity {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
     }
 
     public Date getCreatedAt() {

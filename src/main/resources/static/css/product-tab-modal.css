@@ -88,7 +88,7 @@
         right: 15%;
         width: 86%;
         height: 87%;
-        z-index: 1;
+        z-index: 0;
     }
     .product-btn-back {
         position: absolute;
@@ -104,7 +104,6 @@
     .product-modal-content button {
         padding: 8px 16px;
         border: none;
-        background-color: #e0d1d1;
         cursor: pointer;
         border-radius: 4px;
         height: 50px;
@@ -147,7 +146,7 @@
     .add-attribute-btn{
         width: 300px;
         height: 50px;
-        margin-left: 8%;
+        margin-left: 23%;
     }
 
     .attribute-list-title{
@@ -162,6 +161,7 @@
         width: 84%;
         height: 68%;
         left: 15%;
+        z-index: 1;
     }
 
     .product-verify-tab-container{

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductVariantImageRepository extends JpaRepository<VariantImageEntity, Integer> {
 
-    @Query(value = "SELECT vi.id, v.id as variant_id, vi.image, vi.image_type, vi.created_at, vi.last_updated_at " +
+    @Query(value = "SELECT vi.id, v.id as variant_id, vi.image, vi.created_at, vi.last_updated_at " +
             "FROM variant_images vi " +
             "INNER JOIN variants v ON v.id = vi.variant_id ",
             nativeQuery = true)

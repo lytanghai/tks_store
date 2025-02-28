@@ -43,4 +43,19 @@ public class ProductFullCreateDTO {
         this.variantAttributes = variantAttribute;
     }
 
+    public List<VariantAttributeDTO> getVariantAttributes() {
+        return variantAttributes;
+    }
+
+    public void setVariantAttributes(List<VariantAttributeDTO> variantAttributes) {
+        this.variantAttributes = variantAttributes;
+    }
+
+    public List<VariantImageCreateDTO> getVariantImage() {
+        return variantImage;
+    }
+
+    public void setVariantImage(List<VariantImageCreateDTO> variantImage) {
+        this.variantImage = variantImage;
+    }
 }

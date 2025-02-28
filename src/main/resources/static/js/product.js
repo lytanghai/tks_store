@@ -1,21 +1,3 @@
-let productData = {
-    product: {
-        name_en: "",
-        name_kh: "",
-        code: "",
-        category: { id: null },
-        sale_price: 0,
-        currency: "",
-        description: ""
-    },
-    variant: {
-        base_price: 0,
-        currency: "",
-        stock_quantity: 0,
-        sku: ""
-    },
-    variant_attributes: []
-};
 let variantAttributes = [];
 let resultList = [];
 let currentTab = "Product";
@@ -111,26 +93,61 @@ function openUpdateProductModal(element) {
     document.getElementById("myProductModal").style.display = "block";
 }
 
-function fillProductObject() {
-    productData.product = {
-        name_en: document.getElementById('product_name_en_edit').value,
-        name_kh: document.getElementById('product_name_kh_edit').value,
-        code: document.getElementById('product_code_edit').value,
-        category: { id: parseInt(document.getElementById('product_select').value) },
-        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
-        currency: document.getElementById('product_currency_edit').value,
-        description: document.getElementById('product_description_edit').value
+async function uploadProduct() {
+    let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
+    let files = fileInput.files;
+    let formData = new FormData();
+
+
+    let jsonData = {
+        product: {
+            name_en: document.getElementById("product_name_en_edit").value,
+            name_kh: document.getElementById("product_name_kh_edit").value,
+            code: document.getElementById("product_code_edit").value,
+            category: { id: document.getElementById("product_select").value },
+            sale_price: parseFloat(document.getElementById("product_sale_price_edit").value),
+            currency: document.getElementById("product_currency_edit").value,
+            description: document.getElementById("product_description_edit").value
+        },
+        variant: {
+            base_price: parseFloat(document.getElementById('product_base_price_edit').value),
+            currency: document.getElementById('product_base_price_currency_edit').value,
+            stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
+            sku: document.getElementById('product_stock_sku').value
+        },
+        variant_images: [],
+        variant_attributes: []
     };
+
+    if(files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+            jsonData.variant_images.push({ variant_id: files[i].variant_id, image: files[i].name });
+        }
+    }
+
+    if(variantAttributes.length > 0) {
+        for (let y = 0; y < variantAttributes.length; y++) {
+            jsonData.variant_attributes.push({
+                attribute_id: variantAttributes[y].attribute_id,
+                value: variantAttributes[y].value
+            });
+        }
+    }
+
+    formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
+    try {
+        let response = await fetch("http://localhost:8080/api/product/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        let result = await response.json();
+    } catch (error) {
+        console.error("Error uploading:", error);
+    }
 }
 
-function fillVariantObject() {
-    productData.variant = {
-        base_price: parseFloat(document.getElementById('product_base_price_edit').value),
-        currency: document.getElementById('product_base_price_currency_edit').value,
-        stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
-        sku: document.getElementById('product_stock_sku').value
-    };
-}
 
 function showProductVerify() {
 //Product
@@ -244,24 +261,6 @@ function removeAttributeItem(listItem) {
     }
 }
 
-function submitProduct() {
-
-    fillProductObject();
-    fillVariantObject();
-    productData.variant_attributes = [...variantAttributes];
-
-    fetch("/api/product/full/create", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-    })
-    .then(response => response.json())
-    .then(data => console.log("Product created successfully:", data))
-    .catch(error => console.error("Error creating product:", error));
-}
-
 function productFilterResults() {
     let searchValue = document.getElementById("search_input_product").value.toLowerCase();
     let startDate = document.getElementById("productStartDate").value;
@@ -367,7 +366,6 @@ function populateAttributeDropdown(attributes) {
 function showConfirmationModal(action, id) {
     document.getElementById("product-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("product-confirm-modal-text");
-//    alert('action: ' + action)
     if (action === 'create') {
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលផលិតផលថ្មីមែនទេ?';
     } else if (action === 'update') {
@@ -385,7 +383,7 @@ function closeConfirmationModal() {
 
 function confirmProductActionConfirmation() {
     if (window.currentAction === 'create') {
-        submitProduct();
+        uploadProduct();
         closeModal();
     } else if (window.currentAction === 'update') {
         updateProduct();

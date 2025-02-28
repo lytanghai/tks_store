@@ -1,8 +1,13 @@
 package com.group.tks_store.product.product.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group.tks_store.common.dto.ID;
+//import com.group.tks_store.common.mapper.ProductMapper;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
+import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
@@ -11,6 +16,10 @@ import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDTO;
 import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
+import com.group.tks_store.product.variant.dto.VariantCreateDTO;
+import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
+import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
+import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +29,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(CommonKey.API_CONTEXT_PATH + AddressRedirect.PRODUCT)
@@ -35,7 +46,17 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+
     private final Logger log = LoggerFactory.getLogger(ProductController.class);
+
+    @PostMapping("/upload")
+    public String uploadProduct(
+            @RequestPart("data") String productJson,
+            @RequestPart("images") List<MultipartFile> images) throws IOException, ParseException {
+
+            productService.formCreateProduct(productJson, images);
+            return AddressRedirect.REDIRECT_PRODUCT;
+    }
 
     @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
@@ -45,8 +66,8 @@ public class ProductController {
     }
 
     @PostMapping( "/full" + CommonKey.CREATE)
-    public String createFullProduct(@RequestBody ProductFullCreateDTO productCreateDTO) throws ParseException {
-        productService.createFullProduct(productCreateDTO);
+    public String createFullProduct(@RequestBody ProductFullCreateDTO productCreateDTO) throws ParseException, IOException {
+        productService.createFullProduct(productCreateDTO,null);
         log.info("product created");
         return AddressRedirect.REDIRECT_PRODUCT;
     }

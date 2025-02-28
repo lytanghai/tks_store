@@ -7,7 +7,6 @@ import com.group.tks_store.product.variant.variant_image.entity.VariantImageEnti
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class VariantEntity {
     private String sku;
 
     @Column(name = "base_price")
-    private BigDecimal basePrice;
+    private Double basePrice;
 
     @Column(name = "currency")
     private String currency;
@@ -75,11 +74,11 @@ public class VariantEntity {
         this.sku = sku;
     }
 
-    public BigDecimal getBasePrice() {
+    public Double getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(BigDecimal basePrice) {
+    public void setBasePrice(Double basePrice) {
         this.basePrice = basePrice;
     }
 

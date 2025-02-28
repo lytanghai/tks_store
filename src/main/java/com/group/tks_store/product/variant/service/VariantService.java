@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -68,7 +67,7 @@ public class VariantService {
 
     public void update(VariantUpdateDto payloadRequest) throws ParseException {
         VariantEntity existProduct = productVariantRepository.getById(payloadRequest.getId());
-        if(Objects.nonNull(existProduct)) {
+        if(existProduct != null) {
             existProduct.setBasePrice(payloadRequest.getBasePrice());
             existProduct.setCurrency(payloadRequest.getCurrency());
             existProduct.setSku(payloadRequest.getSku());
@@ -84,11 +83,6 @@ public class VariantService {
 
     public List<VariantEntity> getAllVariants() {
         return productVariantRepository.findAll();
-    }
-
-    public VariantEntity getProductById(Integer id) {
-        return productVariantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     public Page<VariantListDTO> getActiveVariants(Pageable pageable) {
@@ -117,10 +111,5 @@ public class VariantService {
             variant.setProduct(product);
         }
         return productVariantRepository.save(variant);
-    }
-
-    @Transactional
-    public void deleteProduct(Integer id) {
-        productVariantRepository.deleteById(id);
     }
 }

@@ -9,21 +9,21 @@ import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.util.DateTimeUtil;
 import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
+import com.group.tks_store.product.category.dto.CategoryDetailDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.repository.CategoryRepository;
-import com.group.tks_store.product.product.dto.ProductCreateDTO;
-import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
-import com.group.tks_store.product.product.dto.ProductListDTO;
-import com.group.tks_store.product.product.dto.ProductUpdateDto;
+import com.group.tks_store.product.product.dto.*;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.repository.ProductRepository;
 import com.group.tks_store.product.variant.dto.VariantCreateDTO;
+import com.group.tks_store.product.variant.dto.VariantDetailDTO;
 import com.group.tks_store.product.variant.entity.VariantEntity;
 import com.group.tks_store.product.variant.repository.ProductVariantRepository;
 import com.group.tks_store.product.variant.service.VariantService;
 import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
 import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
+import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTOV2;
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -256,6 +256,71 @@ public class ProductService {
             product.setCategory(category);
         }
         return productRepository.save(product);
+    }
+
+    public List<ProductListDetailDTO> getActiveProducts() {
+        List<Object[]> results = productRepository.findActiveProductsRaw();
+        List<ProductListDetailDTO> products = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Integer productId = (Integer) row[0];
+            String nameEn = (String) row[1];
+            String nameKh = (String) row[2];
+            String code = (String) row[3];
+            Double salePrice = ((Number) row[4]).doubleValue();
+            String currency = (String) row[5];
+            String description = (String) row[6];
+            String status = (String) row[7];
+
+            // Mapping category
+            CategoryDetailDTO category = new CategoryDetailDTO(
+                    ((Number) row[8]).longValue(),
+                    (String) row[9],
+                    (String) row[10],
+                    (String) row[11]
+            );
+
+            // Mapping variants
+            VariantDetailDTO variant = new VariantDetailDTO(
+                    ((Number) row[12]).longValue(),
+                    (String) row[13],
+                    ((Number) row[14]).doubleValue(),
+                    (String) row[15],
+                    ((Number) row[16]).intValue(),
+                    row[17] != null ? List.of((String[]) row[17]) : new ArrayList<>(),
+                    mapVariantAttributes((String[]) row[18])
+            );
+
+            // Check if product already exists in list
+            ProductListDetailDTO existingProduct = products.stream()
+                    .filter(p -> p.getId().equals(productId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existingProduct == null) {
+                existingProduct = new ProductListDetailDTO(
+                        productId, nameEn, nameKh, code, salePrice, currency, description, status, category, new ArrayList<>()
+                );
+                products.add(existingProduct);
+            }
+
+            existingProduct.getVariants().add(variant);
+        }
+
+        return products;
+    }
+
+    private List<VariantAttributeDTOV2> mapVariantAttributes(String[] attributes) {
+        List<VariantAttributeDTOV2> variantAttributes = new ArrayList<>();
+        if (attributes != null) {
+            for (String attr : attributes) {
+                String[] parts = attr.split(":");
+                if (parts.length == 2) {
+                    variantAttributes.add(new VariantAttributeDTOV2(Integer.valueOf(parts[0]), parts[1]));
+                }
+            }
+        }
+        return variantAttributes;
     }
 
     @Transactional

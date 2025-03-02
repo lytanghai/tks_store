@@ -15,18 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(AddressRedirect.INTERNAL + AddressRedirect.PRODUCT)
 public class ProductRestController {
 
     private final Logger log = LoggerFactory.getLogger(ProductRestController.class);
+
     @Autowired
     private ProductService productService;
-
 
     @PostMapping(CommonKey.CREATE)
     public void create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {

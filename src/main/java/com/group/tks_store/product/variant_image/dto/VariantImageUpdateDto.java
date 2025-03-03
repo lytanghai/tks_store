@@ -1,4 +1,4 @@
-package com.group.tks_store.product.variant.variant_image.dto;
+package com.group.tks_store.product.variant_image.dto;
 
 public class VariantImageUpdateDto extends VariantImageCreateDTO {
     private Integer id;

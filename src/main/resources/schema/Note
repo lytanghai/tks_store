@@ -1,0 +1,142 @@
+1.@Data
+  public class ProductListDTO {
+      private Long id;
+      private String nameEn;
+      private String nameKh;
+      private String code;
+      private BigDecimal salePrice;
+      private String currency;
+      private String description;
+      private String status;
+
+      private CategoryDTO category;  // ✅ Include category details
+      private List<VariantDTO> variants; // ✅ Include active variants
+  }
+
+2.public class CategoryDTO {
+    private Long id;
+    private String name;
+    private String nameKh;
+    private String description;
+}
+
+3.@Data
+  public class VariantDTO {
+      private Long id;
+      private String sku;
+      private BigDecimal basePrice;
+      private String currency;
+      private Integer stockQuantity;
+      private List<String> images; // List of image URLs
+      private List<VariantAttributeDTO> attributes; // List of attributes
+  }
+
+  4.public class VariantAttributeDTO {
+        private Long variantId;
+        private Long attributeId;
+        private String value;
+    }
+
+5.@Query("""
+      SELECT new com.example.dto.ProductListDTO(
+          p.id, p.nameEn, p.nameKh, p.code, p.salePrice, p.currency, p.description, p.status,
+          new com.example.dto.CategoryDTO(c.id, c.name, c.nameKh, c.description),  -- ✅ Include category
+          new com.example.dto.VariantDTO(v.id, v.sku, v.basePrice, v.currency, v.stockQuantity,
+              (SELECT ARRAY_AGG(vi.image) FROM VariantImages vi WHERE vi.variant.id = v.id),
+              (SELECT ARRAY_AGG(new com.example.dto.VariantAttributeDTO(va.variant.id, va.attribute.id, va.value)) FROM VariantAttributes va WHERE va.variant.id = v.id)
+          )
+      )
+      FROM Product p
+      LEFT JOIN p.category c ON c.status = 'ACTIVE'  -- ✅ Only active categories
+      LEFT JOIN p.variants v ON v.status = 'ACTIVE'
+      WHERE p.status = 'ACTIVE'
+      """)
+  Page<ProductListDTO> findActiveProducts(Pageable pageable);
+
+
+6.@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+     this.productRepository = productRepository;
+    }
+
+    public Page<ProductListDTO> getActiveProducts(Pageable pageable) {
+     return productRepository.findActiveProducts(pageable);
+    }
+}
+
+7.@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+
+   private final ProductService productService;
+
+   public ProductController(ProductService productService) {
+       this.productService = productService;
+   }
+
+   @GetMapping
+   public Page<ProductListDTO> getActiveProducts(
+           @RequestParam(name = "page", defaultValue = "0") Integer pageNumber,
+           @RequestParam(name = "size", defaultValue = "10") Integer pageSize,
+           @RequestParam(name = "sort", defaultValue = "id") String sortBy,
+           @RequestParam(name = "direction", defaultValue = "DESC") String sortDirection) {
+
+       PageRequest pageRequest = PageRequest.of(
+               pageNumber,
+               pageSize,
+               Sort.by(Sort.Direction.fromString(sortDirection), sortBy)
+       );
+
+       return productService.getActiveProducts(pageRequest);
+   }
+}
+
+8.GET /api/products?page=0&size=10
+
+9. Response:
+{
+  "content": [
+    {
+      "id": 1,
+      "nameEn": "Smartphone",
+      "nameKh": "ទូរស័ព្ទដៃ",
+      "code": "SP001",
+      "salePrice": 299.99,
+      "currency": "USD",
+      "description": "Latest model",
+      "status": "ACTIVE",
+      "category": {
+        "id": 185,
+        "name": "Electronics",
+        "nameKh": "អេឡិចត្រូនិច",
+        "description": "Electronic products"
+      },
+      "variants": [
+        {
+          "id": 10,
+          "sku": "SP001-RED",
+          "basePrice": 12.50,
+          "currency": "USD",
+          "stockQuantity": 14,
+          "images": [
+            "https://example.com/images/sp001-red-1.jpg",
+            "https://example.com/images/sp001-red-2.jpg"
+          ],
+          "attributes": [
+            { "variantId": 10, "attributeId": 1, "value": "RED" },
+            { "variantId": 10, "attributeId": 2, "value": "M" }
+          ]
+        }
+      ]
+    }
+  ],
+  "totalPages": 5,
+  "totalElements": 50,
+  "currentPage": 0,
+  "first": true,
+  "last": false
+}

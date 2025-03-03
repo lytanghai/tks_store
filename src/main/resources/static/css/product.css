@@ -15,6 +15,9 @@
         border-collapse: collapse;
         table-layout: fixed;
     }
+    .custom-sale-price{
+        text-align: right;
+    }
 
     #form-modal-product-title {
         font-size: 2rem;
@@ -22,6 +25,23 @@
 
     #productTable {
         height: 10px;
+    }
+
+    #productTable tr td ul li {
+        list-style: none;
+        text-align: center;
+        width: auto;
+    }
+
+    #productTable tr td ul li span:nth-child(3) {
+        list-style: none;
+        text-align: left;
+        color:red;
+    }
+
+    #productTable tr td ul li span {
+        color:#000;
+        font-weight: 400;
     }
 
     .product_tr:nth-child(even) {
@@ -38,7 +58,7 @@
     .product-page-number{
         position: fixed;
         top: 89.6%;
-        left: 51%;
+        left: 50.5%;
         display: inline-flex;
     }
     .product-list-prev{
@@ -136,7 +156,7 @@
 
     .product-search-bar-container{
         position: fixed;
-        width: 60%;
+        width: 64%;
         height: 100px;
         top: 8%;
         left: 15.5%;
@@ -306,5 +326,61 @@
         font-size: 1.6rem;
         text-align:center
    }
+
+   .variant-attribute-container{
+        display: flex;
+   }
+
+    .slider-container {
+        position: fixed;
+        top: 46%;
+        left: 57%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        width: 50%;
+        height: 50%;
+    }
+
+    .slider-image {
+        max-width: 500px;
+        max-height: 500px;
+        border-radius: 5px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 25px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .prev-btn, .next-btn {
+        background: none;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .view_img_td{
+        text-align: center;
+    }
+    .view_img_td ul {
+        list-style-type: none;
+        padding: 0;
+        display: inline-block;
+    }
+    .view_img_td ul li {
+        display: inline-block;
+        margin: 0 10px;
+    }
 
 }

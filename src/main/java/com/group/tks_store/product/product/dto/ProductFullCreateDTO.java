@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.variant.dto.VariantCreateDTO;
+import com.group.tks_store.product.variant_image.dto.VariantImageCreateDTO;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public class ProductFullCreateDTO {
     private VariantCreateDTO variant;
     @JsonProperty("variant_attributes")
     private List<VariantAttributeDTO> variantAttributes;
+    @JsonProperty("images")
+    private List<VariantImageCreateDTO> images;
 
     public ProductCreateDTO getProduct() {
         return product;
@@ -37,5 +40,21 @@ public class ProductFullCreateDTO {
 
     public void setVariantAttribute(List<VariantAttributeDTO> variantAttribute) {
         this.variantAttributes = variantAttribute;
+    }
+
+    public List<VariantAttributeDTO> getVariantAttributes() {
+        return variantAttributes;
+    }
+
+    public void setVariantAttributes(List<VariantAttributeDTO> variantAttributes) {
+        this.variantAttributes = variantAttributes;
+    }
+
+    public List<VariantImageCreateDTO> getVariantImage() {
+        return images;
+    }
+
+    public void setVariantImage(List<VariantImageCreateDTO> variantImage) {
+        this.images = variantImage;
     }
 }

@@ -83,7 +83,6 @@ CREATE TABLE tks.public.variant_images (
     id SERIAL PRIMARY KEY,
     variant_id INT REFERENCES tks.public.variants(id) ON DELETE CASCADE,
     image TEXT,
-    image_type VARCHAR(50),
     created_at TIMESTAMP DEFAULT NOW(),
     last_updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -97,3 +96,37 @@ CREATE TABLE tks.public.variant_attributes (
     value VARCHAR(255) NOT NULL,  -- Example: "Red", "M", "Cotton, Adidas"
     status VARCHAR(10)
 );
+
+--Init
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Color', 'ពណ៍', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Size', 'ទំហំ', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Number', 'លេខ', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Length', 'ប្រវែង', 'ACTIVE');
+INSERT INTO public."attributes"
+("name", name_kh, status)
+VALUES('Material', 'សមាសភាគ', 'ACTIVE');
+
+CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
+    variant_id INTEGER,
+    status BOOLEAN DEFAULT TRUE,
+    file_name VARCHAR(255),
+    file_type VARCHAR(100),
+    size BIGINT,
+    uuid UUID,
+    system_name VARCHAR(255),
+    data BYTEA,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(255),
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE images ALTER COLUMN uuid TYPE VARCHAR(36);

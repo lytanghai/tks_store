@@ -1,5 +1,6 @@
 package com.group.tks_store.product.variant_attribute.service;
 
+import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
 import com.group.tks_store.product.attribute.repository.AttributeRepository;
 import com.group.tks_store.product.variant.entity.VariantEntity;
@@ -28,13 +29,12 @@ public class VariantAttributeService {
     @Autowired
     private AttributeRepository attributeRepository;
 
-    // Create a new Variant Attribute
     public VariantAttributeDTO createVariantAttribute(VariantAttributeDTO dto) {
         VariantEntity variant = variantRepository.findById(dto.getVariantId())
-                .orElseThrow(() -> new RuntimeException("Variant not found"));
+                .orElseThrow(() -> new ServiceException("VR-002","រកវ៉ារ្យ៉ង់មិនឃើញទេ"));
         
         AttributeEntity attribute = attributeRepository.findById(dto.getAttributeId())
-                .orElseThrow(() -> new RuntimeException("Attribute not found"));
+                .orElseThrow(() -> new ServiceException("AT-002","រកអង្គធាតុមិនឃើញទេ"));
 
         VariantAttributeEntity entity = new VariantAttributeEntity();
         entity.setVariant(variant);
@@ -49,10 +49,10 @@ public class VariantAttributeService {
 
     public VariantAttributeEntity createVariantAttribute2(VariantAttributeDTO dto, Integer variantId) {
         VariantEntity variant = variantRepository.findById(variantId)
-                .orElseThrow(() -> new RuntimeException("Variant not found"));
+                .orElseThrow(() -> new ServiceException("VR-002","រកវ៉ារ្យ៉ង់មិនឃើញទេ"));
 
         AttributeEntity attribute = attributeRepository.findById(dto.getAttributeId())
-                .orElseThrow(() -> new RuntimeException("Attribute not found"));
+                .orElseThrow(() -> new ServiceException("AT-002","រកអង្គធាតុមិនឃើញទេ"));
 
         VariantAttributeEntity entity = new VariantAttributeEntity();
         entity.setVariant(variant);
@@ -68,7 +68,7 @@ public class VariantAttributeService {
     // Get Variant Attribute by ID
     public VariantAttributeDTO getVariantAttributeById(Integer id) {
         VariantAttributeEntity entity = variantAttributeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Variant Attribute not found"));
+                .orElseThrow(() -> new ServiceException("VA-002","រកវ៉ារ្យ៉ង់ និងអង្គធាតុមិនឃើញទេ"));
         return new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getStatus());
     }
 
@@ -83,13 +83,13 @@ public class VariantAttributeService {
     // Update Variant Attribute
     public VariantAttributeDTO updateVariantAttribute(Integer id, VariantAttributeDTO dto) {
         VariantAttributeEntity entity = variantAttributeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Variant Attribute not found"));
+                .orElseThrow(() -> new ServiceException("VA-002","រកវ៉ារ្យ៉ង់ និងអង្គធាតុមិនឃើញទេ"));
 
         VariantEntity variant = variantRepository.findById(dto.getVariantId())
-                .orElseThrow(() -> new RuntimeException("Variant not found"));
+                .orElseThrow(() -> new ServiceException("VR-002","រកវ៉ារ្យ៉ង់មិនឃើញទេ"));
 
         AttributeEntity attribute = attributeRepository.findById(dto.getAttributeId())
-                .orElseThrow(() -> new RuntimeException("Attribute not found"));
+                .orElseThrow(() ->  new ServiceException("AT-002","រកអង្គធាតុមិនឃើញទេ"));
 
         entity.setVariant(variant);
         entity.setAttribute(attribute);
@@ -104,7 +104,7 @@ public class VariantAttributeService {
     // Delete Variant Attribute
     public void deleteVariantAttribute(Integer id) {
         if (!variantAttributeRepository.existsById(id)) {
-            throw new RuntimeException("Variant Attribute not found");
+            throw new ServiceException("VA-002","រកវ៉ារ្យ៉ង់ និងអង្គធាតុមិនឃើញទេ");
         }
         variantAttributeRepository.deleteById(id);
     }

@@ -1,19 +1,18 @@
-package com.group.tks_store.product.variant.variant_image.controller;
+package com.group.tks_store.product.variant_image.controller;
 
 
 import com.group.tks_store.common.dto.ID;
-import com.group.tks_store.product.variant.dto.VariantUpdateDto;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageListDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageUpdateDto;
-import com.group.tks_store.product.variant.variant_image.entity.VariantImageEntity;
-import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
+import com.group.tks_store.product.variant_image.dto.VariantImageListDTO;
+import com.group.tks_store.product.variant_image.entity.VariantImageEntity;
+import com.group.tks_store.product.variant_image.service.VariantImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +27,16 @@ public class VariantImageRestController {
 
 
     @PostMapping("/create")
-    public void create(@RequestBody VariantImageCreateDTO variantImageCreateDTO) throws ParseException {
-        variantImageService.create(variantImageCreateDTO);
+    public void createVariantImage(@RequestParam("variant_id") Integer variantId,
+                                     @RequestParam("image") MultipartFile image) throws ParseException, IOException {
+        variantImageService.create(variantId, image);
     }
 
     @PostMapping("/update")
-    public String delete(@RequestBody VariantImageUpdateDto variantImageUpdateDto) throws ParseException {
-        variantImageService.update(variantImageUpdateDto);
+    public String delete(@RequestParam("variant_image_id") Integer variantImageId,
+                         @RequestParam("variant_id") Integer variantId,
+                         @RequestParam("image") MultipartFile image) throws ParseException, IOException {
+        variantImageService.update(variantImageId, variantId, image);
         return "redirect:/variant";
     }
 

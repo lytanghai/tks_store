@@ -1,26 +1,16 @@
-package com.group.tks_store.product.variant.variant_image.dto;
+package com.group.tks_store.product.variant_image.dto;
 
 import com.group.tks_store.product.variant.dto.VariantCreateDTO;
 
 import java.util.Date;
 
-public class VariantImageListDTO {
+public class VariantImageProductListDTO {
+
     private Integer id;
     private VariantCreateDTO variant;
-    private Integer variantId;
     private String image;
-    private String imageType;
     private Date createdAt;
     private Date lastUpdatedAt;
-
-    public VariantImageListDTO(Integer id, Integer variantId, String image, String imageType, Date createdAt, Date lastUpdatedAt) {
-        this.id = id;
-        this.variantId = variantId;
-        this.image = image;
-        this.imageType = imageType;
-        this.createdAt = createdAt;
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
 
     public Integer getId() {
         return id;
@@ -28,14 +18,6 @@ public class VariantImageListDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getVariantId() {
-        return variantId;
-    }
-
-    public void setVariantId(Integer variantId) {
-        this.variantId = variantId;
     }
 
     public VariantCreateDTO getVariant() {
@@ -52,14 +34,6 @@ public class VariantImageListDTO {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
     }
 
     public Date getCreatedAt() {

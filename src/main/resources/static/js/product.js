@@ -1,54 +1,6 @@
-let productData = {
-    product: {
-        name_en: "",
-        name_kh: "",
-        code: "",
-        category: { id: null },
-        sale_price: 0,
-        currency: "",
-        description: ""
-    },
-    variant: {
-        base_price: 0,
-        currency: "",
-        stock_quantity: 0,
-        sku: ""
-    },
-    variant_attributes: []
-};
 let variantAttributes = [];
+let resultList = [];
 let currentTab = "Product";
-
-function createNewProduct() {
-    var formData = {
-        name_en: document.getElementById('product_name_en_edit').value,
-        name_kh: document.getElementById('product_name_kh_edit').value,
-        code: document.getElementById('product_code_edit').value,
-        category: { id: document.getElementById('product_select').value },
-        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
-        currency: document.getElementById('product_currency_edit').value,
-        description: document.getElementById('product_description_edit').value
-    };
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchCategories();
-        });
-
-    fetch('/api/product/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(data => {
-        sessionStorage.setItem('popupMessage', 'success');
-        sessionStorage.setItem('popupAction', 'create');
-        location.reload();
-    })
-    .catch(err => {
-        showPopUpMessage('error', 'create');
-    })
-}
 
 function deleteProduct(id) {
     fetch('/api/product/delete', {
@@ -101,27 +53,41 @@ alert(document.getElementById("product_select").value)
     });
 }
 
-function openUpdateProductModal(element) {
-    let id = element.getAttribute("id");
-    let nameEn = element.getAttribute("data-name-en");
-    let nameKh = element.getAttribute("data-name-kh");
-    let code = element.getAttribute("data-code");
-    let categoryNameEn = element.getAttribute("data-categoryEn");
-    let categoryNameKh = element.getAttribute("data-categoryKh");
-    let currency = element.getAttribute("data-currency");
-    let salePrice = element.getAttribute("data-sale-price");
-    let description = element.getAttribute("data-description");
+function openCreateUpdateProductModal(element) {
+
+        let id = '';
+        let nameEn = '';
+        let nameKh = '';
+        let code = '';
+        let categoryNameEn = '';
+        let categoryNameKh = '';
+        let currency = '';
+        let salePrice = '';
+        let description = '';
 
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
 
+    showTab("Product");
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
+        document.getElementById("product-category-edit").style.display = "none";
+        document.getElementById("product_currency_edit").value = 'USD'
         document.getElementById("product-submit-btn").value = "create";
     } else if(formTitle == 'Update') {
+        id = element.getAttribute("id");
+        nameEn = element.getAttribute("data-name-en");
+        nameKh = element.getAttribute("data-name-kh");
+        code = element.getAttribute("data-code");
+        categoryNameEn = element.getAttribute("data-categoryEn");
+        categoryNameKh = element.getAttribute("data-categoryKh");
+        currency = element.getAttribute("data-currency");
+        salePrice = element.getAttribute("data-sale-price");
+        description = element.getAttribute("data-description");
+
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
         iconElement.src = "/icon/edit-product-icon.png";
@@ -141,26 +107,85 @@ function openUpdateProductModal(element) {
     document.getElementById("myProductModal").style.display = "block";
 }
 
-function fillProductObject() {
-    productData.product = {
-        name_en: document.getElementById('product_name_en_edit').value,
-        name_kh: document.getElementById('product_name_kh_edit').value,
-        code: document.getElementById('product_code_edit').value,
-        category: { id: parseInt(document.getElementById('product_select').value) },
-        sale_price: parseFloat(document.getElementById('product_sale_price_edit').value),
-        currency: document.getElementById('product_currency_edit').value,
-        description: document.getElementById('product_description_edit').value
+async function uploadProduct() {
+    let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
+    let files = fileInput.files;
+    let formData = new FormData();
+
+    let prodNameEn = document.getElementById("product_name_en_edit").value;
+    let prodNameKh = document.getElementById("product_name_kh_edit").value;
+    if(prodNameEn === '' && prodNameKh === '') {
+        alert("ឈ្មោះទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
+
+    let categoryId = document.getElementById("product_select").value;
+    if(categoryId === '') {
+         alert("ប្រភេទទំនិញមិនអាចទទេរបានទេ!");
+         return;
+    }
+
+    let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
+    if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
+        alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
+
+    let salePriceCurrency = document.getElementById("product_currency_edit").value;
+    if(salePriceCurrency === '') {
+        alert("រូបីយប័ណ្ណមិនអាចទទេរបានទេ!");
+        return;
+    }
+
+    let jsonData = {
+        product: {
+            name_en: prodNameEn,
+            name_kh: prodNameKh,
+            code: document.getElementById("product_code_edit").value,
+            category: { id: categoryId },
+            sale_price: salePrice,
+            currency: salePriceCurrency,
+            description: document.getElementById("product_description_edit").value
+        },
+        variant: {
+            base_price: parseFloat(document.getElementById('product_base_price_edit').value),
+            currency: document.getElementById('product_base_price_currency_edit').value,
+            stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
+            sku: document.getElementById('product_stock_sku').value
+        },
+        images: [],
+        variant_attributes: []
     };
+
+    if(files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+            jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
+        }
+    }
+
+    if(variantAttributes.length > 0) {
+        for (let y = 0; y < variantAttributes.length; y++) {
+            jsonData.variant_attributes.push({
+                attribute_id: variantAttributes[y].attribute_id,
+                value: variantAttributes[y].value
+            });
+        }
+    }
+
+    formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
+    try {
+        let response = await fetch("http://localhost:8080/api/product/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        let result = await response.json();
+    } catch (error) {
+        console.error("Error uploading:", error);
+    }
 }
 
-function fillVariantObject() {
-    productData.variant = {
-        base_price: parseFloat(document.getElementById('product_base_price_edit').value),
-        currency: document.getElementById('product_base_price_currency_edit').value,
-        stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
-        sku: document.getElementById('product_stock_sku').value
-    };
-}
 
 function showProductVerify() {
 //Product
@@ -185,6 +210,9 @@ function showProductVerify() {
 
     getLiElementsContentAsArray();
     document.getElementById("verify-variant-attribute-name").innerHTML = resultList.join('</br>');
+
+//    Image
+    showVerifyImageSlider();
 }
 function addAttribute() {
     let selectElement = document.getElementById("product_attribute_select");
@@ -269,24 +297,6 @@ function removeAttributeItem(listItem) {
     if (existingIndex !== -1) {
         variantAttributes.splice(existingIndex, 1);
     }
-}
-
-function submitProduct() {
-
-    fillProductObject();
-    fillVariantObject();
-    productData.variant_attributes = [...variantAttributes];
-
-    fetch("/api/product/full/create", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-    })
-    .then(response => response.json())
-    .then(data => console.log("Product created successfully:", data))
-    .catch(error => console.error("Error creating product:", error));
 }
 
 function productFilterResults() {
@@ -394,7 +404,6 @@ function populateAttributeDropdown(attributes) {
 function showConfirmationModal(action, id) {
     document.getElementById("product-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("product-confirm-modal-text");
-//    alert('action: ' + action)
     if (action === 'create') {
         modalText.textContent = 'តើអ្នកប្រាកដថាចង់បញ្ជូលផលិតផលថ្មីមែនទេ?';
     } else if (action === 'update') {
@@ -412,7 +421,7 @@ function closeConfirmationModal() {
 
 function confirmProductActionConfirmation() {
     if (window.currentAction === 'create') {
-        submitProduct();
+        uploadProduct();
         closeModal();
     } else if (window.currentAction === 'update') {
         updateProduct();
@@ -465,12 +474,6 @@ function checkButtonAction() {
     }
 }
 
-//function openModal() {
-//    fetchCategories();
-//    document.getElementById("myProductModal").style.display = "block";
-//    showTab(currentTab);
-//}
-
 function closeModal() {
     document.getElementById("myProductModal").style.display = "none";
 }
@@ -510,8 +513,6 @@ function truncateTextIfLongerThan200() {
     }
 }
 
-let resultList = [];
-
 function getLiElementsContentAsArray() {
     let ulElement = document.getElementById('attribute-list');
     let liElements = ulElement.querySelectorAll('li');
@@ -525,6 +526,78 @@ function getLiElementsContentAsArray() {
             resultList.push(content);
         }
     });
-
 }
 
+let currentImageIndex = 0;
+let imageUUIDs = [];
+
+function openImageSlider(button) {
+    let variantId = button.getAttribute("data-variant-id");
+
+    // Step 1: Get list of image UUIDs from API
+    fetch(`/api/get/images?variant_id=${variantId}`)
+        .then(response => response.json())  // Expecting an array of UUIDs
+        .then(uuids => {
+            if (!uuids.length) {
+                alert("No images found!");
+                return;
+            }
+
+            imageUUIDs = uuids;
+            currentImageIndex = 0;
+            showImage(); // Display first image
+            document.getElementById("imageSlider").style.display = "flex"; // Show slider
+        })
+        .catch(error => {
+            console.error("Error fetching images:", error);
+            alert("Error loading images!");
+        });
+}
+
+function showImage() {
+console.log("showImage " + document.getElementById("sliderImage"))
+    let imageElement = document.getElementById("sliderImage");
+    let uuid = imageUUIDs[currentImageIndex];
+
+    // Step 2: Fetch individual image using UUID
+    fetch(`/api/image/show?uuid=${uuid}`)
+        .then(response => response.blob())  // Get binary data
+        .then(blob => {
+            imageElement.src = URL.createObjectURL(blob); // Convert to image URL
+        })
+        .catch(error => console.error("Error loading image:", error));
+}
+
+function nextProductImage() {
+
+    if (currentImageIndex < imageUUIDs.length - 1) {
+        currentImageIndex++;
+    } else if(currentImageIndex == imageUUIDs.length - 1) {
+        currentImageIndex--;
+    }
+    showImage();
+}
+
+function prevProductImage() {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+    } else {
+        currentImageIndex++;
+    }
+    showImage();
+}
+
+function closeSlider() {
+    document.getElementById("imageSlider").style.display = "none";
+}
+
+let currentImageIndex = 0;
+let imageUUIDs = [];
+
+function openAttributeDetail(button) {
+    console.log(variant);
+
+    // Accessing attribute ID and value from the button
+    var attributeId = button.getAttribute('data-attribute-id');
+    var attributeValue = button.getAttribute('data-attribute-value');
+}

@@ -1,23 +1,23 @@
 package com.group.tks_store.product.category.dto;
 
 public class CategoryDetailDTO {
-    private Long id;
+    private Integer id;
     private String name;
     private String nameKh;
     private String description;
 
-    public CategoryDetailDTO(Long id, String name, String nameKh, String description) {
+    public CategoryDetailDTO(Integer id, String name, String nameKh, String description) {
         this.id = id;
         this.name = name;
         this.nameKh = nameKh;
         this.description = description;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -153,14 +153,14 @@ async function uploadProduct() {
             stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
             sku: document.getElementById('product_stock_sku').value
         },
-        variant_images: [],
+        images: [],
         variant_attributes: []
     };
 
     if(files.length > 0) {
         for (let i = 0; i < files.length; i++) {
             formData.append("images", files[i]);
-            jsonData.variant_images.push({ variant_id: files[i].variant_id, image: files[i].name });
+            jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
         }
     }
 
@@ -526,6 +526,78 @@ function getLiElementsContentAsArray() {
             resultList.push(content);
         }
     });
-
 }
 
+let currentImageIndex = 0;
+let imageUUIDs = [];
+
+function openImageSlider(button) {
+    let variantId = button.getAttribute("data-variant-id");
+
+    // Step 1: Get list of image UUIDs from API
+    fetch(`/api/get/images?variant_id=${variantId}`)
+        .then(response => response.json())  // Expecting an array of UUIDs
+        .then(uuids => {
+            if (!uuids.length) {
+                alert("No images found!");
+                return;
+            }
+
+            imageUUIDs = uuids;
+            currentImageIndex = 0;
+            showImage(); // Display first image
+            document.getElementById("imageSlider").style.display = "flex"; // Show slider
+        })
+        .catch(error => {
+            console.error("Error fetching images:", error);
+            alert("Error loading images!");
+        });
+}
+
+function showImage() {
+console.log("showImage " + document.getElementById("sliderImage"))
+    let imageElement = document.getElementById("sliderImage");
+    let uuid = imageUUIDs[currentImageIndex];
+
+    // Step 2: Fetch individual image using UUID
+    fetch(`/api/image/show?uuid=${uuid}`)
+        .then(response => response.blob())  // Get binary data
+        .then(blob => {
+            imageElement.src = URL.createObjectURL(blob); // Convert to image URL
+        })
+        .catch(error => console.error("Error loading image:", error));
+}
+
+function nextProductImage() {
+
+    if (currentImageIndex < imageUUIDs.length - 1) {
+        currentImageIndex++;
+    } else if(currentImageIndex == imageUUIDs.length - 1) {
+        currentImageIndex--;
+    }
+    showImage();
+}
+
+function prevProductImage() {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+    } else {
+        currentImageIndex++;
+    }
+    showImage();
+}
+
+function closeSlider() {
+    document.getElementById("imageSlider").style.display = "none";
+}
+
+let currentImageIndex = 0;
+let imageUUIDs = [];
+
+function openAttributeDetail(button) {
+    console.log(variant);
+
+    // Accessing attribute ID and value from the button
+    var attributeId = button.getAttribute('data-attribute-id');
+    var attributeValue = button.getAttribute('data-attribute-value');
+}

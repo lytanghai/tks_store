@@ -1,18 +1,13 @@
-package com.group.tks_store.product.variant.variant_image.controller;
+package com.group.tks_store.product.variant_image.controller;
 
 
 import com.group.tks_store.common.dto.ID;
-import com.group.tks_store.product.variant.dto.VariantCreateDTO;
-import com.group.tks_store.product.variant.dto.VariantUpdateDto;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageListDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageUpdateDto;
-import com.group.tks_store.product.variant.variant_image.entity.VariantImageEntity;
-import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
+import com.group.tks_store.product.variant_image.dto.VariantImageListDTO;
+import com.group.tks_store.product.variant_image.entity.VariantImageEntity;
+import com.group.tks_store.product.variant_image.service.VariantImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,4 +1,4 @@
-package com.group.tks_store.product.variant.variant_image.entity;
+package com.group.tks_store.product.variant_image.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

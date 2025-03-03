@@ -1,24 +1,25 @@
 package com.group.tks_store.product.variant.dto;
 
+import com.group.tks_store.product.images.dto.ImageDTO;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTOV2;
 
 import java.util.List;
 
 public class VariantDetailDTO {
-    private Long id;
+    private Integer id;
     private String sku;
     private Double basePrice;
-    private String currency;
+    private String basePriceCurrency;
     private Integer stockQuantity;
-    private List<String> images;
+    private List<ImageDTO> images;
     private List<VariantAttributeDTOV2> attributes;
 
-    public VariantDetailDTO(Long id, String sku, Double basePrice, String currency, Integer stockQuantity,
-                            List<String> images, List<VariantAttributeDTOV2> attributes) {
+    public VariantDetailDTO(Integer id, String sku, Double basePrice, String basePriceCurrency, Integer stockQuantity,
+                            List<ImageDTO> images, List<VariantAttributeDTOV2> attributes) {
         this.id = id;
         this.sku = sku;
         this.basePrice = basePrice;
-        this.currency = currency;
+        this.basePriceCurrency = basePriceCurrency;
         this.stockQuantity = stockQuantity;
         this.images = images;
         this.attributes = attributes;
@@ -26,11 +27,11 @@ public class VariantDetailDTO {
 
     // Getters & Setters
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -50,12 +51,12 @@ public class VariantDetailDTO {
         this.basePrice = basePrice;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getBasePriceCurrency() {
+        return basePriceCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setBasePriceCurrency(String currency) {
+        this.basePriceCurrency = currency;
     }
 
     public Integer getStockQuantity() {
@@ -66,11 +67,11 @@ public class VariantDetailDTO {
         this.stockQuantity = stockQuantity;
     }
 
-    public List<String> getImages() {
+    public List<ImageDTO> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<ImageDTO> images) {
         this.images = images;
     }
 

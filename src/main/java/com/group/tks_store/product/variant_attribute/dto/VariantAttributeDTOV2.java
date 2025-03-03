@@ -1,20 +1,20 @@
 package com.group.tks_store.product.variant_attribute.dto;
 
 public class VariantAttributeDTOV2 {
-    private Integer attributeId;
+    private String name;
     private String value;
 
-    public VariantAttributeDTOV2(Integer attributeId, String value) {
-        this.attributeId = attributeId;
+    public VariantAttributeDTOV2(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
-    public Integer getAttributeId() {
-        return attributeId;
+    public String getName() {
+        return name;
     }
 
-    public void setAttributeId(Integer attributeId) {
-        this.attributeId = attributeId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getValue() {

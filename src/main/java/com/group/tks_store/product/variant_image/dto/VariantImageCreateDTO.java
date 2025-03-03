@@ -1,4 +1,4 @@
-package com.group.tks_store.product.variant.variant_image.dto;
+package com.group.tks_store.product.variant_image.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 

@@ -39,6 +39,10 @@ document.addEventListener("click", function(event) {
       if (event.target === modal) {
           event.stopPropagation(); // Prevent closing the modal
       }
+
+    //close preview image on product list when click anywhere
+      document.getElementById("imageSlider").style.display = 'none';
+
   });
 
 document.addEventListener('keydown', function (event) {
@@ -92,6 +96,7 @@ function addImages(event) {
 }
 
 function openPreview() {
+    showImageSlider();
     if (imageUrls.length > 0) {
         document.getElementById('preview_image').src = imageUrls[currentIndex];
         document.getElementById('image_preview_modal').style.display = 'block';
@@ -110,9 +115,25 @@ function prevImage(id) {
 }
 
 function nextImage(id) {
+console.log('nextImage: ' + id)
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         document.getElementById(id).src = imageUrls[currentIndex];
+    }
+}
+
+function prevImageUpload() {
+console.log('prevImageUpload:')
+    if (imageUrls.length > 0) {
+        currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+        document.getElementById('preview_image').src = imageUrls[currentIndex];
+    }
+}
+
+function nextImageUpload() {
+    if (imageUrls.length > 0) {
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+        document.getElementById('preview_image').src = imageUrls[currentIndex];
     }
 }
 
@@ -131,6 +152,7 @@ function showVerifyImageSlider() {
     }
 }
 
-window.onclick = function(event) {
-    showImageSlider();
-}
+
+//window.onclick = function(event) {
+//    showImageSlider();
+//}

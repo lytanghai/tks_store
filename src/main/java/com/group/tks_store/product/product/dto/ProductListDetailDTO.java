@@ -3,6 +3,7 @@ package com.group.tks_store.product.product.dto;
 import com.group.tks_store.product.category.dto.CategoryDetailDTO;
 import com.group.tks_store.product.variant.dto.VariantDetailDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductListDetailDTO {
@@ -14,11 +15,12 @@ public class ProductListDetailDTO {
     private String currency;
     private String description;
     private String status;
+    private Date createdAt;
     private CategoryDetailDTO category;
     private List<VariantDetailDTO> variants;
 
     public ProductListDetailDTO(Integer id, String nameEn, String nameKh, String code, Double salePrice, String currency,
-                                String description, String status, CategoryDetailDTO category, List<VariantDetailDTO> variants) {
+                                String description, String status, Date createdAt, CategoryDetailDTO category, List<VariantDetailDTO> variants) {
         this.id = id;
         this.nameEn = nameEn;
         this.nameKh = nameKh;
@@ -27,6 +29,7 @@ public class ProductListDetailDTO {
         this.currency = currency;
         this.description = description;
         this.status = status;
+        this.createdAt = createdAt;
         this.category = category;
         this.variants = variants;
     }
@@ -93,6 +96,14 @@ public class ProductListDetailDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public CategoryDetailDTO getCategory() {

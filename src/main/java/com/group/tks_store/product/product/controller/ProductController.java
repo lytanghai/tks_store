@@ -1,25 +1,17 @@
 package com.group.tks_store.product.product.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group.tks_store.common.dto.ID;
-//import com.group.tks_store.common.mapper.ProductMapper;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
-import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
-import com.group.tks_store.product.product.dto.ProductListDTO;
+import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
-import com.group.tks_store.product.variant.dto.VariantCreateDTO;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageCreateDTO;
-import com.group.tks_store.product.variant.variant_image.service.VariantImageService;
-import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
+import com.group.tks_store.product.product.service.ProductServiceBK;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(CommonKey.API_CONTEXT_PATH + AddressRedirect.PRODUCT)
@@ -42,6 +34,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductServiceBK productServiceBk;
 
     @Autowired
     private CategoryService categoryService;
@@ -52,15 +47,15 @@ public class ProductController {
     @PostMapping("/upload")
     public String uploadProduct(
             @RequestPart("data") String productJson,
-            @RequestPart("images") List<MultipartFile> images) throws IOException, ParseException {
+            @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException, ParseException {
 
             productService.formCreateProduct(productJson, images);
-            return AddressRedirect.REDIRECT_PRODUCT;
+            return AddressRedirect.REDIRECT_PRODUCT + CommonKey.LIST;
     }
 
     @PostMapping(CommonKey.CREATE)
     public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
-        productService.create(productCreateDTO);
+        productServiceBk.create(productCreateDTO);
         log.info("product created");
         return AddressRedirect.REDIRECT_PRODUCT;
     }
@@ -81,7 +76,7 @@ public class ProductController {
 
     @PostMapping(CommonKey.UPDATE)
     public String update(@RequestBody ProductUpdateDto productUpdateDto) throws ParseException {
-        productService.update(productUpdateDto);
+        productServiceBk.update(productUpdateDto);
         log.info("product {} updated", productUpdateDto.getId());
         return AddressRedirect.REDIRECT_PRODUCT;
     }
@@ -103,18 +98,18 @@ public class ProductController {
     }
 
     @GetMapping(CommonKey.LIST)
-    public String getActiveProducts(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
                                     @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                     @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                     @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
                                     Model model) {
 
-        Page<ProductListDTO> productPage = productService.getActiveProducts(
+        Page<ProductListDetailDTO> productPage = productService.getProductDetail(
                 PageRequest.of(
                         pageNumber,
                         pageSize,
                         Sort.by(Sort.Direction.fromString(sortDirection),
-                        sortBy))
+                                sortBy))
         );
 
         model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
@@ -131,6 +126,4 @@ public class ProductController {
 
         return AddressRedirect.HOME;
     }
-
-
 }

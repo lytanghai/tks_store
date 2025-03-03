@@ -1,6 +1,6 @@
-package com.group.tks_store.product.variant.variant_image.repository;
+package com.group.tks_store.product.variant_image.repository;
 
-import com.group.tks_store.product.variant.variant_image.entity.VariantImageEntity;
+import com.group.tks_store.product.variant_image.entity.VariantImageEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

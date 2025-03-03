@@ -1,4 +1,4 @@
-package com.group.tks_store.product.variant.variant_image.service;
+package com.group.tks_store.product.variant_image.service;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -8,9 +8,9 @@ import com.group.tks_store.common.util.ImageUtil;
 import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.variant.entity.VariantEntity;
 import com.group.tks_store.product.variant.repository.ProductVariantRepository;
-import com.group.tks_store.product.variant.variant_image.dto.VariantImageListDTO;
-import com.group.tks_store.product.variant.variant_image.entity.VariantImageEntity;
-import com.group.tks_store.product.variant.variant_image.repository.ProductVariantImageRepository;
+import com.group.tks_store.product.variant_image.dto.VariantImageListDTO;
+import com.group.tks_store.product.variant_image.entity.VariantImageEntity;
+import com.group.tks_store.product.variant_image.repository.ProductVariantImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

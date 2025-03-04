@@ -152,3 +152,9 @@ function showVerifyImageSlider() {
         document.getElementById('image_verify_preview_modal').style.display = 'block';
     }
 }
+
+function extractNumber(value) {
+    // Extract numeric part from value (e.g., "100 USD" → 100)
+    let number = parseFloat(value.replace(/[^\d.]/g, ""));
+    return isNaN(number) ? null : number;
+}

@@ -1,18 +1,60 @@
 <div class="content" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="product">
 
     <div class="product-search-bar-container">
-        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="productFilterResults()" class="search-ipt">
-        <div class="filter-date-container">
-        <label for="productStartDate" class="start_from">ចាប់ពី:</label>
-            <input type="date" id="productStartDate" onchange="productFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
+        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="filterInputValueDateTime()" class="search-ipt">
+
+        <div class="filter-container">
+            <select id="filterColumn">
+                <option value="default" disabled selected>ជ្រើសរើស</option>
+                <option value="0">លេខកូដ</option>
+                <option value="1">ឈ្មោះទំនិញ</option>
+                <option value="2">ប្រភេទទំនិញ</option>
+                <option value="3">តម្លៃ</option>
+                <option value="4">ចំនួនស្ដុក</option>
+                <option value="5">SKU</option>
+                <option value="10">ថ្ងៃខែបញ្ជូល</option>
+            </select>
+            &nbsp;&nbsp;
+            <select id="filterCondition" onchange="toggleInputFields()">
+                <option value="default" disabled selected>លក្ខខណ្ឌ</option>
+                <option value="equal">ស្មើរ</option>
+                <option value="contain">ប្រហែល</option>
+                <option value="in">ចន្លោះ</option>
+                <option value="greater">ធំជាង</option>
+                <option value="less">តូចជាង</option>
+            </select>
+            &nbsp;&nbsp;
+            <div id="inConditionFields" style="display: none;">
+                <div style="display: flex; height:100%;">
+                    <input type="text" id="filterValue1" placeholder="បញ្ជូលតម្លៃទី 1">
+                    <input type="text" id="filterValue2" placeholder="បញ្ជូលតម្លៃទី 2">
+                </div>
+            </div>
+            &nbsp;&nbsp;
+            <div id="singleConditionField">
+                <input type="text" id="filterValue" placeholder="បញ្ជូលតម្លៃ">
+            </div>
+            &nbsp;&nbsp;
+            <button onclick="productFilterResults()" id="btn-submit-filter">ដាក់បញ្ជូន</button>
+            <span style="margin-left: 3%"></span>
+            <button class="clear-filter-btn" onclick="clearAllFilters()" id="btn-reset-filter">កំណត់ឡើងវិញ</button>
         </div>
 
-        <div class="filter-date-container">
-        <label for="productEndDate" class="start_to">រហូតដល់:</label>
-            <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
-            <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
+        <!-- Date Filter -->
+        <div id="dateFilter">
+            <div class="filter-date-container" id="filter-start-date" style="display: none;">
+                <label for="productStartDate" class="start_from">ចាប់ពី:</label>
+                <input type="date" id="productStartDate" onchange="filterInputValueDateTime()" class="date-obj">
+                <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
+            </div>
+
+            <div class="filter-date-container" id="filter-end-date" style="display: none;">
+                <label for="productEndDate" class="start_to">រហូតដល់:</label>
+                <input type="date" id="productEndDate" onchange="filterInputValueDateTime()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
+                <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
+            </div>
         </div>
+
     </div>
 
     <div id="product-create-container">
@@ -44,6 +86,7 @@
             <th class="table_th">SKU</th>
             <th class="table_th">អង្គធាតុ</th>
             <th class="table_th">រូបភាព</th>
+            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
             <th class="table_th">សកម្មភាព</th>
         </tr>
         </thead>
@@ -74,7 +117,7 @@
                         <button class="view-image-btn"
                                 th:data-variant-id="${variant.id}"
                                 onclick="openVariantAttributeDetail(this)">
-                            &#128065;អង្គធាតុ
+                            ⚛អង្គធាតុ
                         </button>
                     </li>
                 </ul>
@@ -95,6 +138,7 @@
                     </li>
                 </ul>
             </td>
+            <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
 
             <div id="imageSlider" class="slider-container" style="display: none;">
                 <span class="close-btn" onclick="closeSlider()">✖</span>
@@ -232,7 +276,6 @@
                                 <select id="product_base_price_currency_edit"
                                         name="product_currency_edit"
                                         style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
-<!--                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>-->
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>

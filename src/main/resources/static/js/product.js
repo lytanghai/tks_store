@@ -299,39 +299,145 @@ function removeAttributeItem(listItem) {
     }
 }
 
-function productFilterResults() {
-    let searchValue = document.getElementById("search_input_product").value.toLowerCase();
+function toggleInputFields() {
+    const condition = document.getElementById("filterCondition").value;
+    const inFields = document.getElementById("inConditionFields");
+    const dateFilter = document.getElementById("dateFilter");
+    const singleField = document.getElementById("singleConditionField");
+
+    if (condition === "in") {
+        inFields.style.display = "block";
+        singleField.style.display = "none";
+        dateFilter.style.display = "none";
+    } else if (condition === "equal" || condition === "greater" || condition === "less") {
+        inFields.style.display = "none";
+        singleField.style.display = "block";
+        dateFilter.style.display = "none";
+    } else if (condition === "9") {
+        inFields.style.display = "none";
+        singleField.style.display = "none";
+        dateFilter.style.display = "block";
+    } else {
+        inFields.style.display = "none";
+        singleField.style.display = "block";
+        dateFilter.style.display = "none";
+    }
+}
+
+function filterInputValueDateTime() {
     let startDate = document.getElementById("productStartDate").value;
     let endDate = document.getElementById("productEndDate").value;
     let rows = document.querySelectorAll("#productTable tr");
+    let searchValue = document.getElementById("search_input_product").value.toLowerCase();
 
     rows.forEach(row => {
         let rowText = row.textContent.toLowerCase();
-        let rowDate = row.cells[6].textContent.trim();
-
-       let textareaElements = row.querySelectorAll(".product_desc");
-            textareaElements.forEach(textarea => {
-                rowText += " " + textarea.value.toLowerCase();
-        });
+        let rowDate = row.cells[8].textContent.trim();
         let showRow = rowText.includes(searchValue);
 
-        let rowDateTime = new Date(rowDate);
-
+        let rowDateTime2 = new Date(rowDate);
         if (startDate) {
             let startDateTime = new Date(startDate + "T00:00:00.000");
-            if (rowDateTime < startDateTime) {
+            if (rowDateTime2 < startDateTime) {
                 showRow = false;
             }
         }
         if (endDate) {
             let endDateTime = new Date(endDate + "T23:59:59.999");
-            if (rowDateTime > endDateTime) {
+            if (rowDateTime2 > endDateTime) {
                 showRow = false;
             }
         }
         row.style.display = showRow ? "" : "none";
     });
 }
+function productFilterResults() {
+    let searchValue = document.getElementById("filterValue") ? document.getElementById("filterValue").value.toLowerCase() : "";
+    let searchValue1 = document.getElementById("filterValue1") ? document.getElementById("filterValue1").value.toLowerCase() : "";
+    let searchValue2 = document.getElementById("filterValue2") ? document.getElementById("filterValue2").value.toLowerCase() : "";
+    let selectedColumn = parseInt(document.getElementById("filterColumn").value);
+    let condition = document.getElementById("filterCondition").value;
+    let rows = document.querySelectorAll("#productTable tr");
+
+    rows.forEach(row => {
+        let cell = row.cells[selectedColumn];
+        if (!cell) return;
+
+        let cellText = getTextFromCell(cell).trim().toLowerCase();
+        let cellNumber = extractNumber(cellText);
+        let searchNumber = extractNumber(searchValue);
+        let showRow = false;
+
+        if (condition === "in") {
+            showRow = cellText.includes(searchValue1) && cellText.includes(searchValue2);
+        } else if (condition === "equal") {
+            if (searchNumber !== null) {
+                showRow = cellNumber === searchNumber;
+            }
+        } else if (condition === "greater") {
+            let cellNumber = parseFloat(cellText);
+            let searchNumber = parseFloat(searchValue);
+            if (!isNaN(cellNumber) && !isNaN(searchNumber)) {
+                showRow = cellNumber > searchNumber;
+            }
+        } else if (condition === "less") {
+            let cellNumber = parseFloat(cellText);
+            let searchNumber = parseFloat(searchValue);
+            if (!isNaN(cellNumber) && !isNaN(searchNumber)) {
+                showRow = cellNumber < searchNumber;
+            }
+        } else if (condition === "contain") {
+             showRow = cellText.includes(searchValue) ;
+         }
+    row.style.display = showRow ? "" : "none";
+    });
+}
+
+function getTextFromCell(cell) {
+    if (cell.querySelector('ul')) {
+        let text = '';
+        let items = cell.querySelectorAll('li');
+        items.forEach(item => {
+            text += item.textContent.trim() + ' ';
+        });
+        return text;
+    } else {
+        return cell.textContent || "";
+    }
+}
+function clearAllFilters() {
+    document.getElementById("filterColumn").selectedIndex = 0;
+    document.getElementById("filterCondition").selectedIndex = 0;
+    document.getElementById("filterValue").value = "";
+    document.getElementById("filterValue1").value = "";
+    document.getElementById("filterValue2").value = "";
+    document.getElementById("productStartDate").value = "";
+    document.getElementById("productEndDate").value = "";
+
+    let rows = document.querySelectorAll("#productTable tr");
+    rows.forEach(row => {
+        row.style.display = "";
+    });
+}
+
+const selectElement = document.getElementById('filterColumn');
+selectElement.addEventListener('change', function() {
+    if (selectElement.value === '10') {
+        document.getElementById("filterCondition").style.display = 'none'
+        document.getElementById("singleConditionField").style.display = 'none'
+        document.getElementById("btn-submit-filter").style.display = 'none'
+        document.getElementById("btn-reset-filter").style.display = 'none'
+        document.getElementById("filter-start-date").style.display = 'inline-block'
+        document.getElementById("filter-end-date").style.display = 'inline-block'
+    } else {
+        document.getElementById("filterCondition").style.display = 'block'
+        document.getElementById("singleConditionField").style.display = 'block'
+        document.getElementById("btn-submit-filter").style.display = 'block'
+        document.getElementById("btn-reset-filter").style.display = 'block'
+        document.getElementById("filter-start-date").style.display = 'none'
+        document.getElementById("filter-end-date").style.display = 'none'
+    }
+});
 
 function clearProductStartDate() {
     let startDateInput = document.getElementById("productStartDate");
@@ -539,7 +645,7 @@ function openImageSlider(button) {
         .then(response => response.json())  // Expecting an array of UUIDs
         .then(uuids => {
             if (!uuids.length) {
-                alert("No images found!");
+                alert("❌ទំនិញនេះមិនមានរូបភាពទេ!");
                 return;
             }
 

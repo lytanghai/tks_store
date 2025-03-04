@@ -5,7 +5,7 @@
 
         <div class="filter-container">
             <select id="filterColumn">
-                <option value="default" disabled selected>ជ្រើសរើស</option>
+                <option value="defaultChoice" disabled selected>ជ្រើសរើស</option>
                 <option value="0">លេខកូដ</option>
                 <option value="1">ឈ្មោះទំនិញ</option>
                 <option value="2">ប្រភេទទំនិញ</option>
@@ -15,8 +15,8 @@
                 <option value="10">ថ្ងៃខែបញ្ជូល</option>
             </select>
             &nbsp;&nbsp;
-            <select id="filterCondition" onchange="toggleInputFields()">
-                <option value="default" disabled selected>លក្ខខណ្ឌ</option>
+            <select id="filterCondition" onchange="toggleInputFields()" style="display:none">
+                <option value="defaultCondition" disabled selected>លក្ខខណ្ឌ</option>
                 <option value="equal">ស្មើរ</option>
                 <option value="contain">ប្រហែល</option>
                 <option value="in">ចន្លោះ</option>
@@ -31,13 +31,13 @@
                 </div>
             </div>
             &nbsp;&nbsp;
-            <div id="singleConditionField">
+            <div id="singleConditionField" style="display:none">
                 <input type="text" id="filterValue" placeholder="បញ្ជូលតម្លៃ">
             </div>
             &nbsp;&nbsp;
-            <button onclick="productFilterResults()" id="btn-submit-filter">ដាក់បញ្ជូន</button>
+            <button onclick="productFilterResults()" id="btn-submit-filter" style="display:none">ដាក់បញ្ជូន</button>
             <span style="margin-left: 3%"></span>
-            <button class="clear-filter-btn" onclick="clearAllFilters()" id="btn-reset-filter">កំណត់ឡើងវិញ</button>
+            <button class="clear-filter-btn" onclick="clearAllFilters()" id="btn-reset-filter" style="display:none">កំណត់ឡើងវិញ</button>
         </div>
 
         <!-- Date Filter -->
@@ -465,9 +465,10 @@
             </div>
 
             <div th:if="${current_page < total_pages}" class="product-list-next">
-                <a th:if="${current_page < total_pages - 1}" th:href="@{/api/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
+                <a th:href="@{/api/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
             </div>
         </div>
     </div>
+
 
 </div>

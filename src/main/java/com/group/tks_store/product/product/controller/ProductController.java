@@ -98,7 +98,7 @@ public class ProductController {
     }
 
     @GetMapping(CommonKey.LIST)
-    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
                                     @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                     @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                     @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
@@ -112,17 +112,22 @@ public class ProductController {
                                 sortBy))
         );
 
+        int totalPage = productPage.getTotalPages();
+
+        if(pageNumber == 0) {
+            totalPage += 1;
+        }
+
         model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
         model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
         model.addAttribute("content", productPage.getContent());
         model.addAttribute("total_records", productPage.getTotalElements());
-        model.addAttribute("total_pages", productPage.getTotalPages());
+        model.addAttribute("total_pages",  totalPage);
         model.addAttribute("current_page", productPage.getNumber());
         model.addAttribute("sort_by", sortBy);
         model.addAttribute("sort_direction", sortDirection);
         model.addAttribute("first", productPage.isFirst());
         model.addAttribute("last", productPage.isLast());
-        log.info("list pagination product");
 
         return AddressRedirect.HOME;
     }

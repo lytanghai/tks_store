@@ -422,6 +422,13 @@ function clearAllFilters() {
 
 const selectElement = document.getElementById('filterColumn');
 selectElement.addEventListener('change', function() {
+
+    if(selectElement.value !== 'defaultCondition') {
+        document.getElementById("singleConditionField").style.display = 'block'
+        document.getElementById("btn-submit-filter").style.display = 'block'
+        document.getElementById("btn-reset-filter").style.display = 'block'
+    }
+
     if (selectElement.value === '10') {
         document.getElementById("filterCondition").style.display = 'none'
         document.getElementById("singleConditionField").style.display = 'none'

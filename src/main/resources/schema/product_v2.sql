@@ -16,11 +16,6 @@ VALUES
 (1, 'TSHIRT001-RED-M', 15.99, 'USD', 50, 'ACTIVE'),
 (1, 'TSHIRT001-BLUE-L', 15.99, 'USD', 30, 'ACTIVE');
 
-INSERT INTO tks.public.variant_images (variant_id, image,image_type)
-VALUES
-(1, 'https://example.com/images/tshirt_red_m.jpg', 'Front'),
-(2, 'https://example.com/images/tshirt_blue_l.jpg', 'Back');
-
 INSERT INTO tks.public.variant_attributes (variant_id, attribute_id, value, status)
 VALUES
 (1, 1, 'M', 'ACTIVE'),  -- Medium size
@@ -79,13 +74,23 @@ CREATE TABLE tks.public.variants (
 );
 
 -- 5. Product Variant Images Table (NEW: Links images to product variants) store in tab(s)
-CREATE TABLE tks.public.variant_images (
+CREATE TABLE images (
     id SERIAL PRIMARY KEY,
-    variant_id INT REFERENCES tks.public.variants(id) ON DELETE CASCADE,
-    image TEXT,
-    created_at TIMESTAMP DEFAULT NOW(),
-    last_updated_at TIMESTAMP DEFAULT NOW()
+    variant_id INTEGER,
+    status BOOLEAN DEFAULT TRUE,
+    file_name VARCHAR(255),
+    file_type VARCHAR(100),
+    size BIGINT,
+    uuid UUID,
+    system_name VARCHAR(255),
+    data BYTEA,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(255),
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE images ALTER COLUMN uuid TYPE VARCHAR(36);
+
 
 
 -- 6. Variant Attributes Table (Links attributes to variants)
@@ -114,19 +119,3 @@ INSERT INTO public."attributes"
 ("name", name_kh, status)
 VALUES('Material', 'សមាសភាគ', 'ACTIVE');
 
-CREATE TABLE images (
-    id SERIAL PRIMARY KEY,
-    variant_id INTEGER,
-    status BOOLEAN DEFAULT TRUE,
-    file_name VARCHAR(255),
-    file_type VARCHAR(100),
-    size BIGINT,
-    uuid UUID,
-    system_name VARCHAR(255),
-    data BYTEA,
-    created_by VARCHAR(255),
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(255),
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-ALTER TABLE images ALTER COLUMN uuid TYPE VARCHAR(36);

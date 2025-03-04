@@ -68,17 +68,25 @@
                 </ul>
             </td>
 
-            <td>
+            <td class="view_img_td">
                 <ul>
                     <li th:each="variant : ${row.variants}">
-                        <ul>
-                            <li th:each="attribute : ${variant.attributes}" style="text-align: left; width: 150px">
-                                <span th:text="${attribute.name}"></span>:<span th:text="${attribute.value}"></span><br>
-                            </li>
-                        </ul>
+                        <button class="view-image-btn"
+                                th:data-variant-id="${variant.id}"
+                                onclick="openVariantAttributeDetail(this)">
+                            &#128065;អង្គធាតុ
+                        </button>
                     </li>
                 </ul>
             </td>
+
+            <div id="customModal" class="custom-modal">
+                <div class="custom-modal-content">
+                    <span class="close-var-att-btn" onclick="closeVariantAttributeModal()">&times;</span>
+                    <p style="font-size: 2.3rem">ពត័មានអង្គធាតុ</p>
+                    <ul id="attributeList" style="font-size: 2rem"></ul>
+                </div>
+            </div>
 
             <td class="view_img_td">
                 <ul>

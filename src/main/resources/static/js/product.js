@@ -21,7 +21,7 @@ function deleteProduct(id) {
 }
 
 function updateProduct() {
-alert(document.getElementById("product_select").value)
+
     let formData = {
         id: document.getElementById("product_id_edit").value,
         name_en: document.getElementById("product_name_en_edit").value,
@@ -555,7 +555,6 @@ function openImageSlider(button) {
 }
 
 function showImage() {
-console.log("showImage " + document.getElementById("sliderImage"))
     let imageElement = document.getElementById("sliderImage");
     let uuid = imageUUIDs[currentImageIndex];
 
@@ -591,13 +590,40 @@ function closeSlider() {
     document.getElementById("imageSlider").style.display = "none";
 }
 
-let currentImageIndex = 0;
-let imageUUIDs = [];
+function openVariantAttributeDetail(button) {
+    let variantId = button.getAttribute("data-variant-id");
+    // Fetch data using AJAX
+    fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
+    .then(response => response.json())
+    .then(data => {
+        let attributeList = document.getElementById("attributeList");
+        attributeList.innerHTML = ""; // Clear old data
 
-function openAttributeDetail(button) {
-    console.log(variant);
+        if (data.length > 0) {
+            data.forEach(attr => {
+//                let listItemId = document.createElement("li");
+//                listItemId.textContent = `លេខរៀង: ${attr.variant_attribute_id}`;
+//                attributeList.appendChild(listItemId);
+//                listItemId.style.listStyle = 'none'
 
-    // Accessing attribute ID and value from the button
-    var attributeId = button.getAttribute('data-attribute-id');
-    var attributeValue = button.getAttribute('data-attribute-value');
+
+                let listItemName = document.createElement("li");
+                listItemName.textContent = `${attr.attribute_name}: ${attr.value}`;
+                listItemName.style.listStyle = 'none'
+                listItemName.style.paddingRight = '5%'
+
+                attributeList.appendChild(listItemName);
+            });
+
+            // Show the modal
+            document.getElementById("customModal").style.display = "flex";
+        } else {
+            alert("No attributes found!");
+        }
+    })
+    .catch(error => console.error("Error fetching data:", error));
 }
+function closeVariantAttributeModal() {
+    document.getElementById("customModal").style.display = "none";
+}
+

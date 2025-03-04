@@ -41,7 +41,8 @@ document.addEventListener("click", function(event) {
       }
 
     //close preview image on product list when click anywhere
-      document.getElementById("imageSlider").style.display = 'none';
+    document.getElementById("imageSlider").style.display = 'none';
+    document.getElementById("customModal").style.display = 'none';
 
   });
 
@@ -151,8 +152,3 @@ function showVerifyImageSlider() {
         document.getElementById('image_verify_preview_modal').style.display = 'block';
     }
 }
-
-
-//window.onclick = function(event) {
-//    showImageSlider();
-//}

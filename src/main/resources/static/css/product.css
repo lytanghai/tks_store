@@ -16,7 +16,7 @@
         table-layout: fixed;
     }
     .custom-sale-price{
-        text-align: right;
+        text-align: center;
     }
 
     #form-modal-product-title {
@@ -165,24 +165,18 @@
     .filter-container select {
         width: 28%;
         padding: 0%;
-        font-size: 1rem;
+        font-size: .8rem;
         border: 1px solid;
         text-align:center;
     }
 
     .filter-container input {
-        width: 100%;
+        width: 200px;
         padding: 0%;
         font-size: 1.2rem;
         height: 100%;
         border: 1px solid;
         text-align:center;
-    }
-    .filter-container button{
-        background-color: #e28743;
-        color: #000;
-        font-size: 1.4rem;
-        width: 30%;
     }
 
     #dateFilter{
@@ -457,9 +451,10 @@
      }
 
      .view-image-btn {
-        background-color: #e28743;
-        color: #0a0a0a;
+        background-color: #053914a3;
+        color: #fff;
         font-weight: normal;
+        font-size: 12px;
      }
 
 }

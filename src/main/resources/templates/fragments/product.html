@@ -19,14 +19,15 @@
                 <option value="defaultCondition" disabled selected>លក្ខខណ្ឌ</option>
                 <option value="equal">ស្មើរ</option>
                 <option value="contain">ប្រហែល</option>
-                <option value="in">ចន្លោះ</option>
-                <option value="greater">ធំជាង</option>
-                <option value="less">តូចជាង</option>
+                <option value="in">ចន្លោះ (លេខ)</option>
+                <option value="greater">ធំជាង (លេខ)</option>
+                <option value="less">តូចជាង (លេខ)</option>
             </select>
             &nbsp;&nbsp;
             <div id="inConditionFields" style="display: none;">
                 <div style="display: flex; height:100%;">
                     <input type="text" id="filterValue1" placeholder="បញ្ជូលតម្លៃទី 1">
+                    <span style="margin-left: 2%"></span>
                     <input type="text" id="filterValue2" placeholder="បញ្ជូលតម្លៃទី 2">
                 </div>
             </div>
@@ -35,9 +36,11 @@
                 <input type="text" id="filterValue" placeholder="បញ្ជូលតម្លៃ">
             </div>
             &nbsp;&nbsp;
-            <button onclick="productFilterResults()" id="btn-submit-filter" style="display:none">ដាក់បញ្ជូន</button>
+
+            <span style="margin-left: 2%"></span>
+            <button class="common-btn" id="btn-submit-filter" style="display: none"></button>
             <span style="margin-left: 3%"></span>
-            <button class="clear-filter-btn" onclick="clearAllFilters()" id="btn-reset-filter" style="display:none">កំណត់ឡើងវិញ</button>
+            <button class="reset-btn" onclick="clearAllFilters()" id="btn-reset-filter" style="display:none"></button>
         </div>
 
         <!-- Date Filter -->
@@ -117,7 +120,7 @@
                         <button class="view-image-btn"
                                 th:data-variant-id="${variant.id}"
                                 onclick="openVariantAttributeDetail(this)">
-                            ⚛អង្គធាតុ
+                            ⚙️
                         </button>
                     </li>
                 </ul>
@@ -134,7 +137,7 @@
             <td class="view_img_td">
                 <ul>
                     <li th:each="variant : ${row.variants}">
-                        <button class="view-image-btn" th:data-variant-id="${variant.id}" onclick="openImageSlider(this)">&#128065;រូបភាព</button>
+                        <button class="view-image-btn" th:data-variant-id="${variant.id}" onclick="openImageSlider(this)">🔍</button>
                     </li>
                 </ul>
             </td>

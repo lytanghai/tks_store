@@ -105,6 +105,44 @@ public class ProductController {
         return list;
     }
 
+    @GetMapping(CommonKey.LIST + "/filter")
+    public String getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
+                                   @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
+                                   @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
+                                   @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
+                                   @RequestParam(name = "code", defaultValue = "DESC") String code,
+                                   @RequestParam(name = "product_name",required = false) String productName,
+                                   @RequestParam(name = "category_name", required = false) String categoryName,
+                                   @RequestParam(name = "sale_price", required = false) String salePrice,
+                                   @RequestParam(name = "stock_quantity", required = false) String stockQty,
+                                   @RequestParam(name = "sku", required = false) String sku,
+                                   @RequestParam(name = "created_date", required = false) String dateTime,
+                                   Model model) {
+
+        String[] properties = {code, productName, categoryName, salePrice, stockQty, sku, dateTime};
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, properties);
+        Page<ProductListDetailDTO> productPage = productService.getProductDetail(pageRequest);
+
+        int totalPage = productPage.getTotalPages();
+
+        if(pageNumber == 0) {
+            totalPage += 1;
+        }
+
+        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
+        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
+        model.addAttribute("content", productPage.getContent());
+        model.addAttribute("total_records", productPage.getTotalElements());
+        model.addAttribute("total_pages",  totalPage);
+        model.addAttribute("current_page", productPage.getNumber());
+        model.addAttribute("sort_by", sortBy);
+        model.addAttribute("sort_direction", sortDirection);
+        model.addAttribute("first", productPage.isFirst());
+        model.addAttribute("last", productPage.isLast());
+
+        return AddressRedirect.HOME;
+    }
+
     @GetMapping(CommonKey.LIST)
     public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
                                     @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,

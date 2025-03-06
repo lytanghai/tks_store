@@ -84,12 +84,12 @@
             <th class="table_th">លេខកូដ</th>
             <th class="table_th">ឈ្មោះទំនិញ</th>
             <th class="table_th">ប្រភេទទំនិញ</th>
-            <th class="table_th">តម្លៃ</th>
-            <th class="table_th">ចំនួនស្ដុក</th>
+            <th class="table_th">តម្លៃ(ដុល្លារ) | តម្លៃ(រៀល)</th>
             <th class="table_th">SKU</th>
+            <th class="table_th" width="50px">ចំនួនស្ដុក</th>
             <th class="table_th">អង្គធាតុ</th>
             <th class="table_th">រូបភាព</th>
-            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
+<!--            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>-->
             <th class="table_th">សកម្មភាព</th>
         </tr>
         </thead>
@@ -98,18 +98,22 @@
             <td class="table_td" th:text="${row.code}"></td>
             <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEnn}"></td>
             <td class="table_td" th:text="${row.category.name != null and row.category.nameKh != '' ? row.category.name + ' (' + row.category.nameKh + ')' : row.category.name}"></td>
-            <td class="table_td custom-sale-price" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
-            <td>
-                <ul>
-                    <li th:each="variant : ${row.variants}">
-                        <span th:text="${variant.stockQuantity}"></span><br>
-                    </li>
-                </ul>
+            <td class="table_td custom-sale-price"
+                th:text="${#numbers.formatDecimal(row.currency == 'USD' ? row.salePrice : row.salePrice / 4100, 1, 2)} + ' ដុល្លារ = ' +
+             ${#numbers.formatDecimal(row.currency == 'KHR' ? row.salePrice : row.salePrice * 4100, 1, 0)} + ' រៀល'">
             </td>
             <td>
                 <ul>
                     <li th:each="variant : ${row.variants}">
                         <span th:text="${variant.sku}"></span><br>
+                    </li>
+                </ul>
+            </td>
+
+            <td class="custom-stock-qty">
+                <ul style="text-align:center">
+                    <li th:each="variant : ${row.variants}">
+                        <span th:text="${variant.stockQuantity}"></span><br>
                     </li>
                 </ul>
             </td>
@@ -134,14 +138,14 @@
                 </div>
             </div>
 
-            <td class="view_img_td">
+            <td class="view_img_td custom-image">
                 <ul>
                     <li th:each="variant : ${row.variants}">
                         <button class="view-image-btn" th:data-variant-id="${variant.id}" onclick="openImageSlider(this)">🔍</button>
                     </li>
                 </ul>
             </td>
-            <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
+<!--            <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 10)}"></td>-->
 
             <div id="imageSlider" class="slider-container" style="display: none;">
                 <div class="product-prev-btn-container">
@@ -154,16 +158,16 @@
                 </div>
             </div>
 
-            <td class="table_td">
+            <td style="font-size: 1rem">
                 <ul class="product-action ">
                     <li>
                         <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-                            <span class="unicode-icon">&#128465</span>
-                            <span th:text="លុប"></span>
+                            <span class="unicode-icon">&#128465;លុប</span>
+<!--                            <span th:text="លុប" style="font-size: 1.1rem"></span>-->
                         </a>
                     </li>
                     &nbsp;
-                    <li> <span style="font-size:1.5rem">|</span> </li>
+                    <li> <span style="font-size:1.3rem">|</span> </li>
                     &nbsp;
                     <li>
                         <a th:id="${row.id}"
@@ -187,8 +191,8 @@
                            th:data-form-title="'Update'"
                            th:href="'#'"
                            onclick="openCreateUpdateProductModal(this)">
-                            <span class="unicode-icon">&#x270E;</span>
-                            <span th:text="'កែ'"></span>
+                            <span class="unicode-icon">&#x270E;កែ</span>
+<!--                            <span th:text="'កែ'" style="font-size: 1.1rem"></span>-->
                         </a>
 
                     </li>

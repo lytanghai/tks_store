@@ -277,6 +277,7 @@ function productFilterResults() {
     let condition = document.getElementById("filterCondition").value;
     let rows = document.querySelectorAll("#productTable tr");
 
+console.log(searchValue)
     rows.forEach(row => {
         let cell = row.cells[selectedColumn];
         if (!cell) return;
@@ -307,7 +308,7 @@ function productFilterResults() {
         } else if (condition === "contain") {
              showRow = cellText.includes(searchValue) ;
          }
-    row.style.display = showRow ? "" : "none";
+        row.style.display = showRow ? "" : "none";
     });
 }
 

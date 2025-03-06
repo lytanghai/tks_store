@@ -16,7 +16,11 @@
         table-layout: fixed;
     }
     .custom-sale-price{
-        text-align: center;
+        text-align: left;
+        color: #000000a3;
+        font-weight: bold;
+        background-color: #d69c3eaa;
+        padding-left: 16px;
     }
 
     #form-modal-product-title {
@@ -29,23 +33,25 @@
 
     #productTable tr td ul li {
         list-style: none;
-        text-align: center;
         width: auto;
-    }
-
-    #productTable tr td ul li span:nth-child(3) {
-        list-style: none;
-        text-align: left;
-        color:red;
     }
 
     #productTable tr td ul li span {
         color:#000;
+
+        text-align:center;
         font-weight: 400;
     }
+    .custom-stock-qty{
+        text-align:center;
+        color: #3ed642aa;
+        font-weight: bold;
+        background-color: #d69c3eaa;
+        padding-right: 28px;
+    }
 
-    .product_tr:nth-child(even) {
-        background-color: #f9f9f9;
+    .custom-image {
+        background-color: #d69c3eaa;
     }
 
     .product-page-redirect{

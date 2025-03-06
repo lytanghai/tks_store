@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -234,6 +235,54 @@ public class ProductService {
         }).collect(Collectors.toList());
 
         return new PageImpl<>(mappedProducts, pageable, getActiveProducts.size());
+    }
+
+    public Page<ProductListDetailDTO> getProductFilterDetail(Pageable pageable, Map<String,Object> properties) {
+        String code = "";
+        String sku = "";
+        String categoryName = "";
+        String productName = "";
+        String createdDate = "";
+        int stockQuantity = 0;
+        Double salePrice = null;
+
+        if(!properties.isEmpty()) {
+            for(Map.Entry<String,Object> key : properties.entrySet()) {
+                if(key.getKey().equals("code")) {
+                    code = key.getValue().toString();
+                }
+                if(key.getKey().equals("product_name")) {
+                    productName = key.getValue().toString();
+                }
+                if(key.getKey().equals("category_name")) {
+                    categoryName = key.getValue().toString();
+                }
+                if(key.getKey().equals("sale_price")) {
+                    salePrice = Double.valueOf(key.getValue().toString());
+                }
+                if(key.getKey().equals("sku")) {
+                    sku = key.getValue().toString();
+                }
+                if(key.getKey().equals("stock_quantity")) {
+                    stockQuantity = Integer.valueOf(key.getValue().toString());
+                }
+                if(key.getKey().equals("created_date")) {
+                    createdDate = key.getValue().toString();
+                }
+            }
+        }
+
+//        productRepository.fetchProductByProperty(code, sku, productName, categoryName, stockQuantity, salePrice, createdDate);
+        //condition for contain
+        productRepository.fetchProductByProperty(code, productName, categoryName, salePrice);
+
+        //condition for equal
+        //condition for between
+        //condition for greater than
+        //condition for less than
+
+
+        return null;
     }
 
 

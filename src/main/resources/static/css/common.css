@@ -21,7 +21,7 @@
     }
 
     .unicode-icon {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     .icon{
         width: 25px;
@@ -248,12 +248,16 @@
         width: 120px;
     }
 
-    .table_th:nth-child(even) {
+    .table_tr:nth-child(even) {
         background-color: #f9f9f9;
     }
 
-    .table_tr:nth-child(even) {
-        background-color: #f9f9f9;
+    .table_th:nth-child(even) {
+        background-color: #d69c3eaa;
+    }
+
+    .table_td:nth-child(even) {
+        background-color: #d69c3eaa;
     }
 
     .common-label {

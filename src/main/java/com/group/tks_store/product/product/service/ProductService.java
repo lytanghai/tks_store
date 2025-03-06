@@ -1,5 +1,6 @@
 package com.group.tks_store.product.product.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -17,7 +18,7 @@ import com.group.tks_store.product.images.dto.ImageDTO;
 import com.group.tks_store.product.images.repository.ImageRepository;
 import com.group.tks_store.product.images.service.ImageService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
-import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
+import com.group.tks_store.product.product.dto.ProductDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.repository.ProductRepository;
@@ -37,7 +38,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -69,102 +69,123 @@ public class ProductService {
     private ImageService imageService;
 
     @org.springframework.transaction.annotation.Transactional
-    public void formCreateProduct(String productJson, MultipartFile[] images) throws IOException, ParseException {
+    public void updateProduct(String productJson, MultipartFile[] images) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> productObj = objectMapper.readValue(productJson, Map.class);
 
-        ProductFullCreateDTO newProductInformation = new ProductFullCreateDTO();
+        ProductDTO productUpdateDTO = new ProductDTO();
+        for(Map.Entry<String,Object> key : productObj.entrySet()) {
+            String keyName = key.getKey();
+            if(keyName.equals("product") && Objects.nonNull(key.getValue())) {
+                this.mappingProductInfo(key, productUpdateDTO);
+            }
+
+            if(keyName.equals("variant") && Objects.nonNull(key.getValue())) {
+                this.mappingVariantInfo(key, productUpdateDTO);
+            }
+
+            if(keyName.equals("variant_images") && Objects.nonNull(key.getValue())) {
+                this.mappingVariantImgInfo(key, productUpdateDTO);
+            }
+
+            if(keyName.equals("variant_attributes") && Objects.nonNull(key.getValue())) {
+                this.mappingVariantAttributeInfo(key, productUpdateDTO);
+            }
+        }
+        System.out.println(productUpdateDTO);
+
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public void updateProduct(ProductDTO productUpdateDTO, MultipartFile[] imageFile) throws ParseException {
+
+        ProductEntity product = null;
+        ProductCreateDTO productCreate = productUpdateDTO.getProduct();
+        if(!ObjectUtils.isEmpty(productCreate)) {
+            CategoryEntity category = categoryRepository.findById(
+                            productCreate.getCategory()
+                                    .getId())
+                    .orElseThrow(() -> new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + productCreate.getCategory().getId()));
+            product = new ProductEntity();
+            product.setCategory(category);
+            product.setNameEn(productCreate.getNameEn());
+            product.setNameKh(productCreate.getNameKh());
+            product.setCode(productCreate.getCode());
+            product.setDescription(productCreate.getDescription());
+            product.setCurrency(productCreate.getCurrency());
+            product.setSalePrice(productCreate.getSalePrice());
+            product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
+            product.setStatus(Status.ACTIVE.getValue());
+            product = productRepository.save(product);
+        }
+        assert product != null;
+
+        VariantEntity variant = null;
+        if(!ObjectUtils.isEmpty(productUpdateDTO.getVariant())) {
+            variant = variantService.createVariant(productUpdateDTO.getVariant(), product.getId());
+        }
+
+        assert variant != null;
+        if(!ObjectUtils.isEmpty(imageFile)) {
+            imageService.uploadMultiFiles(imageFile, variant.getId());
+        }
+
+        if(!ObjectUtils.isEmpty(productUpdateDTO.getVariantAttribute())) {
+            for (VariantAttributeDTO variantAttributeDTO : productUpdateDTO.getVariantAttribute()) {
+                variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
+            }
+        }
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public void createProduct(String productJson, MultipartFile[] images) throws IOException, ParseException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> productObj = objectMapper.readValue(productJson, Map.class);
+
+        ProductDTO newProductInformation = new ProductDTO();
         for(Map.Entry<String,Object> key : productObj.entrySet()) {
 
             String keyName = key.getKey();
             if(keyName.equals("product") && Objects.nonNull(key.getValue())) {
-                Map<String,Object> product = (Map<String, Object>) key.getValue();
-                ProductCreateDTO productDTO = new ProductCreateDTO();
-                productDTO.setNameEn(String.valueOf(product.getOrDefault("name_en", null)));
-                productDTO.setNameKh(String.valueOf(product.getOrDefault("name_kh", null)));
-                productDTO.setCode(String.valueOf(product.getOrDefault("code", null)));
-                Integer salePriceInteger = (Integer) product.getOrDefault("sale_price", 0.0);
-                Double salePrice = salePriceInteger != null ? salePriceInteger.doubleValue() : 0.0;
-                productDTO.setSalePrice(salePrice);
-                productDTO.setCurrency(String.valueOf(product.getOrDefault("currency", null)));
-                productDTO.setDescription(String.valueOf(product.getOrDefault("description", null)));
-                Map<String,Object> category = (Map<String, Object>) product.get("category");
-                CategoryCreateDTO categoryCreateDTO = new CategoryCreateDTO();
-
-                String categoryIdString = (String) category.getOrDefault("id", "0");
-
-                Integer categoryId = Integer.parseInt(categoryIdString);
-                categoryCreateDTO.setId(categoryId);
-                productDTO.setCategory(categoryCreateDTO);
-
-                newProductInformation.setProduct(productDTO);
+                this.mappingProductInfo(key, newProductInformation);
             }
 
             if(keyName.equals("variant") && Objects.nonNull(key.getValue())) {
-                Map<String,Object> variant = (Map<String, Object>) key.getValue();
-                VariantCreateDTO variantDTO = new VariantCreateDTO();
-                Integer basePriceInteger = (Integer) variant.getOrDefault("base_price", 0);
-                Double basePrice = basePriceInteger != null ? basePriceInteger.doubleValue() : 0.0;
-                variantDTO.setBasePrice(basePrice);
-                variantDTO.setCurrency((String) variant.getOrDefault("currency", null));
-                variantDTO.setStockQuantity((Integer) variant.getOrDefault("stock_quantity", 0));
-                variantDTO.setSku((String) variant.getOrDefault("sku", null));
-                newProductInformation.setVariant(variantDTO);
+                this.mappingVariantInfo(key, newProductInformation);
             }
 
             if(keyName.equals("variant_images") && Objects.nonNull(key.getValue())) {
-                List<VariantImageCreateDTO> listVariantImgDTO = new ArrayList<>();
-                ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
-                for(int i =0; i< arrayList.size();i++) {
-                    Map<String,Object> map = (Map<String, Object>) arrayList.get(i);
-                    VariantImageCreateDTO variantImageCreateDTO = new VariantImageCreateDTO();
-                    variantImageCreateDTO.setVariantId((Integer) map.getOrDefault("variant_id", null));
-                    listVariantImgDTO.add(variantImageCreateDTO);
-                }
-                newProductInformation.setVariantImage(listVariantImgDTO);
+                this.mappingVariantImgInfo(key, newProductInformation);
             }
 
             if(keyName.equals("variant_attributes") && Objects.nonNull(key.getValue())) {
-
-                List<VariantAttributeDTO> listVariantAttributeDTO = new ArrayList<>();
-                ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
-                for(int i =0 ;i < arrayList.size();i++) {
-                    Map<String,Object> map = (Map<String, Object>) arrayList.get(i);
-                    VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
-                    variantAttributeDTO.setAttributeId((Integer) map.getOrDefault("attribute_id", null));
-                    variantAttributeDTO.setValue((String) map.getOrDefault("value", null));
-                    listVariantAttributeDTO.add(variantAttributeDTO);
-                }
-                newProductInformation.setVariantAttributes(listVariantAttributeDTO);
+                this.mappingVariantAttributeInfo(key, newProductInformation);
             }
         }
-        this.createFullProduct(newProductInformation, images);
-    }
-
-
-    public ProductEntity createProduct(ProductCreateDTO productCreateDTO) throws ParseException {
-
-        CategoryEntity category = categoryRepository.findById(productCreateDTO.getCategory().getId()).orElseThrow(() -> new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + productCreateDTO.getCategory().getId()));
-
-        ProductEntity product = new ProductEntity();
-        product.setCategory(category);
-        product.setNameEn(productCreateDTO.getNameEn());
-        product.setNameKh(productCreateDTO.getNameKh());
-        product.setCode(productCreateDTO.getCode());
-        product.setDescription(productCreateDTO.getDescription());
-        product.setCurrency(productCreateDTO.getCurrency());
-        product.setSalePrice(productCreateDTO.getSalePrice());
-        product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
-        product.setStatus(Status.ACTIVE.getValue());
-        return productRepository.save(product);
+        this.createProduct(newProductInformation, images);
     }
 
     @org.springframework.transaction.annotation.Transactional
-    public void createFullProduct(ProductFullCreateDTO productCreateDTO, MultipartFile[] imageFile) throws ParseException {
+    public void createProduct(ProductDTO productCreateDTO, MultipartFile[] imageFile) throws ParseException {
 
         ProductEntity product = null;
-        if(!ObjectUtils.isEmpty(productCreateDTO.getProduct())) {
-            product = this.createProduct(productCreateDTO.getProduct());
+        ProductCreateDTO productCreate = productCreateDTO.getProduct();
+        if(!ObjectUtils.isEmpty(productCreate)) {
+            CategoryEntity category = categoryRepository.findById(
+                    productCreate.getCategory()
+                            .getId())
+                    .orElseThrow(() -> new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + productCreate.getCategory().getId()));
+            product = new ProductEntity();
+            product.setCategory(category);
+            product.setNameEn(productCreate.getNameEn());
+            product.setNameKh(productCreate.getNameKh());
+            product.setCode(productCreate.getCode());
+            product.setDescription(productCreate.getDescription());
+            product.setCurrency(productCreate.getCurrency());
+            product.setSalePrice(productCreate.getSalePrice());
+            product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
+            product.setStatus(Status.ACTIVE.getValue());
+            product = productRepository.save(product);
         }
         assert product != null;
 
@@ -174,7 +195,6 @@ public class ProductService {
         }
 
         assert variant != null;
-
         if(!ObjectUtils.isEmpty(imageFile)) {
             imageService.uploadMultiFiles(imageFile, variant.getId());
         }
@@ -216,15 +236,6 @@ public class ProductService {
         return new PageImpl<>(mappedProducts, pageable, getActiveProducts.size());
     }
 
-    @Transactional
-    public ProductEntity createProduct(ProductEntity product) {
-        if (product.getCategory() != null && product.getCategory().getId() != null) {
-            CategoryEntity category = categoryRepository.findById(product.getCategory().getId())
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
-            product.setCategory(category);
-        }
-        return productRepository.save(product);
-    }
 
     public List<ProductListDetailDTO> getActiveProducts(Pageable pageable) {
         Page<Object[]> results = productRepository.findActiveProductsRaw(pageable);
@@ -293,6 +304,67 @@ public class ProductService {
             }
         }
         return products;
+    }
+
+    void mappingProductInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
+        Map<String,Object> product = (Map<String, Object>) key.getValue();
+        ProductCreateDTO productCreateDTO = new ProductCreateDTO();
+        productCreateDTO.setId(Integer.valueOf(String.valueOf(product.getOrDefault("id", 0))));
+        productCreateDTO.setNameEn(String.valueOf(product.getOrDefault("name_en", null)));
+        productCreateDTO.setNameKh(String.valueOf(product.getOrDefault("name_kh", null)));
+        productCreateDTO.setCode(String.valueOf(product.getOrDefault("code", null)));
+        Integer salePriceInteger = (Integer) product.getOrDefault("sale_price", 0.0);
+        Double salePrice = salePriceInteger != null ? salePriceInteger.doubleValue() : 0.0;
+        productCreateDTO.setSalePrice(salePrice);
+        productCreateDTO.setCurrency(String.valueOf(product.getOrDefault("currency", null)));
+        productCreateDTO.setDescription(String.valueOf(product.getOrDefault("description", null)));
+        Map<String,Object> category = (Map<String, Object>) product.get("category");
+        CategoryCreateDTO categoryCreateDTO = new CategoryCreateDTO();
+
+        String categoryIdString = (String) category.getOrDefault("id", "0");
+
+        Integer categoryId = Integer.parseInt(categoryIdString);
+        categoryCreateDTO.setId(categoryId);
+        productCreateDTO.setCategory(categoryCreateDTO);
+
+        productDTO.setProduct(productCreateDTO);
+    }
+
+    void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
+        Map<String,Object> variant = (Map<String, Object>) key.getValue();
+        VariantCreateDTO variantDTO = new VariantCreateDTO();
+        Integer basePriceInteger = (Integer) variant.getOrDefault("base_price", 0);
+        Double basePrice = basePriceInteger != null ? basePriceInteger.doubleValue() : 0.0;
+        variantDTO.setBasePrice(basePrice);
+        variantDTO.setCurrency((String) variant.getOrDefault("currency", null));
+        variantDTO.setStockQuantity((Integer) variant.getOrDefault("stock_quantity", 0));
+        variantDTO.setSku((String) variant.getOrDefault("sku", null));
+        productDTO.setVariant(variantDTO);
+    }
+
+    void mappingVariantImgInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
+        List<VariantImageCreateDTO> listVariantImgDTO = new ArrayList<>();
+        ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
+        for(int i =0; i< arrayList.size();i++) {
+            Map<String,Object> map = (Map<String, Object>) arrayList.get(i);
+            VariantImageCreateDTO variantImageCreateDTO = new VariantImageCreateDTO();
+            variantImageCreateDTO.setVariantId((Integer) map.getOrDefault("variant_id", null));
+            listVariantImgDTO.add(variantImageCreateDTO);
+        }
+        productDTO.setVariantImage(listVariantImgDTO);
+    }
+
+    void mappingVariantAttributeInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
+        List<VariantAttributeDTO> listVariantAttributeDTO = new ArrayList<>();
+        ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
+        for(int i =0 ;i < arrayList.size();i++) {
+            Map<String,Object> map = (Map<String, Object>) arrayList.get(i);
+            VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
+            variantAttributeDTO.setAttributeId((Integer) map.getOrDefault("attribute_id", null));
+            variantAttributeDTO.setValue((String) map.getOrDefault("value", null));
+            listVariantAttributeDTO.add(variantAttributeDTO);
+        }
+        productDTO.setVariantAttributes(listVariantAttributeDTO);
     }
 
 }

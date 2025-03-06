@@ -23,7 +23,7 @@ displayDateTime();
 setInterval(displayDateTime, 1000);
 
 function adjustAnimationDuration() {
-    const runningText = document.querySelector('.running-text');
+    const runningText = document.querySelector('.announcement');
     const textLength = runningText.textContent.length;
     const animationDuration = textLength * 0.05 + 's';
 

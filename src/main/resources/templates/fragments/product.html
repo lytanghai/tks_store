@@ -38,7 +38,7 @@
             &nbsp;&nbsp;
 
             <span style="margin-left: 2%"></span>
-            <button class="common-btn" id="btn-submit-filter" style="display: none"></button>
+            <button class="common-btn" onclick="productFilterResults()" id="btn-submit-filter" style="display: none"></button>
             <span style="margin-left: 3%"></span>
             <button class="reset-btn" onclick="clearAllFilters()" id="btn-reset-filter" style="display:none"></button>
         </div>
@@ -144,10 +144,14 @@
             <td class="product_td" th:text="${#strings.substring(row.createdAt, 0, 19)}"></td>
 
             <div id="imageSlider" class="slider-container" style="display: none;">
+                <div class="product-prev-btn-container">
+                    <button class="prev-btn" onclick="prevProductImage()">⮜</button>
+                </div>
                 <span class="close-btn" onclick="closeSlider()">✖</span>
-                <button class="prev-btn" onclick="prevProductImage()">⮜</button>
                 <img id="sliderImage" class="slider-image" src="" alt="Product Image">
-                <button class="next-btn" onclick="nextProductImage()">⮞</button>
+                <div class="product-next-btn-container">
+                    <button class="next-btn" onclick="nextProductImage()">⮞</button>
+                </div>
             </div>
 
             <td class="table_td">
@@ -162,29 +166,37 @@
                     <li> <span style="font-size:1.5rem">|</span> </li>
                     &nbsp;
                     <li>
-                        <a
-                                th:id="${row.id}"
-                                th:data-code="${row.code}"
-                                th:data-categoryEn="${row.category.name}"
-                                th:data-categoryKh="${row.category.nameKh}"
-                                th:data-name-en="${row.nameEn}"
-                                th:data-name-kh="${row.nameKh}"
-                                th:data-sale-price="${row.salePrice}"
-                                th:data-currency="${row.currency}"
-                                th:data-description="${row.description}"
-                                th:data-form-title="'Update'"
-                                th:href="'#'"
-                                onclick="openCreateUpdateProductModal(this)">
+                        <a th:id="${row.id}"
+                           th:data-code="${row.code}"
+                           th:data-categoryEn="${row.category.name}"
+                           th:data-categoryKh="${row.category.nameKh}"
+                           th:data-name-en="${row.nameEn}"
+                           th:data-name-kh="${row.nameKh}"
+                           th:data-sale-price="${row.salePrice}"
+                           th:data-currency="${row.currency}"
+                           th:data-description="${row.description}"
+
+                           th:data-base-price="${row.variants != null and not #lists.isEmpty(row.variants) ? row.variants[0].basePrice : 0}"
+                           th:data-base-price-currency="${row.variants != null and not #lists.isEmpty(row.variants) ? row.variants[0].basePriceCurrency : ''}"
+                           th:data-stock-quantity="${row.variants != null and not #lists.isEmpty(row.variants) ? row.variants[0].stockQuantity : 0}"
+                           th:data-sku="${row.variants != null and not #lists.isEmpty(row.variants) ? row.variants[0].sku : ''}"
+
+                           th:data-images="${row.variants != null and not #lists.isEmpty(row.variants) ? #strings.listJoin(row.variants[0].images.![id + ':' + uuid], ',') : ''}"
+                           th:data-attributes="${row.variants != null and not #lists.isEmpty(row.variants) ? #strings.listJoin(row.variants[0].attributes.![name + ':' + value], ',') : ''}"
+
+                           th:data-form-title="'Update'"
+                           th:href="'#'"
+                           onclick="openCreateUpdateProductModal(this)">
                             <span class="unicode-icon">&#x270E;</span>
                             <span th:text="'កែ'"></span>
                         </a>
+
                     </li>
                 </ul>
             </td>
         </tr>
         </tbody>
     </table>
-
 
     <div id="myProductModal" class="product-modal product-tab-container">
         <div class="product-modal-content">
@@ -241,7 +253,6 @@
                                         name="product_currency_edit"
                                         class="product-currency-select"
                                         style="text-align: center">
-<!--                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>-->
                                     <option value="USD">USD</option>
                                     <option value="KHR">KHR</option>
                                 </select>
@@ -333,9 +344,9 @@
 
                                     <div id="image_preview_modal" class="image-preview">
                                         <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 1.5rem; position: absolute; top: 5px; right: 10px;">×</span>
-                                        <button onclick="prevImageUpload()" class="preview-prev-img">◀</button>
+                                        <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
                                         <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
-                                        <button onclick="nextImageUpload()" class="preview-next-img">▶</button>
+                                        <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
                                     </div>
                                 </div>
 
@@ -363,9 +374,9 @@
                                 </div>
                             </div>
                                 <ul id="attribute-list" class="product-attribute-ul"></ul>
-
                         </div>
                         <div class="product-btn-container">
+                            <button onclick="updateProductDetail()">TEST</button>
                             <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">ថយក្រោយ</button>
                             <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">បន្ទាប់</button>
                         </div>
@@ -472,6 +483,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

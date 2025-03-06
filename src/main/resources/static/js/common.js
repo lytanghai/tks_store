@@ -33,6 +33,8 @@ window.onload = function() {
         }, 500);
     }
 };
+let currentImageIndex = 0;
+let imageUUIDs = [];
 
 document.addEventListener("click", function(event) {
       let modal = document.getElementById("myProductModal");
@@ -41,7 +43,7 @@ document.addEventListener("click", function(event) {
       }
 
     //close preview image on product list when click anywhere
-    document.getElementById("imageSlider").style.display = 'none';
+//    document.getElementById("imageSlider").style.display = 'none';
     document.getElementById("customModal").style.display = 'none';
 
   });
@@ -116,22 +118,24 @@ function prevImage(id) {
 }
 
 function nextImage(id) {
-console.log('nextImage: ' + id)
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         document.getElementById(id).src = imageUrls[currentIndex];
     }
 }
 
-function prevImageUpload() {
-console.log('prevImageUpload:')
+function prevImageUpload(event) {
+       event.preventDefault();
+       event.stopPropagation();
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
         document.getElementById('preview_image').src = imageUrls[currentIndex];
     }
 }
 
-function nextImageUpload() {
+function nextImageUpload(event) {
+       event.preventDefault();
+       event.stopPropagation();
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         document.getElementById('preview_image').src = imageUrls[currentIndex];
@@ -157,4 +161,11 @@ function extractNumber(value) {
     // Extract numeric part from value (e.g., "100 USD" → 100)
     let number = parseFloat(value.replace(/[^\d.]/g, ""));
     return isNaN(number) ? null : number;
+}
+
+function convertToJSONArray(input) {
+    return input.split(',').map(pair => {
+        let [name, value] = pair.split(':').map(item => item.trim());
+        return { name, value };
+    });
 }

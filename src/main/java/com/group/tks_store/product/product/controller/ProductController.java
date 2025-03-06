@@ -1,5 +1,6 @@
 package com.group.tks_store.product.product.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
@@ -7,9 +8,7 @@ import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
-import com.group.tks_store.product.product.dto.ProductFullCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
-import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
 import com.group.tks_store.product.product.service.ProductServiceBK;
 import org.slf4j.Logger;
@@ -49,8 +48,17 @@ public class ProductController {
             @RequestPart("data") String productJson,
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException, ParseException {
 
-            productService.formCreateProduct(productJson, images);
+            productService.createProduct(productJson, images);
             return AddressRedirect.REDIRECT_PRODUCT + CommonKey.LIST;
+    }
+
+    @PostMapping(CommonKey.UPDATE)
+    public String updateV2(@RequestPart("data") String productJson,
+                           @RequestPart(value = "images", required = false) MultipartFile[] images) throws JsonProcessingException {
+        log.info("productJson!" + productJson);
+        log.info("images!" + images.length);
+        productService.updateProduct(productJson, images);
+        return AddressRedirect.REDIRECT_PRODUCT;
     }
 
     @PostMapping(CommonKey.CREATE)
@@ -60,12 +68,12 @@ public class ProductController {
         return AddressRedirect.REDIRECT_PRODUCT;
     }
 
-    @PostMapping( "/full" + CommonKey.CREATE)
-    public String createFullProduct(@RequestBody ProductFullCreateDTO productCreateDTO) throws ParseException, IOException {
-        productService.createFullProduct(productCreateDTO,null);
-        log.info("product created");
-        return AddressRedirect.REDIRECT_PRODUCT;
-    }
+//    @PostMapping( "/full" + CommonKey.CREATE)
+//    public String createFullProduct(@RequestBody ProductDTO productCreateDTO) throws ParseException, IOException {
+//        productService.createFullProduct(productCreateDTO,null);
+//        log.info("product created");
+//        return AddressRedirect.REDIRECT_PRODUCT;
+//    }
 
     @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {
@@ -73,13 +81,13 @@ public class ProductController {
         log.info("product {} deleted", id);
         return AddressRedirect.REDIRECT_PRODUCT;
     }
-
-    @PostMapping(CommonKey.UPDATE)
-    public String update(@RequestBody ProductUpdateDto productUpdateDto) throws ParseException {
-        productServiceBk.update(productUpdateDto);
-        log.info("product {} updated", productUpdateDto.getId());
-        return AddressRedirect.REDIRECT_PRODUCT;
-    }
+//
+//    @PostMapping(CommonKey.UPDATE)
+//    public String update(@RequestBody ProductUpdateDTO productUpdateDto) throws ParseException {
+//        productServiceBk.update(productUpdateDto);
+//        log.info("product {} updated", productUpdateDto.getId());
+//        return AddressRedirect.REDIRECT_PRODUCT;
+//    }
 
     @GetMapping("/api/categories")
     @ResponseBody

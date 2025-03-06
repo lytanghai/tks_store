@@ -10,7 +10,7 @@ import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ProductFullCreateDTO {
+public class ProductDTO {
     private ProductCreateDTO product;
     private VariantCreateDTO variant;
     @JsonProperty("variant_attributes")

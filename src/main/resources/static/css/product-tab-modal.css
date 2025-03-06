@@ -141,6 +141,7 @@
         height: 59%;
         overflow: auto;
         border: 1px solid #000;
+        z-index: 1;
     }
 
     .add-attribute-btn{

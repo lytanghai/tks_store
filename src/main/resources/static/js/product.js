@@ -2,7 +2,6 @@ let resultList = [];
 let currentTab = "Product";
 
 function openCreateUpdateProductModal(element) {
-
         let id = '';
         let nameEn = '';
         let nameKh = '';
@@ -12,11 +11,18 @@ function openCreateUpdateProductModal(element) {
         let currency = '';
         let salePrice = '';
         let description = '';
+        let basePrice = '';
+        let basePriceCurrency = '';
+        let stockQuantity = '';
+        let sku = '';
+        let images = [];
+        let attributes = [];
 
     var iconElement = document.querySelector(".icon-service-type");
     var formTitle = element.getAttribute("data-form-title");
 
     showTab("Product");
+
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
@@ -35,6 +41,25 @@ function openCreateUpdateProductModal(element) {
         currency = element.getAttribute("data-currency");
         salePrice = element.getAttribute("data-sale-price");
         description = element.getAttribute("data-description");
+
+        basePrice = element.getAttribute("data-base-price");
+        basePriceCurrency = element.getAttribute("data-base-price-currency");
+        stockQuantity = element.getAttribute("data-stock-quantity");
+        sku = element.getAttribute("data-sku");
+
+        const rawAttributeString = element.getAttribute("data-attributes");
+
+        if(rawAttributeString !== null) {
+            const attributeArr = convertToJSONArray(rawAttributeString);
+            attributes = JSON.stringify(attributeArr, null, 2)
+        }
+
+        document.getElementById("product_base_price_edit").value = basePrice;
+        document.getElementById("product_base_price_currency_edit").value = basePriceCurrency;
+        document.getElementById("product_stock_quantity_edit").value = stockQuantity;
+        document.getElementById("product_stock_sku").value = sku;
+
+        variantAttributes = attributes;
 
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
@@ -56,6 +81,7 @@ function openCreateUpdateProductModal(element) {
 }
 
 function showProductVerify() {
+
 //Product
     document.getElementById("verify-product-id").innerHTML = document.getElementById("product_id_edit").value
     document.getElementById("verify-product-nameEn").innerHTML = document.getElementById("product_name_en_edit").value
@@ -82,28 +108,51 @@ function showProductVerify() {
 //    Image
     showVerifyImageSlider();
 }
+
 function addAttribute() {
     let selectElement = document.getElementById("product_attribute_select");
     let attributeId = parseInt(selectElement.value);
     let attributeName = selectElement.options[selectElement.selectedIndex].text;
     let value = document.getElementById("product_attribute_value").value.trim();
-
     if (!value) {
         alert("Please enter a value for the attribute.");
         return;
     }
 
-    let existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
-    if (existingIndex !== -1) {
-        alert("This attribute is already added!");
-        return;
+    let existingIndex = '';
+    if(typeof(variantAttributes) === 'object') {
+        //create
+        existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
+        if (existingIndex !== -1) {
+            alert("This attribute is already added!");
+            return;
+        }
+
+         variantAttributes.push({
+            attribute_id: attributeId,
+            value: value
+        });
+        updateAttributeList();
+
+    } else {
+        variantAttributes = JSON.parse(variantAttributes);
+        existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
+
+        if (existingIndex !== -1) {
+            alert("This attribute is already added!");
+            return;
+        }
+        variantAttributes.push({
+            attribute_id: attributeId,
+            name: attributeName,
+            value: value
+        });
+        variantAttributes = JSON.stringify(variantAttributes);
+        displayVariantAttributes(variantAttributes);
+        document.getElementById("product_attribute_value").value = '';
+        document.getElementById("product_attribute_select").value = '';
     }
 
-    variantAttributes.push({
-        attribute_id: attributeId,
-        value: value
-    });
-    updateAttributeList();
 }
 
 function updateAttributeList() {
@@ -128,12 +177,13 @@ function updateAttributeList() {
     let attrSpan = document.createElement("span");
     attrSpan.classList.add("attribute-name");
     attrSpan.style.flex = "1";
+    attrSpan.style.marginLeft = '2%';
     attrSpan.textContent = attributeName;
 
     let valueSpan = document.createElement("span");
     valueSpan.classList.add("attribute-value");
     valueSpan.style.flex = "1";
-    valueSpan.style.paddingLeft = "8%";
+    valueSpan.style.paddingRight = "3%";
     valueSpan.textContent = value;
 
     let deleteButton = document.createElement("button");
@@ -141,7 +191,6 @@ function updateAttributeList() {
     deleteButton.style.flex = "1";
     deleteButton.style.backgroundColor = "#fff";
     deleteButton.style.width = "100px";
-    deleteButton.style.paddingLeft = "8%";
     deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
     deleteButton.addEventListener("click", function() {
         removeAttributeItem(listItem);
@@ -219,6 +268,7 @@ function filterInputValueDateTime() {
         row.style.display = showRow ? "" : "none";
     });
 }
+
 function productFilterResults() {
     let searchValue = document.getElementById("filterValue") ? document.getElementById("filterValue").value.toLowerCase() : "";
     let searchValue1 = document.getElementById("filterValue1") ? document.getElementById("filterValue1").value.toLowerCase() : "";
@@ -273,6 +323,7 @@ function getTextFromCell(cell) {
         return cell.textContent || "";
     }
 }
+
 function clearAllFilters() {
     document.getElementById("filterColumn").selectedIndex = 0;
     document.getElementById("filterCondition").selectedIndex = 0;
@@ -358,7 +409,7 @@ function populateAttributeDropdown(attributes) {
         const option = document.createElement("option");
         option.value = attr.id;
         option.text = attr.name_kh && attr.name_kh.trim() !== ""
-            ? attr.name + " ( " + attr.name_kh + " )"
+            ? attr.name + "(" + attr.name_kh + ")"
             : attr.name;
         attributeSelect.appendChild(option);
     });
@@ -439,6 +490,14 @@ function checkButtonAction() {
 
 function closeModal() {
     document.getElementById("myProductModal").style.display = "none";
+    document.getElementById("product_base_price_edit").value = "";
+    document.getElementById("product_base_price_currency_edit").value = "";
+    document.getElementById("product_stock_quantity_edit").value = "";
+    document.getElementById("product_stock_sku").value = "";
+    document.getElementById("product_attribute_select").value = "";
+    document.getElementById("product_attribute_value").value = "";
+    document.getElementById("product_variant_image_value").value = "";
+    variantAttributes = [];
 }
 
 function showTab(tabName) {
@@ -479,6 +538,9 @@ function truncateTextIfLongerThan200() {
 function getLiElementsContentAsArray() {
     let ulElement = document.getElementById('attribute-list');
     let liElements = ulElement.querySelectorAll('li');
+    if(liElements.length === 1) {
+        return;
+    }
 
     liElements.forEach((liElement, index) => {
         let attributeName = liElement.querySelector('.attribute-name').textContent;
@@ -494,9 +556,9 @@ function getLiElementsContentAsArray() {
 function nextProductImage() {
 
     if (currentImageIndex < imageUUIDs.length - 1) {
-        currentImageIndex++;
-    } else if(currentImageIndex == imageUUIDs.length - 1) {
-        currentImageIndex--;
+        currentImageIndex++; // Move to the next image
+    } else {
+        currentImageIndex = 0; // Reset to the first image
     }
     showImage();
 }
@@ -518,3 +580,89 @@ function closeVariantAttributeModal() {
     document.getElementById("customModal").style.display = "none";
 }
 
+function displayVariantAttributes(attributes) {
+    const attributeListContainer = document.getElementById('attribute-list');
+    attributeListContainer.innerHTML = "";
+
+    try {
+            const attributes = JSON.parse(variantAttributes);
+            if (Array.isArray(attributes)) {
+                attributes.forEach((attribute, index) => {
+                const listItem = document.createElement('li');
+                listItem.style.display = 'flex';
+                listItem.style.textAlign = "center";
+                listItem.style.fontSize = "1.6rem";
+                listItem.style.paddingRight = "2%";
+                listItem.style.backgroundColor = "#fff";
+
+                const nameSpan = document.createElement('span');
+                nameSpan.classList.add('attribute-name');
+                nameSpan.style.flex = "1";
+                nameSpan.textContent = attribute.name;
+
+                const valueSpan = document.createElement('span');
+                valueSpan.classList.add('attribute-value');
+                valueSpan.style.flex = "1";
+                valueSpan.style.marginRight = "6%";
+                valueSpan.textContent = attribute.value;
+
+                const actionsSpan = document.createElement('span');
+                actionsSpan.classList.add('product-attribute-actions');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.style.flex = "1";
+                deleteButton.style.backgroundColor = "#fff";
+                deleteButton.style.width = "100px";
+                deleteButton.style.paddingLeft = "8%";
+                deleteButton.style.zIndex = "-4";
+                deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+                deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
+
+                actionsSpan.appendChild(deleteButton);
+
+                listItem.appendChild(nameSpan);
+                listItem.appendChild(valueSpan);
+                listItem.appendChild(actionsSpan);
+
+                attributeListContainer.appendChild(listItem);
+            });
+            } else {
+                console.error('Expected an array for attributes, but got:', attributes);
+            }
+        } catch (e) {
+            console.error('Failed to parse attributes:', e);
+        }
+}
+
+
+function removeAttributeUpdateItem(attributes, index) {
+   attributes = JSON.parse(attributes);
+   if (index > -1 && index < attributes.length) {
+       attributes.splice(index, 1);
+   }
+   variantAttributes = JSON.stringify(attributes);
+   displayVariantAttributes(variantAttributes);
+}
+
+const checkVariantButtonUpdate = document.getElementById("product-next-btn");
+checkVariantButtonUpdate.addEventListener("click", function() {
+    if(variantAttributes !== '') {
+        displayVariantAttributes(variantAttributes);
+    }
+    if(imageUrls !== '') {
+        checkAndShowPreviewEditButton(imageUrls);
+    }
+})
+
+function checkAndShowPreviewEditButton(imageUrls) {
+    const previewButton = document.getElementById('preview_button');
+    imageUUIDs = imageUrls.map(img => img.value);
+
+    if (imageUUIDs.length > 0) {
+        previewButton.style.display = "block";
+        previewButton.onclick = () => openPreview(0);
+    } else {
+        previewButton.style.display = "none";
+    }
+}

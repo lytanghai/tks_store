@@ -19,7 +19,6 @@ function deleteProduct(id) {
 }
 
 function updateProduct() {
-
     let formData = {
         id: document.getElementById("product_id_edit").value,
         name_en: document.getElementById("product_name_en_edit").value,
@@ -153,15 +152,13 @@ function fetchAttributes() {
 }
 
 
-let currentImageIndex = 0;
-let imageUUIDs = [];
 
 function openImageSlider(button) {
     let variantId = button.getAttribute("data-variant-id");
 
     // Step 1: Get list of image UUIDs from API
     fetch(`/api/get/images?variant_id=${variantId}`)
-        .then(response => response.json())  // Expecting an array of UUIDs
+        .then(response => response.json())
         .then(uuids => {
             if (!uuids.length) {
                 alert("❌ទំនិញនេះមិនមានរូបភាពទេ!");
@@ -171,7 +168,7 @@ function openImageSlider(button) {
             imageUUIDs = uuids;
             currentImageIndex = 0;
             showImage(); // Display first image
-            document.getElementById("imageSlider").style.display = "flex"; // Show slider
+            document.getElementById("imageSlider").style.display = "flex";
         })
         .catch(error => {
             console.error("Error fetching images:", error);
@@ -211,11 +208,73 @@ function openVariantAttributeDetail(button) {
                 attributeList.appendChild(listItemName);
             });
 
-            // Show the modal
             document.getElementById("customModal").style.display = "flex";
         } else {
             alert("No attributes found!");
         }
     })
     .catch(error => console.error("Error fetching data:", error));
+}
+
+
+async function updateProductDetail() {
+        let fileInput = document.getElementById('product_variant_image_value');
+        let files = fileInput.files;
+        let formData = new FormData();
+
+        let id = document.getElementById("product_id_edit").value;
+        let productNameEn = document.getElementById("product_name_en_edit").value;
+        let productNameKh = document.getElementById("product_name_kh_edit").value;
+        let productCode = document.getElementById("product_code_edit").value;
+
+        let categoryId = document.getElementById("product_select").value;
+
+        let salePriceCurrency = document.getElementById("product_currency_edit").value;
+        let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
+        let description = document.getElementById("product_description_edit").value;
+
+        let basePrice = parseFloat(document.getElementById('product_base_price_edit').value);
+        let basePriceCurrency = document.getElementById('product_base_price_currency_edit').value;
+        let stockQuantity = parseInt(document.getElementById('product_stock_quantity_edit').value);
+        let sku = document.getElementById('product_stock_sku').value;
+
+        let jsonData = {
+            product: {
+                id: id,
+                name_en: productNameEn ? productNameEn : undefined,
+                name_kh: productNameKh ? productNameKh : undefined,
+                code: productCode || undefined,
+                category: { id: categoryId ? categoryId : undefined },
+                sale_price: salePrice ? salePrice : undefined,
+                currency: salePriceCurrency ? salePriceCurrency : undefined,
+                description: document.getElementById("product_description_edit").value || undefined
+            },
+            variant: {
+             base_price: basePrice || undefined,
+             currency: basePriceCurrency || undefined,
+             stock_quantity: stockQuantity || undefined,
+             sku: sku || undefined
+             },
+             variant_attributes: JSON.parse(variantAttributes),
+             images: []
+            };
+        if(files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                formData.append("images", files[i]);
+                jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
+            }
+        }
+
+        formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
+
+        try {
+            let response = await fetch("http://localhost:8080/api/product/update", {
+                method: "POST",
+                body: formData
+            });
+
+//            let result = await response.json();
+        } catch (error) {
+            console.error("Error uploading:", error);
+        }
 }

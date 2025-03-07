@@ -350,12 +350,12 @@
 
     .common-btn::before {
         content: "➔";
-        margin-right: 5px;
-        margin-bottom: 12px;
+        margin-right: 0px;
+        margin-bottom: 0px;
     }
     .reset-btn::before {
         content: "↻";
-        margin-right: 5px;
-        margin-bottom: 12px;
+        margin-right: 0px;
+        margin-bottom: 0px;
     }
 }

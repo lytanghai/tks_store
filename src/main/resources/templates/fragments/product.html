@@ -1,27 +1,27 @@
 <div class="content" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="product">
 
     <div class="product-search-bar-container">
-        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="filterInputValueDateTime()" class="search-ipt">
+        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." class="search-ipt">
 
         <div class="filter-container">
             <select id="filterColumn">
                 <option value="defaultChoice" disabled selected>ជ្រើសរើស</option>
-                <option value="0">លេខកូដ</option>
-                <option value="1">ឈ្មោះទំនិញ</option>
-                <option value="2">ប្រភេទទំនិញ</option>
-                <option value="3">តម្លៃ</option>
-                <option value="4">ចំនួនស្ដុក</option>
-                <option value="5">SKU</option>
-                <option value="10">ថ្ងៃខែបញ្ជូល</option>
+                <option value="code">លេខកូដ</option>
+                <option value="product_name">ឈ្មោះទំនិញ</option>
+                <option value="category_name">ប្រភេទទំនិញ</option>
+                <option value="sale_price">តម្លៃ</option>
+                <option value="stock_quantity">ចំនួនស្ដុក</option>
+                <option value="sku">SKU</option>
+<!--                <option value="10">ថ្ងៃខែបញ្ជូល</option>-->
             </select>
             &nbsp;&nbsp;
-            <select id="filterCondition" onchange="toggleInputFields()" style="display:none">
+            <select id="filterCondition" onchange="toggleInputFields()">
                 <option value="defaultCondition" disabled selected>លក្ខខណ្ឌ</option>
-                <option value="equal">ស្មើរ</option>
-                <option value="contain">ប្រហែល</option>
-                <option value="in">ចន្លោះ (លេខ)</option>
-                <option value="greater">ធំជាង (លេខ)</option>
-                <option value="less">តូចជាង (លេខ)</option>
+                <option value="EQUAL">ស្មើរ</option>
+                <option value="CONTAINS">ប្រហែល</option>
+                <option value="BETWEEN">ចន្លោះ (លេខ)</option>
+                <option value="GREATER_THAN">ធំជាង (លេខ)</option>
+                <option value="LESS_THAN">តូចជាង (លេខ)</option>
             </select>
             &nbsp;&nbsp;
             <div id="inConditionFields" style="display: none;">
@@ -38,9 +38,9 @@
             &nbsp;&nbsp;
 
             <span style="margin-left: 2%"></span>
-            <button class="common-btn" onclick="productFilterResults()" id="btn-submit-filter" style="display: none"></button>
+            <button class="common-btn" onclick="fetchFilterProduct()" id="btn-submit-filter"></button>
             <span style="margin-left: 3%"></span>
-            <button class="reset-btn" onclick="clearAllFilters()" id="btn-reset-filter" style="display:none"></button>
+            <button class="reset-btn" onclick="resetFilter()" id="btn-reset-filter"></button>
         </div>
 
         <!-- Date Filter -->
@@ -192,7 +192,6 @@
                            th:href="'#'"
                            onclick="openCreateUpdateProductModal(this)">
                             <span class="unicode-icon">&#x270E;កែ</span>
-<!--                            <span th:text="'កែ'" style="font-size: 1.1rem"></span>-->
                         </a>
 
                     </li>
@@ -474,16 +473,18 @@
         </div>
 
         <div class="product-page-number">
-            <div th:if="${current_page == 0}" class="product-list-prev">
-                <a href="#" class="product-redirect-href"><</a>
+            <div class="product-list-prev">
+                <button id="back-page"> < </button>
             </div>
 
-            <div th:if="${current_page != 0}" class="product-list-prev">
-                <a th:if="${current_page > 0}" th:href="@{/api/product/list/(page=${current_page - 1})}" class="product-redirect-href"> < </a>
-            </div>
+<!--            <div th:if="${current_page != 0}" class="product-list-prev">-->
+<!--                <a th:if="${current_page > 0}" th:href="@{/internal/product/list/filter/(page=${current_page - 1})}" class="product-redirect-href"> < </a>                <button onclick="fetchFilterProduct(this)" data-current-page="${current_page + 1}"></button>-->
+<!--                <button onclick="fetchFilterProduct()" id="back-page"> < </button>-->
 
-            <div th:if="${current_page < total_pages}" class="product-list-next">
-                <a th:href="@{/api/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
+<!--            </div>-->
+
+            <div class="product-list-next">
+                <button id="to-page"> > </button>
             </div>
         </div>
     </div>

@@ -44,7 +44,7 @@
     }
     .custom-stock-qty{
         text-align:center;
-        color: #3ed642aa;
+        color: #062106aa;
         font-weight: bold;
         background-color: #d69c3eaa;
         padding-right: 28px;
@@ -56,14 +56,14 @@
 
     .product-page-redirect{
         position: fixed;
-        top: 90%;
+        top: 90.6%;
         left: 53%;
         font-size: 1.5rem;
     }
     .product-page-number{
         position: fixed;
         top: 92.6%;
-        left: 50.5%;
+        left: 50%;
         display: inline-flex;
     }
     .product-list-prev{
@@ -171,9 +171,10 @@
     .filter-container select {
         width: 28%;
         padding: 0%;
-        font-size: .8rem;
+        font-size: 1rem;
         border: 1px solid;
-        text-align:center;
+        text-align: center;
+        border-radius: 8px;
     }
 
     .filter-container input {

@@ -7,6 +7,7 @@ import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.service.ProductService;
 import com.group.tks_store.product.product.service.ProductServiceBK;
+import com.group.tks_store.product.product.service.ProductFilterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,9 @@ public class ProductRestController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductFilterService productFilterService;
 
     @Autowired
     private ProductServiceBK productServiceBk;
@@ -64,7 +67,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/list/filter")
-    public String getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<Map<String, Object>> getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
                                          @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                          @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
@@ -74,17 +77,51 @@ public class ProductRestController {
                                          @RequestParam(name = "sale_price", defaultValue = "") String salePrice,
                                          @RequestParam(name = "sale_price_val1", defaultValue = "") String salePriceVal1,
                                          @RequestParam(name = "sale_price_val2", defaultValue = "") String salePriceVal2,
+                                         @RequestParam(name = "sale_price_currency", defaultValue = "") String salePriceCurrency,
                                          @RequestParam(name = "stock_quantity", defaultValue = "") String stockQty,
                                          @RequestParam(name = "stock_quantity_val1", defaultValue = "") String stockQtyVal1,
                                          @RequestParam(name = "stock_quantity_val2", defaultValue = "") String stockQtyVal2,
                                          @RequestParam(name = "sku", defaultValue = "") String sku,
-                                         @RequestParam(name = "created_date", defaultValue = "") String dateTime,
+                                         @RequestParam(name = "variant_attribute_value", defaultValue = "") String variantAttributeValue,
+                                         @RequestParam(name = "from_date", defaultValue = "") String fromDate,
+                                         @RequestParam(name = "to_date", defaultValue = "") String toDate,
+                                         @RequestParam(name = "general", defaultValue = "") String general,
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
                                          Model model) {
 
+        Map<String, Object> propertiesList = this.mapPropertyList(
+                code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
+                fromDate,toDate, general,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
+
+        // Get filtered product details from the service
+        Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
+                pageNumber,
+                pageSize,
+                Sort.by(Sort.Direction.fromString(sortDirection), sortBy)),
+                propertiesList);
+
+        int totalPage = productPage.getTotalPages();
+
+        if(pageNumber == 0) {
+            totalPage += 1;
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productPage.getContent());
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", totalPage);
+
+        log.info("calling to get filter");
+
+        return ResponseEntity.ok(response);
+    }
+
+    private Map<String,Object> mapPropertyList(String code, String productName, String categoryName, String salePrice, String stockQty, String sku,
+                                               String variantAttributeValue, String fromDate,String toDate, String general, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
+                                               String stockQtyVal1, String stockQtyVal2, String conditionType) {
         Map<String, Object> propertiesList = new HashMap<>();
 
-        // Add non-empty properties to the list
         if (!code.isEmpty()) {
             propertiesList.put("code", code);
         }
@@ -103,32 +140,49 @@ public class ProductRestController {
         if (!sku.isEmpty()) {
             propertiesList.put("sku", sku);
         }
-        if (!dateTime.isEmpty()) {
-            propertiesList.put("created_date", dateTime);
+        if (!variantAttributeValue.isEmpty()) {
+            propertiesList.put("variant_attribute_value", variantAttributeValue);
+        }
+        if (!fromDate.isEmpty()) {
+            propertiesList.put("from_date", fromDate);
         }
 
+        if (!toDate.isEmpty()) {
+            propertiesList.put("to_date", toDate);
+        }
 
-        // Get filtered product details from the service
-        Page<ProductListDetailDTO> productPage = productService.getProductFilterDetail(PageRequest.of(
-                pageNumber,
-                pageSize,
-                Sort.by(Sort.Direction.fromString(sortDirection),
-                        sortBy)), propertiesList);
+        if (!general.isEmpty()) {
+            propertiesList.put("general", general);
+        }
+        if (!salePriceCurrency.isEmpty()) {
+            propertiesList.put("sale_price_currency", salePriceCurrency);
+        }
+        if (!salePriceVal1.isEmpty() && !salePriceVal2.isEmpty()) {
+            try {
+                propertiesList.put("sale_price_range", new Double[]{
+                        Double.parseDouble(salePriceVal1),
+                        Double.parseDouble(salePriceVal2)
+                });
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid sale_price range values");
+            }
+        }
+        if (!stockQtyVal1.isEmpty() && !stockQtyVal2.isEmpty()) {
+            try {
+                propertiesList.put("stock_quantity_range", new Integer[]{
+                        Integer.parseInt(stockQtyVal1),
+                        Integer.parseInt(stockQtyVal2)
+                });
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid stock_quantity range values");
+            }
+        }
 
-        int totalPage = productPage.getTotalPages();
+        if (!conditionType.isEmpty()) {
+            propertiesList.put("condition_type", conditionType);
+        }
 
-        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
-        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
-        model.addAttribute("content", productPage.getContent());
-        model.addAttribute("total_records", productPage.getTotalElements());
-        model.addAttribute("total_pages",  totalPage);
-        model.addAttribute("current_page", productPage.getNumber());
-        model.addAttribute("sort_by", sortBy);
-        model.addAttribute("sort_direction", sortDirection);
-        model.addAttribute("first", productPage.isFirst());
-        model.addAttribute("last", productPage.isLast());
-
-        return AddressRedirect.HOME;
+        return propertiesList;
     }
 
 }

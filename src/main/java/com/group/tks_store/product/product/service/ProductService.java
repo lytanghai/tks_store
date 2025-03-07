@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
+import com.group.tks_store.common.enumz.Condition;
 import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.common.util.DateTimeUtil;
 import com.group.tks_store.common.util.ImageUtil;
@@ -235,54 +236,6 @@ public class ProductService {
         }).collect(Collectors.toList());
 
         return new PageImpl<>(mappedProducts, pageable, getActiveProducts.size());
-    }
-
-    public Page<ProductListDetailDTO> getProductFilterDetail(Pageable pageable, Map<String,Object> properties) {
-        String code = "";
-        String sku = "";
-        String categoryName = "";
-        String productName = "";
-        String createdDate = "";
-        int stockQuantity = 0;
-        Double salePrice = null;
-
-        if(!properties.isEmpty()) {
-            for(Map.Entry<String,Object> key : properties.entrySet()) {
-                if(key.getKey().equals("code")) {
-                    code = key.getValue().toString();
-                }
-                if(key.getKey().equals("product_name")) {
-                    productName = key.getValue().toString();
-                }
-                if(key.getKey().equals("category_name")) {
-                    categoryName = key.getValue().toString();
-                }
-                if(key.getKey().equals("sale_price")) {
-                    salePrice = Double.valueOf(key.getValue().toString());
-                }
-                if(key.getKey().equals("sku")) {
-                    sku = key.getValue().toString();
-                }
-                if(key.getKey().equals("stock_quantity")) {
-                    stockQuantity = Integer.valueOf(key.getValue().toString());
-                }
-                if(key.getKey().equals("created_date")) {
-                    createdDate = key.getValue().toString();
-                }
-            }
-        }
-
-//        productRepository.fetchProductByProperty(code, sku, productName, categoryName, stockQuantity, salePrice, createdDate);
-        //condition for contain
-        productRepository.fetchProductByProperty(code, productName, categoryName, salePrice);
-
-        //condition for equal
-        //condition for between
-        //condition for greater than
-        //condition for less than
-
-
-        return null;
     }
 
 

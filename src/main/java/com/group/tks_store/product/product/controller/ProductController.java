@@ -9,6 +9,7 @@ import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
+import com.group.tks_store.product.product.service.ProductFilterService;
 import com.group.tks_store.product.product.service.ProductService;
 import com.group.tks_store.product.product.service.ProductServiceBK;
 import org.slf4j.Logger;
@@ -25,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(CommonKey.API_CONTEXT_PATH + AddressRedirect.PRODUCT)
@@ -36,6 +39,9 @@ public class ProductController {
 
     @Autowired
     private ProductServiceBK productServiceBk;
+
+    @Autowired
+    private ProductFilterService productFilterService;
 
     @Autowired
     private CategoryService categoryService;
@@ -106,34 +112,42 @@ public class ProductController {
     }
 
     @GetMapping(CommonKey.LIST + "/filter")
-    public String getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
-                                   @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
-                                   @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
-                                   @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
-                                   @RequestParam(name = "code", defaultValue = "DESC") String code,
-                                   @RequestParam(name = "product_name",required = false) String productName,
-                                   @RequestParam(name = "category_name", required = false) String categoryName,
-                                   @RequestParam(name = "sale_price", required = false) String salePrice,
-                                   @RequestParam(name = "stock_quantity", required = false) String stockQty,
-                                   @RequestParam(name = "sku", required = false) String sku,
-                                   @RequestParam(name = "created_date", required = false) String dateTime,
-                                   Model model) {
+    public String getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+                                         @RequestParam(name = CommonKey.SIZE, defaultValue = "20") Integer pageSize,
+                                         @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
+                                         @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
+                                         @RequestParam(name = "code", defaultValue = "") String code,
+                                         @RequestParam(name = "product_name", defaultValue = "") String productName,
+                                         @RequestParam(name = "category_name", defaultValue = "") String categoryName,
+                                         @RequestParam(name = "sale_price", defaultValue = "") String salePrice,
+                                         @RequestParam(name = "sale_price_val1", defaultValue = "") String salePriceVal1,
+                                         @RequestParam(name = "sale_price_val2", defaultValue = "") String salePriceVal2,
+                                         @RequestParam(name = "sale_price_currency", defaultValue = "") String salePriceCurrency,
+                                         @RequestParam(name = "stock_quantity", defaultValue = "") String stockQty,
+                                         @RequestParam(name = "stock_quantity_val1", defaultValue = "") String stockQtyVal1,
+                                         @RequestParam(name = "stock_quantity_val2", defaultValue = "") String stockQtyVal2,
+                                         @RequestParam(name = "sku", defaultValue = "") String sku,
+                                         @RequestParam(name = "variant_attribute_value", defaultValue = "") String variantAttributeValue,
+                                         @RequestParam(name = "created_date", defaultValue = "") String dateTime,
+                                         @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
+                                         Model model) {
 
-        String[] properties = {code, productName, categoryName, salePrice, stockQty, sku, dateTime};
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, properties);
-        Page<ProductListDetailDTO> productPage = productService.getProductDetail(pageRequest);
+        Map<String, Object> propertiesList = this.mapPropertyList(
+                code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
+                dateTime,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
 
-        int totalPage = productPage.getTotalPages();
+        Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
+                        pageNumber,
+                        pageSize,
+                        Sort.by(Sort.Direction.fromString(sortDirection), sortBy)),
+                propertiesList);
 
-        if(pageNumber == 0) {
-            totalPage += 1;
-        }
 
         model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
         model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
         model.addAttribute("content", productPage.getContent());
         model.addAttribute("total_records", productPage.getTotalElements());
-        model.addAttribute("total_pages",  totalPage);
+        model.addAttribute("total_pages",  productPage.getTotalPages());
         model.addAttribute("current_page", productPage.getNumber());
         model.addAttribute("sort_by", sortBy);
         model.addAttribute("sort_direction", sortDirection);
@@ -154,8 +168,7 @@ public class ProductController {
                 PageRequest.of(
                         pageNumber,
                         pageSize,
-                        Sort.by(Sort.Direction.fromString(sortDirection),
-                                sortBy))
+                        Sort.by(Sort.Direction.fromString(sortDirection), sortBy))
         );
 
         int totalPage = productPage.getTotalPages();
@@ -177,4 +190,66 @@ public class ProductController {
 
         return AddressRedirect.HOME;
     }
+
+    private Map<String,Object> mapPropertyList(String code, String productName, String categoryName, String salePrice, String stockQty, String sku,
+                                               String variantAttributeValue, String dateTime, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
+                                               String stockQtyVal1, String stockQtyVal2, String conditionType) {
+        Map<String, Object> propertiesList = new HashMap<>();
+
+        // Add non-empty properties to the list
+        if (!code.isEmpty()) {
+            propertiesList.put("code", code);
+        }
+        if (!productName.isEmpty()) {
+            propertiesList.put("product_name", productName);
+        }
+        if (!categoryName.isEmpty()) {
+            propertiesList.put("category_name", categoryName);
+        }
+        if (!salePrice.isEmpty()) {
+            propertiesList.put("sale_price", salePrice);
+        }
+        if (!stockQty.isEmpty()) {
+            propertiesList.put("stock_quantity", stockQty);
+        }
+        if (!sku.isEmpty()) {
+            propertiesList.put("sku", sku);
+        }
+        if (!variantAttributeValue.isEmpty()) {
+            propertiesList.put("variant_attribute_value", variantAttributeValue);
+        }
+        if (!dateTime.isEmpty()) {
+            propertiesList.put("created_date", dateTime);
+        }
+        if (!salePriceCurrency.isEmpty()) {
+            propertiesList.put("sale_price_currency", salePriceCurrency);
+        }
+        if (!salePriceVal1.isEmpty() && !salePriceVal2.isEmpty()) {
+            try {
+                propertiesList.put("sale_price_range", new Double[]{
+                        Double.parseDouble(salePriceVal1),
+                        Double.parseDouble(salePriceVal2)
+                });
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid sale_price range values");
+            }
+        }
+        if (!stockQtyVal1.isEmpty() && !stockQtyVal2.isEmpty()) {
+            try {
+                propertiesList.put("stock_quantity_range", new Integer[]{
+                        Integer.parseInt(stockQtyVal1),
+                        Integer.parseInt(stockQtyVal2)
+                });
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid stock_quantity range values");
+            }
+        }
+
+        if (!conditionType.isEmpty()) {
+            propertiesList.put("condition_type", conditionType);
+        }
+
+        return propertiesList;
+    }
+
 }

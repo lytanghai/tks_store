@@ -49,7 +49,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "OR p.name_kh ILIKE CONCAT('%', :productName, '%')) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR c.name ILIKE CONCAT('%', :categoryName, '%') " +
             "OR c.name_kh ILIKE CONCAT('%', :categoryName, '%')) " +
-            "AND (:salePrice IS NULL OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :salePrice, '%')) " +
+            "AND (:salePriceUSD IS NULL OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :salePriceUSD, '%')) " +
+            "OR (:salePriceKHR IS NULL OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :salePriceKHR, '%')) " +
+            "AND (:salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
             "AND (:sku IS NULL OR :sku = '' OR v.sku ILIKE CONCAT('%', :sku, '%')) " +
             "AND (:stockQuantity IS NULL OR :stockQuantity = -1 OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :stockQuantity, '%')) " +
             "AND (:variantAttributeValue IS NULL OR va.value ILIKE CONCAT('%', :variantAttributeValue, '%')) " +
@@ -60,7 +62,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
                                                        @Param("code") String code,
                                                        @Param("productName") String productName,
                                                        @Param("categoryName") String categoryName,
-                                                       @Param("salePrice") Double salePrice,
+                                                       @Param("salePriceUSD") Double salePriceUSD,
+                                                       @Param("salePriceKHR") Double salePriceKHR,
+                                                       @Param("salePriceCurrency") String salePriceCurrency,
                                                        @Param("sku") String sku,
                                                        @Param("stockQuantity") Integer stockQuantity,
                                                        @Param("variantAttributeValue") String variantAttributeValue);
@@ -81,7 +85,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "AND (:code IS NULL OR :code = '' OR p.code = :code) " +
             "AND (:productName IS NULL OR :productName = '' OR p.name_en = :productName OR p.name_kh = :productName) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR c.name = :categoryName OR c.name_kh = :categoryName) " +
-            "AND (:salePrice IS NULL OR p.sale_price = :salePrice) " +
+            "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) " +
+            "OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
+            "AND (:salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
             "AND (:sku IS NULL OR :sku = '' OR v.sku = :sku) " +
             "AND (:stockQuantity IS NULL OR :stockQuantity = -1 OR v.stock_quantity = :stockQuantity) " +
             "AND (:variantAttributeValue IS NULL OR va.value = :variantAttributeValue) " +
@@ -91,7 +97,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
                                                        @Param("code") String code,
                                                        @Param("productName") String productName,
                                                        @Param("categoryName") String categoryName,
-                                                       @Param("salePrice") Double salePrice,
+                                                       @Param("salePriceUSD") Double salePriceUSD,
+                                                       @Param("salePriceKHR") Double salePriceKHR,
+                                                       @Param("salePriceCurrency") String salePriceCurrency,
                                                        @Param("sku") String sku,
                                                        @Param("stockQuantity") Integer stockQuantity,
                                                        @Param("variantAttributeValue") String variantAttributeValue);
@@ -111,14 +119,15 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
             "LEFT JOIN attributes a ON va.attribute_id = a.id " +
             "WHERE p.status = 'ACTIVE' " +
-            "AND (:salePriceVal1 IS NULL OR p.sale_price >= :salePriceVal1) " +
-            "AND (:salePriceVal2 IS NULL OR p.sale_price <= :salePriceVal2) " +
-            "AND (:salePriceCurrency IS NULL OR :salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
+            "AND ( " +
+            "    (:salePriceCurrency = 'USD' AND p.currency = 'USD' AND p.sale_price BETWEEN :salePriceVal1 AND :salePriceVal2) " +
+            " OR (:salePriceCurrency = 'KHR' AND p.currency = 'KHR' AND p.sale_price BETWEEN :salePriceVal1 AND :salePriceVal2) " +
+            ") " +
             "AND (:stockQtyVal1 IS NULL OR :stockQtyVal1 = -1 OR v.stock_quantity >= :stockQtyVal1) " +
             "AND (:stockQtyVal2 IS NULL OR :stockQtyVal2 = -1 OR v.stock_quantity <= :stockQtyVal2) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity", nativeQuery = true)
-    Page<Object[]>  fetchProductByPropertyUsingBetween(
+    Page<Object[]> fetchProductByPropertyUsingBetween(
             Pageable pageable,
             @Param("salePriceVal1") Double salePriceVal1,
             @Param("salePriceVal2") Double salePriceVal2,
@@ -165,16 +174,21 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
             "LEFT JOIN attributes a ON va.attribute_id = a.id " +
             "WHERE p.status = 'ACTIVE' " +
-            "AND (:salePrice IS NULL OR p.sale_price > :salePrice) " +
+            "AND ( " +
+            "  (:salePriceCurrency = 'USD' AND p.sale_price > :salePriceUSD) OR " + // Compare sale_price in USD
+            "  (:salePriceCurrency = 'KHR' AND p.sale_price > :salePriceKHR) " + // Compare sale_price in KHR
+            ") " +
             "AND (:salePriceCurrency IS NULL OR :salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
             "AND (:stockQty IS NULL OR :stockQty = -1 OR v.stock_quantity > :stockQty) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity", nativeQuery = true)
     Page<Object[]> fetchProductByPropertyUsingGreaterThan(
             Pageable pageable,
-            @Param("salePrice") Double salePrice,
+            @Param("salePriceUSD") Double salePriceUSD,
+            @Param("salePriceKHR") Double salePriceKHR,
             @Param("salePriceCurrency") String salePriceCurrency,
             @Param("stockQty") Integer stockQty);
+
 
 
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
@@ -189,14 +203,18 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
             "LEFT JOIN attributes a ON va.attribute_id = a.id " +
             "WHERE p.status = 'ACTIVE' " +
-            "AND (:salePrice IS NULL OR p.sale_price < :salePrice) " +
+            "AND ( " +
+            "  (:salePriceCurrency = 'USD' AND p.sale_price < :salePriceUSD) OR " + // Compare sale_price in USD
+            "  (:salePriceCurrency = 'KHR' AND p.sale_price < :salePriceKHR) " + // Compare sale_price in KHR
+            ") " +
             "AND (:salePriceCurrency IS NULL OR :salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
             "AND (:stockQty IS NULL OR :stockQty = -1 OR v.stock_quantity < :stockQty) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity", nativeQuery = true)
     Page<Object[]> fetchProductByPropertyUsingLessThan(
             Pageable pageable,
-            @Param("salePrice") Double salePriceVal,
+            @Param("salePriceUSD") Double salePriceUSD,
+            @Param("salePriceKHR") Double salePriceKHR,
             @Param("salePriceCurrency") String salePriceCurrency,
             @Param("stockQty") Integer stockQtyVal);
 }

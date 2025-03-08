@@ -124,7 +124,7 @@ public class ProductFilterService {
         String variantAttributeValue = "";
         String categoryName = "";
         String productName = "";
-        String salePriceCurrency = "USD";
+        String salePriceCurrency = "";
         String conditionType = "";
         String fromDate = "";
         String toDate = "";
@@ -156,9 +156,9 @@ public class ProductFilterService {
                     case "category_name":
                         categoryName = entry.getValue().toString();
                         break;
-//                    case "sale_price_currency":
-//                        salePriceCurrency = entry.getValue().toString();
-//                        break;
+                    case "sale_price_currency":
+                        salePriceCurrency = entry.getValue().toString();
+                        break;
                     case "sale_price":
                         salePrice = Double.valueOf(entry.getValue().toString());
                         break;
@@ -193,20 +193,18 @@ public class ProductFilterService {
                 }
             }
         }
-//
-//        if(salePrice != null) {
-//            if(salePriceCurrency.equals("USD")) {
-//                salePriceUSD = salePrice;
-//                salePriceKHR = CurrencyFormatUtil.convertCurrency(salePriceUSD, "USD", "KHR");
-//            } else {
-//                salePriceKHR = salePrice ;
-//                salePriceUSD = CurrencyFormatUtil.convertCurrency(salePriceKHR, "KHR","USD");
-//            }
-//
-//            System.out.println("salePriceUSD: " + salePriceUSD);
-//            System.out.println("salePriceKHR: " + salePriceKHR);
-//            System.out.println("salePrice: " + salePrice);
-//        }
+        Double salePriceUSD = null;
+        Double salePriceKHR = null;
+
+        if(salePrice != null) {
+            if(salePriceCurrency.equals("USD")) {
+                salePriceUSD = salePrice;
+                salePriceKHR = CurrencyFormatUtil.convertCurrency(salePriceUSD, "USD", "KHR");
+            } else {
+                salePriceKHR = salePrice ;
+                salePriceUSD = CurrencyFormatUtil.convertCurrency(salePriceKHR, "KHR","USD");
+            }
+        }
 
         Page<Object[]> result = null;
         switch (conditionType) {
@@ -215,7 +213,9 @@ public class ProductFilterService {
                         code.equals("") ? null : code,
                         productName.equals("") ? null : productName,
                         categoryName.equals("") ? null : categoryName,
-                        salePrice,
+                        salePriceUSD,
+                        salePriceKHR,
+                        salePriceCurrency,
                         sku.equals("") ? null : sku,
                         stockQuantity == -1 ? null : stockQuantity,
                         variantAttributeValue.equals("") ? null : variantAttributeValue);
@@ -228,7 +228,9 @@ public class ProductFilterService {
                         code.equals("") ? null : code,
                         productName.equals("") ? null : productName,
                         categoryName.equals("") ? null : categoryName,
-                        salePrice,
+                        salePriceUSD,
+                        salePriceKHR,
+                        salePriceCurrency,
                         sku.equals("") ? null : sku,
                         stockQuantity == -1 ? null : stockQuantity,
                         variantAttributeValue.equals("") ? null : variantAttributeValue);
@@ -246,7 +248,8 @@ public class ProductFilterService {
             case "GREATER_THAN" :
                 result = productRepository.fetchProductByPropertyUsingGreaterThan(
                         pageable,
-                        salePrice,
+                        salePriceUSD,
+                        salePriceKHR,
                         salePriceCurrency,
                         stockQuantity);
                 break;
@@ -254,7 +257,8 @@ public class ProductFilterService {
             case "LESS_THAN" :
                 result = productRepository.fetchProductByPropertyUsingLessThan(
                         pageable,
-                        salePrice,
+                        salePriceUSD,
+                        salePriceKHR,
                         salePriceCurrency,
                         stockQuantity);
                 break;

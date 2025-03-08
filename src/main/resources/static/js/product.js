@@ -266,6 +266,11 @@ selectElement.addEventListener('change', function() {
         document.getElementById("btn-reset-filter").style.display = 'block'
     }
 
+    if(selectElement.value === 'sale_price') {
+        document.getElementById("product_filter_search_currency").style.display = 'block';
+    } else {
+        document.getElementById("product_filter_search_currency").style.display = 'none';
+    }
     if (selectElement.value === '10') {
         document.getElementById("filterCondition").style.display = 'none'
         document.getElementById("singleConditionField").style.display = 'none'

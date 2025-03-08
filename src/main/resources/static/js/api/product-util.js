@@ -37,11 +37,16 @@ function fetchFilterProduct() {
     let searchValue1 = document.getElementById("filterValue1") ? document.getElementById("filterValue1").value : "";
     let searchValue2 = document.getElementById("filterValue2") ? document.getElementById("filterValue2").value : "";
     let url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
-
+    let salePriceCurrencyValue = document.getElementById("product_filter_search_currency").value;
     if(searchProperty === 'defaultChoice') {
+        //when open product tab
         url = '/internal/product/list/filter?condition_type=' + condition + searchValue + "&general=" + searchGeneralValue + '&page=' + currentPage;
     } else {
-        url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
+        if(salePriceCurrencyValue !== 'none') {
+            url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&sale_price_currency=' + salePriceCurrencyValue + '&page=' + currentPage;
+        } else {
+            url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
+        }
     }
     console.log('url: ' + url)
     fetch(url)

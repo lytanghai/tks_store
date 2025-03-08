@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.enumz.Condition;
 import com.group.tks_store.common.enumz.Status;
+import com.group.tks_store.common.util.CurrencyFormatUtil;
 import com.group.tks_store.common.util.DateTimeUtil;
 import com.group.tks_store.common.util.ImageUtil;
 import com.group.tks_store.common.util.MappingUtil;
@@ -315,7 +316,7 @@ public class ProductService {
         productCreateDTO.setNameEn(String.valueOf(product.getOrDefault("name_en", null)));
         productCreateDTO.setNameKh(String.valueOf(product.getOrDefault("name_kh", null)));
         productCreateDTO.setCode(String.valueOf(product.getOrDefault("code", null)));
-        Integer salePriceInteger = (Integer) product.getOrDefault("sale_price", 0.0);
+        Double salePriceInteger = Double.valueOf(String.valueOf(product.getOrDefault("sale_price", 0.0)));
         Double salePrice = salePriceInteger != null ? salePriceInteger.doubleValue() : 0.0;
         productCreateDTO.setSalePrice(salePrice);
         productCreateDTO.setCurrency(String.valueOf(product.getOrDefault("currency", null)));
@@ -335,7 +336,7 @@ public class ProductService {
     void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
         Map<String,Object> variant = (Map<String, Object>) key.getValue();
         VariantCreateDTO variantDTO = new VariantCreateDTO();
-        Integer basePriceInteger = (Integer) variant.getOrDefault("base_price", 0);
+        Double basePriceInteger = Double.valueOf((String) variant.getOrDefault("base_price", 0.0));
         Double basePrice = basePriceInteger != null ? basePriceInteger.doubleValue() : 0.0;
         variantDTO.setBasePrice(basePrice);
         variantDTO.setCurrency((String) variant.getOrDefault("currency", null));

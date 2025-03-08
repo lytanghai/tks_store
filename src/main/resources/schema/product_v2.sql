@@ -46,6 +46,8 @@ CREATE TABLE tks.public.product (
     category_id INT REFERENCES tks.public.category(id) ON DELETE SET NULL,
     sale_price DECIMAL(10,2),
     currency VARCHAR(5),
+    sale_price_khr DECIMAL(10,2),
+    currency_khr VARCHAR(5)
     description TEXT,
     status VARCHAR(10),
     created_at TIMESTAMP DEFAULT NOW(),

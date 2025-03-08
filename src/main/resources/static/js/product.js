@@ -500,6 +500,7 @@ function displayVariantAttributes(attributes) {
     attributeListContainer.innerHTML = "";
 
     try {
+        if(variantAttributes.length > 0) {
             const attributes = JSON.parse(variantAttributes);
             if (Array.isArray(attributes)) {
                 attributes.forEach((attribute, index) => {
@@ -545,9 +546,11 @@ function displayVariantAttributes(attributes) {
             } else {
                 console.error('Expected an array for attributes, but got:', attributes);
             }
-        } catch (e) {
-            console.error('Failed to parse attributes:', e);
         }
+
+    } catch (e) {
+        console.error('Failed to parse attributes:', e);
+    }
 }
 
 

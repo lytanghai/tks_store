@@ -91,7 +91,7 @@ async function uploadProduct() {
             description: document.getElementById("product_description_edit").value
         },
         variant: {
-            base_price: parseFloat(document.getElementById('product_base_price_edit').value),
+            base_price: parseFloat(document.getElementById('product_base_price_edit').value).toFixed(2),
             currency: document.getElementById('product_base_price_currency_edit').value,
             stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
             sku: document.getElementById('product_stock_sku').value

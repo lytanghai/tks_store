@@ -2,43 +2,47 @@ let currentPage = 0;
 let totalPage = 0;
 const buttonBackPage = document.getElementById("back-page");
 const buttonToPage = document.getElementById("to-page");
+if (buttonBackPage) {
+    buttonBackPage.addEventListener("click", function () {
+        if (currentPage >= 1) {
+            currentPage -= 1;
+            fetchFilterProduct();
+        }
+    });
+} else {
+    console.error("Button with id 'back-page' not found.");
+}
 
-    if (buttonBackPage) {
-        buttonBackPage.addEventListener("click", function () {
-            if (currentPage >= 1) {
-                currentPage -= 1;
-                fetchFilterProduct();
-            }
-        });
-    } else {
-        console.error("Button with id 'back-page' not found.");
-    }
-
-    if (buttonToPage) {
+if (buttonToPage) {
         buttonToPage.addEventListener("click", function () {
-            if(currentPage <= totalPage - 2) {
-                currentPage += 1;
-                fetchFilterProduct();
-            }
-        });
-    } else {
-        console.error("Button with id 'to-page' not found.");
-    }
+        if(currentPage <= totalPage - 2) {
+            currentPage += 1;
+            fetchFilterProduct();
+        }
+    });
+} else {
+    console.error("Button with id 'to-page' not found.");
+}
 function fetchFilterProduct() {
+
+    document.getElementById("back-page-init-container").style.display = 'none';
+    document.getElementById("to-page-init-container").style.display = 'none';
+    document.getElementById("back-page-container").style.display = 'block';
+    document.getElementById("to-page-container").style.display = 'block';
 
     const condition = document.getElementById("filterCondition").value;
     const searchProperty = document.getElementById("filterColumn").value;
     const searchGeneralValue = document.getElementById("search_input_product").value;
-    let searchValue = document.getElementById("filterValue") ? document.getElementById("filterValue").value.toLowerCase() : "";
-    let searchValue1 = document.getElementById("filterValue1") ? document.getElementById("filterValue1").value.toLowerCase() : "";
-    let searchValue2 = document.getElementById("filterValue2") ? document.getElementById("filterValue2").value.toLowerCase() : "";
+    let searchValue = document.getElementById("filterValue") ? document.getElementById("filterValue").value : "";
+    let searchValue1 = document.getElementById("filterValue1") ? document.getElementById("filterValue1").value : "";
+    let searchValue2 = document.getElementById("filterValue2") ? document.getElementById("filterValue2").value : "";
     let url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
+
     if(searchProperty === 'defaultChoice') {
         url = '/internal/product/list/filter?condition_type=' + condition + searchValue + "&general=" + searchGeneralValue + '&page=' + currentPage;
     } else {
         url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
     }
-    console.log(currentPage)
     console.log('url: ' + url)
     fetch(url)
         .then(response => response.json())
@@ -136,7 +140,6 @@ function resetFilter() {
 
     currentPage = 0;
 
-    // Fetch default product list
     fetchFilterProduct();
 }
 

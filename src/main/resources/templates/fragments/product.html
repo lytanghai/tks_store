@@ -34,6 +34,7 @@
             &nbsp;&nbsp;
             <div id="singleConditionField" style="display:none">
                 <input type="text" id="filterValue" placeholder="បញ្ជូលតម្លៃ">
+
             </div>
             &nbsp;&nbsp;
 
@@ -96,7 +97,7 @@
         <tbody id="productTable">
         <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
             <td class="table_td" th:text="${row.code}"></td>
-            <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEnn}"></td>
+            <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEn}"></td>
             <td class="table_td" th:text="${row.category.name != null and row.category.nameKh != '' ? row.category.name + ' (' + row.category.nameKh + ')' : row.category.name}"></td>
             <td class="table_td custom-sale-price"
                 th:text="${#numbers.formatDecimal(row.currency == 'USD' ? row.salePrice : row.salePrice / 4100, 1, 2)} + ' ដុល្លារ = ' +
@@ -473,17 +474,20 @@
         </div>
 
         <div class="product-page-number">
-            <div class="product-list-prev">
+
+            <div class="product-list-prev" id="back-page-init-container">
+                <button id="back-page-init" onclick="fetchFilterProduct()"> < </button>
+            </div>
+
+            <div class="product-list-next" id="to-page-init-container">
+                <button id="to-page-init" onclick="fetchFilterProduct()"> > </button>
+            </div>
+
+            <div class="product-list-prev" id="back-page-container" style="display:none">
                 <button id="back-page"> < </button>
             </div>
 
-<!--            <div th:if="${current_page != 0}" class="product-list-prev">-->
-<!--                <a th:if="${current_page > 0}" th:href="@{/internal/product/list/filter/(page=${current_page - 1})}" class="product-redirect-href"> < </a>                <button onclick="fetchFilterProduct(this)" data-current-page="${current_page + 1}"></button>-->
-<!--                <button onclick="fetchFilterProduct()" id="back-page"> < </button>-->
-
-<!--            </div>-->
-
-            <div class="product-list-next">
+            <div class="product-list-next" id="to-page-container" style="display:none">
                 <button id="to-page"> > </button>
             </div>
         </div>

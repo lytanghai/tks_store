@@ -19,8 +19,7 @@ public class ProductListDetailDTO {
     private CategoryDetailDTO category;
     private List<VariantDetailDTO> variants;
 
-    public ProductListDetailDTO(Integer id, String nameEn, String nameKh, String code, Double salePrice, String currency,
-                                String description, String status, Date createdAt, CategoryDetailDTO category, List<VariantDetailDTO> variants) {
+    public ProductListDetailDTO(Integer id, String nameEn, String nameKh, String code, Double salePrice, String currency,String description, String status, Date createdAt, CategoryDetailDTO category, List<VariantDetailDTO> variants) {
         this.id = id;
         this.nameEn = nameEn;
         this.nameKh = nameKh;

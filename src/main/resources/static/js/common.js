@@ -4,7 +4,6 @@ window.onload = function() {
     fetchCategories();
     fetchAttributes();
     showTab("Product");
-
     const popupType = sessionStorage.getItem('popupMessage');
     const popupAction = sessionStorage.getItem('popupAction');
     if (popupType) {
@@ -35,7 +34,17 @@ window.onload = function() {
 };
 let currentImageIndex = 0;
 let imageUUIDs = [];
+let path = window.location.pathname;
+let query = window.location.search;
+document.addEventListener("DOMContentLoaded", function () {
 
+    // Check if the URL matches exactly
+    if (path === "/api/product/list/filter" && query === "?page=0") {
+        setTimeout(() => {
+            fetchFilterProduct();
+        }, 1000);
+    }
+});
 document.addEventListener("click", function(event) {
       let modal = document.getElementById("myProductModal");
       if (event.target === modal) {

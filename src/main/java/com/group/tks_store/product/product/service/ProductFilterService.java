@@ -2,19 +2,14 @@ package com.group.tks_store.product.product.service;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.group.tks_store.common.util.CurrencyFormatUtil;
 import com.group.tks_store.common.util.ImageUtil;
 import com.group.tks_store.common.util.MappingUtil;
 import com.group.tks_store.product.category.dto.CategoryDetailDTO;
-import com.group.tks_store.product.category.repository.CategoryRepository;
 import com.group.tks_store.product.images.dto.ImageDTO;
-import com.group.tks_store.product.images.repository.ImageRepository;
-import com.group.tks_store.product.images.service.ImageService;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.repository.ProductRepository;
 import com.group.tks_store.product.variant.dto.VariantDetailDTO;
-import com.group.tks_store.product.variant.repository.ProductVariantRepository;
-import com.group.tks_store.product.variant.service.VariantService;
-import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -129,7 +124,7 @@ public class ProductFilterService {
         String variantAttributeValue = "";
         String categoryName = "";
         String productName = "";
-        String salePriceCurrency = "";
+        String salePriceCurrency = "USD";
         String conditionType = "";
         String fromDate = "";
         String toDate = "";
@@ -140,7 +135,6 @@ public class ProductFilterService {
         Double salePriceVal2 = null;
         Integer stockQtyVal1 = null;
         Integer stockQtyVal2 = null;
-
         if(!properties.isEmpty()) {
             for (Map.Entry<String, Object> entry : properties.entrySet()) {
                 switch (entry.getKey()) {
@@ -162,6 +156,9 @@ public class ProductFilterService {
                     case "category_name":
                         categoryName = entry.getValue().toString();
                         break;
+//                    case "sale_price_currency":
+//                        salePriceCurrency = entry.getValue().toString();
+//                        break;
                     case "sale_price":
                         salePrice = Double.valueOf(entry.getValue().toString());
                         break;
@@ -171,9 +168,6 @@ public class ProductFilterService {
                             salePriceVal1 = salePriceRange[0];
                             salePriceVal2 = salePriceRange[1];
                         }
-                        break;
-                    case "sale_price_currency":
-                        salePriceCurrency = entry.getValue().toString();
                         break;
                     case "stock_quantity":
                         stockQuantity = Integer.valueOf(entry.getValue().toString());
@@ -199,6 +193,21 @@ public class ProductFilterService {
                 }
             }
         }
+//
+//        if(salePrice != null) {
+//            if(salePriceCurrency.equals("USD")) {
+//                salePriceUSD = salePrice;
+//                salePriceKHR = CurrencyFormatUtil.convertCurrency(salePriceUSD, "USD", "KHR");
+//            } else {
+//                salePriceKHR = salePrice ;
+//                salePriceUSD = CurrencyFormatUtil.convertCurrency(salePriceKHR, "KHR","USD");
+//            }
+//
+//            System.out.println("salePriceUSD: " + salePriceUSD);
+//            System.out.println("salePriceKHR: " + salePriceKHR);
+//            System.out.println("salePrice: " + salePrice);
+//        }
+
         Page<Object[]> result = null;
         switch (conditionType) {
             case "CONTAINS" :
@@ -261,13 +270,5 @@ public class ProductFilterService {
                 break;
         }
         return result;
-    }
-
-    private Integer isNumeric(String text) {
-        try {
-            return Integer.parseInt(text);
-        }catch (NumberFormatException exception) {
-            return -1;
-        }
     }
 }

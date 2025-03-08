@@ -55,7 +55,7 @@ public class ProductController {
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException, ParseException {
 
             productService.createProduct(productJson, images);
-            return AddressRedirect.REDIRECT_PRODUCT + CommonKey.LIST;
+            return "/fragments/" + AddressRedirect.PRODUCT;
     }
 
     @PostMapping(CommonKey.UPDATE)
@@ -73,13 +73,6 @@ public class ProductController {
         log.info("product created");
         return AddressRedirect.REDIRECT_PRODUCT;
     }
-
-//    @PostMapping( "/full" + CommonKey.CREATE)
-//    public String createFullProduct(@RequestBody ProductDTO productCreateDTO) throws ParseException, IOException {
-//        productService.createFullProduct(productCreateDTO,null);
-//        log.info("product created");
-//        return AddressRedirect.REDIRECT_PRODUCT;
-//    }
 
     @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {
@@ -113,7 +106,7 @@ public class ProductController {
 
     @GetMapping(CommonKey.LIST + "/filter")
     public String getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
-                                         @RequestParam(name = CommonKey.SIZE, defaultValue = "20") Integer pageSize,
+                                         @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                          @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
                                          @RequestParam(name = "code", defaultValue = "") String code,
@@ -132,6 +125,7 @@ public class ProductController {
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
                                          Model model) {
 
+        System.out.println("Fetching");
         Map<String, Object> propertiesList = this.mapPropertyList(
                 code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
                 dateTime,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);

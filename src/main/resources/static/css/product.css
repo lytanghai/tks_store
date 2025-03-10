@@ -19,7 +19,7 @@
     .custom-sale-price{
         text-align: left;
         font-weight: 500;
-        background-color: #d69c3eaa;
+        background-color: #d6c4c4aa;
         padding-left: 90px;
     }
 
@@ -44,7 +44,6 @@
     .custom-stock-qty{
         text-align:center;
         font-weight: 500;
-        background-color: #d69c3eaa;
         padding-right: 28px;
         border: 1px solid #ddd
     }
@@ -438,7 +437,7 @@
         margin: 0 10px;
     }
 
- .custom-modal {
+    .custom-modal {
          display: none;
          position: fixed;
          top: 0;

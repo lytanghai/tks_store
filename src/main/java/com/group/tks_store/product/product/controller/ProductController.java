@@ -123,7 +123,7 @@ public class ProductController {
                                          @RequestParam(name = "variant_attribute_value", defaultValue = "") String variantAttributeValue,
                                          @RequestParam(name = "created_date", defaultValue = "") String dateTime,
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
-                                         Model model) {
+                                         Model model) throws InterruptedException {
 
         System.out.println("Fetching");
         Map<String, Object> propertiesList = this.mapPropertyList(
@@ -135,7 +135,6 @@ public class ProductController {
                         pageSize,
                         Sort.by(Sort.Direction.fromString(sortDirection), sortBy)),
                 propertiesList);
-
 
         model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
         model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);

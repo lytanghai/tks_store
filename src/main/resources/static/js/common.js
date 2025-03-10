@@ -37,11 +37,10 @@ let imageUUIDs = [];
 let path = window.location.pathname;
 let query = window.location.search;
 document.addEventListener("DOMContentLoaded", function () {
-
     if (path === "/api/product/list/filter" && query === "?page=0") {
         setTimeout(() => {
             fetchFilterProduct();
-        }, 1000);
+        }, 500);
     }
 });
 document.addEventListener("click", function(event) {

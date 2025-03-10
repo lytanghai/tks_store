@@ -237,7 +237,6 @@ async function updateProductDetail() {
         let basePriceCurrency = document.getElementById('product_base_price_currency_edit').value;
         let stockQuantity = parseInt(document.getElementById('product_stock_quantity_edit').value);
         let sku = document.getElementById('product_stock_sku').value;
-
         let jsonData = {
             product: {
                 id: id,

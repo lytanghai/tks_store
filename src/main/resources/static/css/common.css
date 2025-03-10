@@ -406,7 +406,7 @@
         padding: 10px;
         text-align: center;
         position: fixed;
-        top: 41%;
+        top: 39%;
         left: 57%;
         transform: translateX(-50%);
         z-index: 1000;
@@ -422,9 +422,10 @@
         height: 50px;
         animation: spin 1s linear infinite;
         position: fixed;
-        top: 50%;
+        top: 48%;
         left: 55%;
         transform: translate(-50%, -50%);
+        z-index: 1000;
     }
 
     @keyframes spin {

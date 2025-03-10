@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.dto.ID;
-import com.group.tks_store.common.enumz.Condition;
 import com.group.tks_store.common.enumz.Status;
-import com.group.tks_store.common.util.CurrencyFormatUtil;
 import com.group.tks_store.common.util.DateTimeUtil;
 import com.group.tks_store.common.util.ImageUtil;
 import com.group.tks_store.common.util.MappingUtil;
@@ -36,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,46 +96,6 @@ public class ProductService {
 
     }
 
-    @org.springframework.transaction.annotation.Transactional
-    public void updateProduct(ProductDTO productUpdateDTO, MultipartFile[] imageFile) throws ParseException {
-
-        ProductEntity product = null;
-        ProductCreateDTO productCreate = productUpdateDTO.getProduct();
-        if(!ObjectUtils.isEmpty(productCreate)) {
-            CategoryEntity category = categoryRepository.findById(
-                            productCreate.getCategory()
-                                    .getId())
-                    .orElseThrow(() -> new ServiceException("CT-002", "ស្វែងរកមិនឃើញទេ! លេខរៀង: " + productCreate.getCategory().getId()));
-            product = new ProductEntity();
-            product.setCategory(category);
-            product.setNameEn(productCreate.getNameEn());
-            product.setNameKh(productCreate.getNameKh());
-            product.setCode(productCreate.getCode());
-            product.setDescription(productCreate.getDescription());
-            product.setCurrency(productCreate.getCurrency());
-            product.setSalePrice(productCreate.getSalePrice());
-            product.setCreatedAt(DateTimeUtil.convertDate(new Date()));
-            product.setStatus(Status.ACTIVE.getValue());
-            product = productRepository.save(product);
-        }
-        assert product != null;
-
-        VariantEntity variant = null;
-        if(!ObjectUtils.isEmpty(productUpdateDTO.getVariant())) {
-            variant = variantService.createVariant(productUpdateDTO.getVariant(), product.getId());
-        }
-
-        assert variant != null;
-        if(!ObjectUtils.isEmpty(imageFile)) {
-            imageService.uploadMultiFiles(imageFile, variant.getId());
-        }
-
-        if(!ObjectUtils.isEmpty(productUpdateDTO.getVariantAttribute())) {
-            for (VariantAttributeDTO variantAttributeDTO : productUpdateDTO.getVariantAttribute()) {
-                variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
-            }
-        }
-    }
 
     @org.springframework.transaction.annotation.Transactional
     public void createProduct(String productJson, MultipartFile[] images) throws IOException, ParseException {
@@ -202,8 +159,8 @@ public class ProductService {
             imageService.uploadMultiFiles(imageFile, variant.getId());
         }
 
-        if(!ObjectUtils.isEmpty(productCreateDTO.getVariantAttribute())) {
-            for (VariantAttributeDTO variantAttributeDTO : productCreateDTO.getVariantAttribute()) {
+        if(!ObjectUtils.isEmpty(productCreateDTO.getVariantAttributes())) {
+            for (VariantAttributeDTO variantAttributeDTO : productCreateDTO.getVariantAttributes()) {
                 variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
             }
         }
@@ -336,7 +293,7 @@ public class ProductService {
     void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO) {
         Map<String,Object> variant = (Map<String, Object>) key.getValue();
         VariantCreateDTO variantDTO = new VariantCreateDTO();
-        Double basePriceInteger = Double.valueOf((String) variant.getOrDefault("base_price", 0.0));
+        Double basePriceInteger = Double.valueOf(String.valueOf(variant.getOrDefault("base_price", 0.0)));
         Double basePrice = basePriceInteger != null ? basePriceInteger.doubleValue() : 0.0;
         variantDTO.setBasePrice(basePrice);
         variantDTO.setCurrency((String) variant.getOrDefault("currency", null));

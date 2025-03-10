@@ -1,6 +1,5 @@
 package com.group.tks_store.product.variant_attribute.service;
 
-import com.group.tks_store.common.enumz.Status;
 import com.group.tks_store.exception.ServiceException;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
 import com.group.tks_store.product.attribute.repository.AttributeRepository;

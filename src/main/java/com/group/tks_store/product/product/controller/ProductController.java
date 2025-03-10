@@ -61,8 +61,9 @@ public class ProductController {
     @PostMapping(CommonKey.UPDATE)
     public String updateV2(@RequestPart("data") String productJson,
                            @RequestPart(value = "images", required = false) MultipartFile[] images) throws JsonProcessingException {
+        log.info("/api/product/update");
         log.info("productJson!" + productJson);
-        log.info("images!" + images.length);
+//        log.info("images!" + images.length);
         productService.updateProduct(productJson, images);
         return AddressRedirect.REDIRECT_PRODUCT;
     }

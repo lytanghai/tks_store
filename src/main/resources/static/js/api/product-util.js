@@ -79,7 +79,7 @@ function fetchFilterProduct() {
                             <td class="custom-stock-qty">
                                         <ul style="text-align:center">
                                             ${product.variants.map(variant => `
-                                                <li style="color: ${variant.stock_quantity < 10 ? 'red' : 'black'}; font-weight:bold">
+                                                <li style="color: ${variant.stock_quantity < 10 ? 'red' : 'black'}; font-weight: normal;">
                                                     ${variant.stock_quantity}
                                                 </li>
                                             `).join('')}

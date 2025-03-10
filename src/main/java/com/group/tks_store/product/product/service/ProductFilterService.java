@@ -230,7 +230,7 @@ public class ProductFilterService {
                         categoryName.equals("") ? null : categoryName,
                         salePriceUSD,
                         salePriceKHR,
-                        salePriceCurrency,
+                        salePriceCurrency.equals("") ? null : salePriceCurrency,
                         sku.equals("") ? null : sku,
                         stockQuantity == -1 ? null : stockQuantity,
                         variantAttributeValue.equals("") ? null : variantAttributeValue);
@@ -250,7 +250,7 @@ public class ProductFilterService {
                         pageable,
                         salePriceUSD,
                         salePriceKHR,
-                        salePriceCurrency,
+                        salePriceCurrency.equals("") ? null : salePriceCurrency,
                         stockQuantity);
                 break;
 
@@ -259,7 +259,7 @@ public class ProductFilterService {
                         pageable,
                         salePriceUSD,
                         salePriceKHR,
-                        salePriceCurrency,
+                        salePriceCurrency.equals("") ? null : salePriceCurrency,
                         stockQuantity);
                 break;
 

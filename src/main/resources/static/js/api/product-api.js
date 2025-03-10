@@ -208,7 +208,7 @@ function openVariantAttributeDetail(button) {
                 attributeList.appendChild(listItemName);
             });
 
-            document.getElementById("customModal").style.display = "flex";
+//            document.getElementById("customModal").style.display = "flex";
         } else {
             alert("No attributes found!");
         }

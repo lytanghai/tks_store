@@ -38,7 +38,6 @@ let path = window.location.pathname;
 let query = window.location.search;
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Check if the URL matches exactly
     if (path === "/api/product/list/filter" && query === "?page=0") {
         setTimeout(() => {
             fetchFilterProduct();
@@ -53,7 +52,7 @@ document.addEventListener("click", function(event) {
 
     //close preview image on product list when click anywhere
 //    document.getElementById("imageSlider").style.display = 'none';
-    document.getElementById("customModal").style.display = 'none';
+//    document.getElementById("customModal").style.display = 'none';
 
   });
 
@@ -177,4 +176,30 @@ function convertToJSONArray(input) {
         let [name, value] = pair.split(':').map(item => item.trim());
         return { name, value };
     });
+}
+
+function showAlertMessageModal(messageTitle, messageBody) {
+    const modal = document.getElementById("alert_msg_modal");
+    const modalMessage = document.getElementById("alert_modal_message_title");
+    const modalMessageBody = document.getElementById("alert_modal_message_body");
+    const modalImg = document.getElementById("alert-msg-image");
+    modalImg.src ='/icon/exclamation-mark.png/';
+    //exclamation-mark.png
+
+    modalMessage.textContent = messageTitle;
+    modalMessageBody.textContent = messageBody;
+
+    modal.style.display = "block";
+
+    modal.classList.remove('fade-out');
+    modal.classList.add('fade-in');
+
+    setTimeout(function() {
+        modal.classList.remove('fade-in');
+        modal.classList.add('fade-out');
+    }, 3000);
+
+    setTimeout(function() {
+        modal.style.display = "none";
+    }, 4000);
 }

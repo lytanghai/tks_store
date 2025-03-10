@@ -26,11 +26,14 @@ function openCreateUpdateProductModal(element) {
     if(formTitle === 'Create') {
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
+        document.getElementById("form-modal-product-title-2").textContent = 'បញ្ជូលអង្គធាតុទំនិញ';
+
         iconElement.src = "/icon/new-product-icon.png";
         iconElement.alt = "new-product-icon.png";
         document.getElementById("product-category-edit").style.display = "none";
         document.getElementById("product_currency_edit").value = 'USD'
         document.getElementById("product-submit-btn").value = "create";
+        document.getElementById("product-submit-btn").textContent = "បន្ថែមទំនិញ";
     } else if(formTitle == 'Update') {
         id = element.getAttribute("id");
         nameEn = element.getAttribute("data-name-en");
@@ -63,6 +66,8 @@ function openCreateUpdateProductModal(element) {
 
         document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
         document.getElementById("form-product-create-title").textContent = 'កែប្រែទិន្ន័យផលិតផលចាស់';
+        document.getElementById("form-modal-product-title-2").textContent = 'កែប្រែអង្គធាតុទំនិញ';
+        document.getElementById("product-submit-btn").textContent = "កែប្រែទំនិញ";
         iconElement.src = "/icon/edit-product-icon.png";
         iconElement.alt = "edit-product-icon.png";
         document.getElementById("product-category-edit").style.display = "block";
@@ -244,50 +249,8 @@ function toggleInputFields() {
     }
 }
 
-const selectElement = document.getElementById('filterColumn');
-const condition = document.getElementById('filterCondition');
-
-selectElement.addEventListener('change', function() {
-
-    document.getElementById("singleConditionField").style.display = 'none';
-    document.getElementById("btn-submit-filter").style.display = 'none';
-    document.getElementById("btn-reset-filter").style.display = 'none';
-
-    if(selectElement.value !== 'defaultChoice') {
-        document.getElementById("filterCondition").style.display = 'block'
-        document.getElementById("singleConditionField").style.display = 'none'
-        document.getElementById("btn-submit-filter").style.display = 'none'
-        document.getElementById("btn-reset-filter").style.display = 'none'
-    }
-
-    if(condition.value !== 'defaultCondition') {
-        condition.value = 'defaultCondition';
-        document.getElementById("btn-submit-filter").style.display = 'block'
-        document.getElementById("btn-reset-filter").style.display = 'block'
-    }
-
-    if(selectElement.value === 'sale_price') {
-        document.getElementById("product_filter_search_currency").style.display = 'block';
-    } else {
-        document.getElementById("product_filter_search_currency").style.display = 'none';
-    }
-    if (selectElement.value === '10') {
-        document.getElementById("filterCondition").style.display = 'none'
-        document.getElementById("singleConditionField").style.display = 'none'
-        document.getElementById("inConditionFields").style.display = 'none'
-        document.getElementById("btn-submit-filter").style.display = 'none'
-        document.getElementById("btn-reset-filter").style.display = 'none'
-        document.getElementById("filter-start-date").style.display = 'inline-block'
-        document.getElementById("filter-end-date").style.display = 'inline-block'
-
-    } else {
-        document.getElementById("btn-submit-filter").style.display = 'block'
-        document.getElementById("btn-reset-filter").style.display = 'block'
-        document.getElementById("filter-start-date").style.display = 'none'
-        document.getElementById("filter-end-date").style.display = 'none'
-
-    }
-});
+//const selectElement = document.getElementById('filterColumn');
+//const condition = document.getElementById('filterCondition');
 
 function clearProductStartDate() {
     let startDateInput = document.getElementById("productStartDate");
@@ -410,6 +373,7 @@ function checkButtonAction() {
 
 function closeModal() {
     document.getElementById("myProductModal").style.display = "none";
+    document.getElementById("product-category-edit").value = "";
     document.getElementById("product_base_price_edit").value = "";
     document.getElementById("product_base_price_currency_edit").value = "";
     document.getElementById("product_stock_quantity_edit").value = "";
@@ -417,6 +381,7 @@ function closeModal() {
     document.getElementById("product_attribute_select").value = "";
     document.getElementById("product_attribute_value").value = "";
     document.getElementById("product_variant_image_value").value = "";
+
     variantAttributes = [];
 }
 
@@ -497,7 +462,7 @@ function closeSlider() {
 }
 
 function closeVariantAttributeModal() {
-    document.getElementById("customModal").style.display = "none";
+//    document.getElementById("customModal").style.display = "none";
 }
 
 function displayVariantAttributes(attributes) {

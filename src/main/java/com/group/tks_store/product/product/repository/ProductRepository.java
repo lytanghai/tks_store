@@ -85,8 +85,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "AND (:code IS NULL OR :code = '' OR p.code = :code) " +
             "AND (:productName IS NULL OR :productName = '' OR p.name_en = :productName OR p.name_kh = :productName) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR c.name = :categoryName OR c.name_kh = :categoryName) " +
-            "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) " +
-            "OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
+            "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
             "AND (:salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
             "AND (:sku IS NULL OR :sku = '' OR v.sku = :sku) " +
             "AND (:stockQuantity IS NULL OR :stockQuantity = -1 OR v.stock_quantity = :stockQuantity) " +

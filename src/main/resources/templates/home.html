@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TKS Store</title>
-
+    <link rel="shortcut icon" href="#">
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Battambang:wght@100;300;400;700;900&family=Changa:wght@200..800&family=Concert+One&family=Lexend+Deca:wght@100..900&family=Pridi:wght@200;300;400;500;600;700&family=Protest+Strike&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +29,8 @@
     <body>
         <div th:replace="fragments/sidebar :: sidebar"></div>
         <div th:replace="fragments/header :: header"></div>
+        <div th:replace="fragments/util/alert_msg :: alert_msg"></div>
+
         <div id="pop_up_message" class="pop-up-message"></div>
         <!-- Content -->
         <div class="main-body">

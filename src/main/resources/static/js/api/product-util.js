@@ -38,7 +38,7 @@ function fetchFilterProduct() {
     let searchValue2 = document.getElementById("filterValue2") ? document.getElementById("filterValue2").value : "";
     let url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
     let salePriceCurrencyValue = document.getElementById("product_filter_search_currency").value;
-    if(searchProperty === 'defaultChoice') {
+    if(searchGeneralValue !== '') {
         //when open product tab
         url = '/internal/product/list/filter?condition_type=' + condition + searchValue + "&general=" + searchGeneralValue + '&page=' + currentPage;
     } else {
@@ -54,11 +54,14 @@ function fetchFilterProduct() {
         .then(data => {
             const productTable = document.getElementById("productTable");
             totalPage = data.totalPages;
+            document.getElementById("display-page-num").textContent = currentPage + 1;
+            document.getElementById("display-page-total").textContent = totalPage;
+
             productTable.innerHTML = '';
 
             data.products.forEach(product => {
                 const row = document.createElement("tr");
-
+//                        <td class="product_td">${formatDate(product.created_at)}</td> <!-- Format Date here -->
                 row.innerHTML = `
                     <td class="table_td">${product.code}</td>
                     <td class="table_td">${product.name_kh ? product.name_en + ' (' + product.name_kh + ')' : product.name_en}</td>
@@ -66,11 +69,7 @@ function fetchFilterProduct() {
                     <td class="table_td custom-sale-price">
                         ${formatCurrency(product.sale_price, product.currency)}
                     </td>
-                    <td>
-                        <ul>
-                            ${product.variants.map(variant => `<li>${variant.sku}</li>`).join('')}
-                        </ul>
-                    </td>
+
                     <td class="custom-stock-qty">
                         <ul style="text-align:center">
                             ${product.variants.map(variant => `<li>${variant.stock_quantity}</li>`).join('')}
@@ -90,7 +89,7 @@ function fetchFilterProduct() {
                             </li>`).join('')}
                         </ul>
                     </td>
-                    <td style="font-size: 1rem">
+                      <td style="font-size: 1rem">
                         <ul class="product-action">
                             <li>
                                 <a id="${product.id}" href="#" onclick="showConfirmationModal('delete', ${product.id})">
@@ -126,6 +125,14 @@ function fetchFilterProduct() {
         })
         .catch(error => console.error("Error fetching data:", error));
 }
+function formatDate(dateString) {
+    const date = new Date(dateString); // Convert to Date object
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
+    const day = date.getDate().toString().padStart(2, '0'); // Pad day with leading zero if necessary
+    return `${year}-${month}-${day}`; // Return formatted date
+}
+
 
 function formatCurrency(amount, currency) {
     if (currency === 'USD') {
@@ -137,12 +144,11 @@ function formatCurrency(amount, currency) {
 }
 
 function resetFilter() {
-    document.getElementById("filterCondition").value = "";
-    document.getElementById("filterColumn").value = "";
+    document.getElementById("filterCondition").value = "defaultCondition";
+    document.getElementById("filterColumn").value = "defaultChoice";
     if (document.getElementById("filterValue")) document.getElementById("filterValue").value = "";
     if (document.getElementById("filterValue1")) document.getElementById("filterValue1").value = "";
     if (document.getElementById("filterValue2")) document.getElementById("filterValue2").value = "";
-
     currentPage = 0;
 
     fetchFilterProduct();
@@ -150,4 +156,24 @@ function resetFilter() {
 
 document.getElementById("search_input_product").addEventListener("keyup", function() {
     setTimeout(fetchFilterProduct, 1500);
+})
+
+document.getElementById("btn-submit-filter").addEventListener("click", function () {
+    if(document.getElementById("filterColumn").value === 'defaultChoice' || document.getElementById("filterCondition").value === 'defaultCondition') {
+        showAlertMessageModal('ERROR!','សូមធ្វើការជ្រើសរើសតម្លៃ និងលក្ខខណ្ឌដើម្បីស្វែងរក!')
+       return;
+    }else {
+        if(document.getElementById("filterCondition").value.includes("EQUAL","CONTAINS","GREATER_THAN", "LESS_THAN")) {
+            if(document.getElementById("filterValue").value === '') {
+               showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!')
+               return;
+            }
+        } else {
+            if(document.getElementById("filterValue1").value === '' && document.getElementById("filterValue2").value === '') {
+                showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!')
+                return;
+            }
+        }
+        fetchFilterProduct();
+    }
 })

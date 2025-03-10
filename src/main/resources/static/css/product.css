@@ -18,10 +18,9 @@
     }
     .custom-sale-price{
         text-align: left;
-        color: #000000a3;
-        font-weight: bold;
+        font-weight: 500;
         background-color: #d69c3eaa;
-        padding-left: 16px;
+        padding-left: 90px;
     }
 
     #form-modal-product-title {
@@ -44,10 +43,10 @@
     }
     .custom-stock-qty{
         text-align:center;
-        color: #062106aa;
-        font-weight: bold;
-        /*background-color: #d69c3eaa;*/
+        font-weight: 500;
+        background-color: #d69c3eaa;
         padding-right: 28px;
+        border: 1px solid #ddd
     }
 
     .custom-image {
@@ -81,7 +80,7 @@
         font-weight: bold;
     }
     .product-action{
-        width: 110px;
+        width: 130px;
         height: 5px;
         display: flex;
         list-style-type: none;
@@ -92,10 +91,14 @@
         justify-content: center;
         align-item: center;
         margin-top: -12px;
+        text-align: center;
+        height: 50px;
+        padding-left: 12px;
     }
     .product-action li a {
         text-decoration: none;
         color: #000;
+        text-align: center;
     }
 
     .product-create-modal{
@@ -171,7 +174,7 @@
 
     .filter-container select {
         width: 20%;
-        padding: 0%;
+        padding-left: 3%;
         font-size: 1.3rem;
         border: 1px solid;
         text-align: center;
@@ -424,6 +427,7 @@
 
     .view_img_td{
         text-align: center;
+        border: 1px solid #ddd;
     }
     .view_img_td ul {
         list-style-type: none;

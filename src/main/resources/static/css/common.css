@@ -234,7 +234,7 @@
 
     .table_td{
         font-size: 1.2rem;
-        padding: 2px;
+        padding: 12px;
         height: 40px;
         width: 120px;
         font-weight: 400;
@@ -253,11 +253,12 @@
     }
 
     .table_th:nth-child(even) {
-        background-color: #d69c3eaa;
+       /* background-color: #d69c3eaa;*/
     }
 
     .table_td:nth-child(even) {
-        background-color: #d69c3eaa;
+        /*background-color: #d69c3eaa;*/
+
     }
 
     .common-label {

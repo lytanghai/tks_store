@@ -52,7 +52,7 @@ document.addEventListener("click", function(event) {
 
     //close preview image on product list when click anywhere
 //    document.getElementById("imageSlider").style.display = 'none';
-//    document.getElementById("customModal").style.display = 'none';
+    document.getElementById("customModal").style.display = 'none';
 
   });
 

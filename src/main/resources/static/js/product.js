@@ -381,7 +381,9 @@ function closeModal() {
     document.getElementById("product_attribute_select").value = "";
     document.getElementById("product_attribute_value").value = "";
     document.getElementById("product_variant_image_value").value = "";
-
+    document.getElementById("verify-variant-attribute-name").innerHTML = ''
+    document.getElementById("attribute-list").textContent = ''
+    resultList = [];
     variantAttributes = [];
 }
 
@@ -423,19 +425,21 @@ function truncateTextIfLongerThan200() {
 function getLiElementsContentAsArray() {
     let ulElement = document.getElementById('attribute-list');
     let liElements = ulElement.querySelectorAll('li');
-    if(liElements.length === 1) {
+    if(liElements.length === 0) {
+        resultList = [];
         return;
     }
+    if(document.getElementById("attribute-list").textContent !== '') {
+        liElements.forEach((liElement, index) => {
+            let attributeName = liElement.querySelector('.attribute-name').textContent;
+            let attributeValue = liElement.querySelector('.attribute-value').textContent;
+            let content = `អង្គធាតុទី ${index + 1}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
+            if (!resultList.includes(content)) {
+                resultList.push(content);
+            }
+        });
+    }
 
-    liElements.forEach((liElement, index) => {
-        let attributeName = liElement.querySelector('.attribute-name').textContent;
-        let attributeValue = liElement.querySelector('.attribute-value').textContent;
-        let content = `អង្គធាតុទី ${index + 1}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
-
-        if (!resultList.includes(content)) {
-            resultList.push(content);
-        }
-    });
 }
 
 function nextProductImage() {

@@ -221,22 +221,19 @@ async function updateProductDetail() {
         let fileInput = document.getElementById('product_variant_image_value');
         let files = fileInput.files;
         let formData = new FormData();
-
         let id = document.getElementById("product_id_edit").value;
         let productNameEn = document.getElementById("product_name_en_edit").value;
         let productNameKh = document.getElementById("product_name_kh_edit").value;
         let productCode = document.getElementById("product_code_edit").value;
-
         let categoryId = document.getElementById("product_select").value;
-
         let salePriceCurrency = document.getElementById("product_currency_edit").value;
-        let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
+        let salePrice = document.getElementById("product_sale_price_edit").value;
         let description = document.getElementById("product_description_edit").value;
-
         let basePrice = parseFloat(document.getElementById('product_base_price_edit').value);
         let basePriceCurrency = document.getElementById('product_base_price_currency_edit').value;
         let stockQuantity = parseInt(document.getElementById('product_stock_quantity_edit').value);
         let sku = document.getElementById('product_stock_sku').value;
+//        let variantId = parseInt(variantId);
         let jsonData = {
             product: {
                 id: id,
@@ -244,26 +241,40 @@ async function updateProductDetail() {
                 name_kh: productNameKh ? productNameKh : undefined,
                 code: productCode || undefined,
                 category: { id: categoryId ? categoryId : undefined },
-                sale_price: salePrice ? salePrice : undefined,
+                sale_price: Number(salePrice) ? Number(salePrice) : undefined,
                 currency: salePriceCurrency ? salePriceCurrency : undefined,
                 description: document.getElementById("product_description_edit").value || undefined
             },
             variant: {
+             id: parseInt(variantId),
              base_price: basePrice || undefined,
              currency: basePriceCurrency || undefined,
              stock_quantity: stockQuantity || undefined,
              sku: sku || undefined
              },
-             variant_attributes: JSON.parse(variantAttributes),
+             variant_attributes: [],
              images: []
             };
+
+        let variantAttr = JSON.parse(variantAttributes);
+
+        if (variantAttr.length > 0) {
+            for (let i = 0; i < variantAttr.length; i++) {
+                jsonData.variant_attributes.push({
+                    id: variantAttr[i].id,
+                    attribute_id: variantAttr[i].attribute_id,
+                    name: variantAttr[i].name,
+                    value: variantAttr[i].value
+                });
+            }
+        }
+
         if(files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 formData.append("images", files[i]);
                 jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
             }
         }
-
         formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
 
         try {

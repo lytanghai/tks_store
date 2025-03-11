@@ -1,5 +1,6 @@
 let resultList = [];
 let currentTab = "Product";
+let variantId = '';
 
 function openCreateUpdateProductModal(element) {
         let id = '';
@@ -45,6 +46,7 @@ function openCreateUpdateProductModal(element) {
         salePrice = element.getAttribute("data-sale-price");
         description = element.getAttribute("data-description");
 
+        variantId = element.getAttribute("data-variantId");
         basePrice = element.getAttribute("data-base-price");
         basePriceCurrency = element.getAttribute("data-base-price-currency");
         stockQuantity = element.getAttribute("data-stock-quantity");
@@ -135,9 +137,9 @@ function addAttribute() {
             alert("This attribute is already added!");
             return;
         }
-
          variantAttributes.push({
             attribute_id: attributeId,
+            name: attributeName,
             value: value
         });
         updateAttributeList();

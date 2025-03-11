@@ -6,9 +6,11 @@ import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEnti
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,5 +29,10 @@ public interface VariantAttributeRepository extends JpaRepository<VariantAttribu
             " AND v.status = 'ACTIVE' " +
             " AND va.status = 'ACTIVE'", nativeQuery = true)
     List<VariantAttributeDetailInterface> findVariantAttributeDetailByVariantId(@Param("variantId") Integer variantId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM variant_attributes WHERE id IN (:ids)", nativeQuery = true)
+    void deleteRecordById(List<Integer> ids);
 
 }

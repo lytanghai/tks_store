@@ -33,6 +33,10 @@ public class VariantAttributeService {
     @Autowired
     private AttributeRepository attributeRepository;
 
+    public void removeItems(List<Integer> id) {
+        variantAttributeRepository.deleteRecordById(id);
+    }
+
     public VariantAttributeDTO createVariantAttribute(VariantAttributeDTO dto) {
         VariantEntity variant = variantRepository.findById(dto.getVariantId())
                 .orElseThrow(() -> new ServiceException("VR-002","រកវ៉ារ្យ៉ង់មិនឃើញទេ"));

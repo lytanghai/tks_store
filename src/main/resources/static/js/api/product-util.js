@@ -121,7 +121,7 @@ function fetchFilterProduct() {
                                             data-stock-quantity="${product.variants[0]?.stock_quantity || 0}"
                                             data-sku="${product.variants[0]?.sku || ''}"
                                             data-images="${product.variants[0]?.images.map(image => image.id + ':' + image.uuid).join(',') || ''}"
-                                            data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.name + ':' + attribute.value).join(',') || ''}"
+                                            data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.id + ':' + attribute.name + ':' + attribute.value).join(',') || ''}"
                                             data-form-title="Update"
                                             href="#" onclick="openCreateUpdateProductModal(this)">
                                             <span class="unicode-icon">&#x270E;កែ</span>

@@ -172,8 +172,8 @@ function extractNumber(value) {
 
 function convertToJSONArray(input) {
     return input.split(',').map(pair => {
-        let [name, value] = pair.split(':').map(item => item.trim());
-        return { name, value };
+        let [id, name, value] = pair.split(':').map(item => item.trim());
+        return { id , name, value };
     });
 }
 

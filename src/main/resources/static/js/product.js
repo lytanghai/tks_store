@@ -54,7 +54,7 @@ function openCreateUpdateProductModal(element) {
 
         if(rawAttributeString !== null) {
             const attributeArr = convertToJSONArray(rawAttributeString);
-            attributes = JSON.stringify(attributeArr, null, 2)
+            attributes = JSON.stringify(attributeArr, null, 3)
         }
 
         document.getElementById("product_base_price_edit").value = basePrice;
@@ -485,6 +485,11 @@ function displayVariantAttributes(attributes) {
                 listItem.style.paddingRight = "2%";
                 listItem.style.backgroundColor = "#fff";
 
+                const idSpan = document.createElement('span');
+                idSpan.classList.add('attribute-id');
+                idSpan.style.flex = "1";
+                idSpan.textContent = attribute.id;
+
                 const nameSpan = document.createElement('span');
                 nameSpan.classList.add('attribute-name');
                 nameSpan.style.flex = "1";
@@ -493,7 +498,7 @@ function displayVariantAttributes(attributes) {
                 const valueSpan = document.createElement('span');
                 valueSpan.classList.add('attribute-value');
                 valueSpan.style.flex = "1";
-                valueSpan.style.marginRight = "6%";
+                valueSpan.style.paddingRight = "10%";
                 valueSpan.textContent = attribute.value;
 
                 const actionsSpan = document.createElement('span');
@@ -503,14 +508,14 @@ function displayVariantAttributes(attributes) {
                 deleteButton.textContent = 'Delete';
                 deleteButton.style.flex = "1";
                 deleteButton.style.backgroundColor = "#fff";
-                deleteButton.style.width = "100px";
-                deleteButton.style.paddingLeft = "8%";
+                deleteButton.style.paddingLeft = "0%";
                 deleteButton.style.zIndex = "-4";
                 deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
                 deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
 
                 actionsSpan.appendChild(deleteButton);
 
+//                listItem.appendChild(idSpan);
                 listItem.appendChild(nameSpan);
                 listItem.appendChild(valueSpan);
                 listItem.appendChild(actionsSpan);

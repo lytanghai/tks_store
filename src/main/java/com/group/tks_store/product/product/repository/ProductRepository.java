@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " + //7
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description,  " + //11
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity,  " + //16
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " + //17
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " + //17
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " + //18
             "FROM product p " +
             "LEFT JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -73,7 +73,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' ||  a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -109,7 +109,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -137,7 +137,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -164,7 +164,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
@@ -193,7 +193,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-            "STRING_AGG(DISTINCT a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +

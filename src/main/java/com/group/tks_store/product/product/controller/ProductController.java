@@ -46,7 +46,6 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
-
     private final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     @PostMapping("/upload")
@@ -55,14 +54,15 @@ public class ProductController {
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException, ParseException {
 
             productService.createProduct(productJson, images);
-            return "/fragments/" + AddressRedirect.PRODUCT;
+
+        return "/fragments/" + AddressRedirect.PRODUCT;
     }
 
     @PostMapping(CommonKey.UPDATE)
     public String updateV2(@RequestPart("data") String productJson,
                            @RequestPart(value = "images", required = false) MultipartFile[] images) throws JsonProcessingException {
         productService.updateProduct(productJson, images);
-        return AddressRedirect.REDIRECT_PRODUCT;
+        return "/fragments/" + AddressRedirect.PRODUCT;
     }
 
     @PostMapping(CommonKey.CREATE)
@@ -78,13 +78,6 @@ public class ProductController {
         log.info("product {} deleted", id);
         return AddressRedirect.REDIRECT_PRODUCT;
     }
-//
-//    @PostMapping(CommonKey.UPDATE)
-//    public String update(@RequestBody ProductUpdateDTO productUpdateDto) throws ParseException {
-//        productServiceBk.update(productUpdateDto);
-//        log.info("product {} updated", productUpdateDto.getId());
-//        return AddressRedirect.REDIRECT_PRODUCT;
-//    }
 
     @GetMapping("/api/categories")
     @ResponseBody
@@ -123,7 +116,6 @@ public class ProductController {
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
                                          Model model) throws InterruptedException {
 
-        System.out.println("Fetching");
         Map<String, Object> propertiesList = this.mapPropertyList(
                 code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
                 dateTime,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);

@@ -15,7 +15,6 @@ import com.group.tks_store.product.category.dto.CategoryDetailDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.repository.CategoryRepository;
 import com.group.tks_store.product.images.dto.ImageDTO;
-import com.group.tks_store.product.images.repository.ImageRepository;
 import com.group.tks_store.product.images.service.ImageService;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductDTO;
@@ -24,7 +23,6 @@ import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.repository.ProductRepository;
 import com.group.tks_store.product.variant.dto.VariantDetailDTO;
 import com.group.tks_store.product.variant.entity.VariantEntity;
-import com.group.tks_store.product.variant.repository.ProductVariantRepository;
 import com.group.tks_store.product.variant.service.VariantService;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
@@ -71,10 +69,8 @@ public class ProductService {
         Map<String, Object> productObj = objectMapper.readValue(productJson, Map.class);
 
         JSONObject productJsonObject = new JSONObject(productJson);
-        JSONObject productPayload = new JSONObject(productJsonObject.getJSONObject(LIB.PRODUCT));
-        JSONObject variantPayload = new JSONObject(productJsonObject.getJSONObject(LIB.VARIANT));
-        JSONObject imagePayload = new JSONObject(productJsonObject.getJSONObject(LIB.IMAGES));
-        JSONObject variantAttributePayload = new JSONObject(productJsonObject.getJSONObject(LIB.VARIANT_ATTRIBUTES));
+        JSONObject productPayload = new JSONObject(productJsonObject.getJSONObject(LIB.PRODUCT).toMap());
+        JSONObject variantPayload = new JSONObject(productJsonObject.getJSONObject(LIB.VARIANT).toMap());
 
         for(Map.Entry<String,Object> key : productObj.entrySet()) {
             String keyName = key.getKey();
@@ -94,11 +90,13 @@ public class ProductService {
                         LIB.UPDATE);
             }
 
-            if(keyName.equals(LIB.VARIANT_IMAGES) && Objects.nonNull(key.getValue())) {
+            if(keyName.equals(LIB.IMAGES)) {
                 productUtil.mappingVariantImgInfo(
                         key,
                         null,
-                        imagePayload,
+                        productJsonObject.optJSONArray("remove_images") == null ? null : productJsonObject.optJSONArray("remove_images"),
+                        variantPayload.getInt(LIB.id),
+                        images,
                         LIB.UPDATE);
             }
 
@@ -106,7 +104,7 @@ public class ProductService {
                 productUtil.mappingVariantAttributeInfo(
                         key,
                         null,
-                        variantAttributePayload,
+                        productPayload.getInt(LIB.id),
                         LIB.UPDATE);
             }
         }
@@ -141,6 +139,8 @@ public class ProductService {
                 productUtil.mappingVariantImgInfo(
                         key,
                         newProductInformation,
+                        null,
+                        null,
                         null,
                         LIB.CREATE);
             }
@@ -275,7 +275,6 @@ public class ProductService {
                 }
             }
 
-            // Check if product already exists in list
             ProductListDetailDTO existingProduct = products.stream()
                     .filter(p -> p.getId().equals(productId))
                     .findFirst()
@@ -293,7 +292,5 @@ public class ProductService {
         }
         return products;
     }
-
-
 
 }

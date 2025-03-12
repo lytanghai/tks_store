@@ -211,6 +211,17 @@
         </tbody>
     </table>
 
+    <div id="imageSlider" class="slider-container" style="display: none;">
+        <div class="product-prev-btn-container">
+            <button class="prev-btn" onclick="prevProductImage()">⮜</button>
+        </div>
+        <span class="close-btn" onclick="closeSlider()">✖</span>
+        <img id="sliderImage" class="slider-image" src="" alt="Product Image">
+        <div class="product-next-btn-container">
+            <button class="next-btn" onclick="nextProductImage()">⮞</button>
+        </div>
+    </div>
+
     <div id="customModal" class="custom-modal">
         <div class="custom-modal-content">
             <span class="close-var-att-btn" onclick="closeVariantAttributeModal()">&times;</span>
@@ -364,7 +375,8 @@
                                     </div>
 
                                     <div id="image_preview_modal" class="image-preview">
-                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 1.5rem; position: absolute; top: 5px; right: 10px;">×</span>
+                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
+                                        <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
                                         <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
                                         <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
                                         <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>

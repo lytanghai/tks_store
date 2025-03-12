@@ -151,12 +151,9 @@ function fetchAttributes() {
     });
 }
 
-
-
 function openImageSlider(button) {
     let variantId = button.getAttribute("data-variant-id");
 
-    // Step 1: Get list of image UUIDs from API
     fetch(`/api/get/images?variant_id=${variantId}`)
         .then(response => response.json())
         .then(uuids => {
@@ -172,19 +169,17 @@ function openImageSlider(button) {
         })
         .catch(error => {
             console.error("Error fetching images:", error);
-            alert("Error loading images!");
         });
 }
 
 function showImage() {
     let imageElement = document.getElementById("sliderImage");
     let uuid = imageUUIDs[currentImageIndex];
-
-    // Step 2: Fetch individual image using UUID
+    console.log(uuid)
     fetch(`/api/image/show?uuid=${uuid}`)
-        .then(response => response.blob())  // Get binary data
+        .then(response => response.blob())
         .then(blob => {
-            imageElement.src = URL.createObjectURL(blob); // Convert to image URL
+            imageElement.src = URL.createObjectURL(blob);
         })
         .catch(error => console.error("Error loading image:", error));
 }
@@ -196,7 +191,7 @@ function openVariantAttributeDetail(button) {
     .then(response => response.json())
     .then(data => {
         let attributeList = document.getElementById("attributeList");
-        attributeList.innerHTML = ""; // Clear old data
+        attributeList.innerHTML = "";
 
         if (data.length > 0) {
             data.forEach(attr => {
@@ -216,7 +211,6 @@ function openVariantAttributeDetail(button) {
     .catch(error => console.error("Error fetching data:", error));
 }
 
-
 async function updateProductDetail() {
         let fileInput = document.getElementById('product_variant_image_value');
         let files = fileInput.files;
@@ -233,7 +227,6 @@ async function updateProductDetail() {
         let basePriceCurrency = document.getElementById('product_base_price_currency_edit').value;
         let stockQuantity = parseInt(document.getElementById('product_stock_quantity_edit').value);
         let sku = document.getElementById('product_stock_sku').value;
-//        let variantId = parseInt(variantId);
         let jsonData = {
             product: {
                 id: id,
@@ -252,6 +245,7 @@ async function updateProductDetail() {
              stock_quantity: stockQuantity || undefined,
              sku: sku || undefined
              },
+             remove_images: [],
              variant_attributes: [],
              images: []
             };
@@ -266,6 +260,12 @@ async function updateProductDetail() {
                     name: variantAttr[i].name,
                     value: variantAttr[i].value
                 });
+            }
+        }
+
+        if (imageIds.length > 0) {
+            for (let x = 0; x < imageIds.length; x++) {
+                jsonData.remove_images.push(imageIds[x]);
             }
         }
 

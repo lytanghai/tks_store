@@ -35,6 +35,8 @@ function openCreateUpdateProductModal(element) {
         document.getElementById("product_currency_edit").value = 'USD'
         document.getElementById("product-submit-btn").value = "create";
         document.getElementById("product-submit-btn").textContent = "បន្ថែមទំនិញ";
+        console.log("2: " + imageUrls)
+
     } else if(formTitle == 'Update') {
         id = element.getAttribute("id");
         nameEn = element.getAttribute("data-name-en");
@@ -51,6 +53,8 @@ function openCreateUpdateProductModal(element) {
         basePriceCurrency = element.getAttribute("data-base-price-currency");
         stockQuantity = element.getAttribute("data-stock-quantity");
         sku = element.getAttribute("data-sku");
+
+        showExistingImage(element.getAttribute("data-images"));
 
         const rawAttributeString = element.getAttribute("data-attributes");
 
@@ -85,6 +89,32 @@ function openCreateUpdateProductModal(element) {
     document.getElementById("product_currency_edit").value = currency;
     document.getElementById("product_sale_price_edit").value = salePrice;
     document.getElementById("myProductModal").style.display = "block";
+}
+
+imageIds = []
+function addToRemoveImg() {
+    if (imageUrls.length === 0) return;
+    let imageUrl = imageUrls[currentImageIndex];
+    let uuid = imageUrl.split("=")[1];
+
+    if (!imageIds.includes(uuid)) {
+        imageIds.push(uuid);
+        imageUrls.splice(currentImageIndex , 1)
+    }
+
+    currentIndex = (currentIndex + 1) % imageUrls.length;
+    document.getElementById('preview_image').src = imageUrls[currentIndex];
+}
+function showExistingImage(imageData) {
+    let baseUrl = "/api/image/show?uuid="; // API endpoint
+
+    let entries = imageData.split(",");
+
+    entries.forEach(entry => {
+        let uuid = entry.split(":")[1];
+        let imageUrl = `${baseUrl}${uuid}`;
+        imageUrls.push(imageUrl);
+    });
 }
 
 function showProductVerify() {
@@ -323,7 +353,9 @@ function confirmProductActionConfirmation() {
         uploadProduct();
         closeModal();
     } else if (window.currentAction === 'update') {
-        updateProduct();
+//        updateProduct();
+        updateProductDetail();
+        closeModal();
     } else if (window.currentAction === 'delete') {
         deleteProduct(window.productId);
     }
@@ -338,7 +370,6 @@ function handleFormSubmit(event) {
 
     }
     else if(titleText.includes("បញ្ជូល")) {
-
         showConfirmationModal('create');
     } else {
         showConfirmationModal('update');
@@ -387,6 +418,7 @@ function closeModal() {
     document.getElementById("attribute-list").textContent = ''
     resultList = [];
     variantAttributes = [];
+//    reloadPage();
 }
 
 function showTab(tabName) {
@@ -441,7 +473,6 @@ function getLiElementsContentAsArray() {
             }
         });
     }
-
 }
 
 function nextProductImage() {

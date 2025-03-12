@@ -1,6 +1,5 @@
 package com.group.tks_store.product.variant_attribute.repository;
 
-import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDetailList;
 import com.group.tks_store.product.variant_attribute.dto.interfaze.VariantAttributeDetailInterface;
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 import org.springframework.data.domain.Page;

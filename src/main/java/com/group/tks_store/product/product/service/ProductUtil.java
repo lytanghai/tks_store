@@ -1,6 +1,5 @@
 package com.group.tks_store.product.product.service;
 
-
 import com.group.tks_store.common.static_key.LIB;
 import com.group.tks_store.product.category.dto.CategoryCreateDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
@@ -19,21 +18,17 @@ import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDetailList;
 import com.group.tks_store.product.variant_attribute.service.VariantAttributeService;
 import com.group.tks_store.product.variant_image.dto.VariantImageCreateDTO;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
 @Service
 public class ProductUtil {
-
-    private static final String ATTRIBUTE_ID = "attribute_id";
-    private static final String VARIANT_ID = "variant_id";
-    private static final String UPDATE = "UPDATE";
-    private static final String CREATE = "CREATE";
-    private static final String VALUE = "value";
-    private static final String ID = "id";
 
     @Autowired
     private ProductRepository productRepository;
@@ -55,11 +50,12 @@ public class ProductUtil {
 
     @Autowired
     private ImageService imageService;
+
     public void mappingProductInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject productJson, String action) {
         Map<String,Object> product = (Map<String, Object>) key.getValue();
         if(action.equals(LIB.CREATE)) {
             ProductCreateDTO productCreateDTO = new ProductCreateDTO();
-            productCreateDTO.setId(Integer.valueOf(String.valueOf(product.getOrDefault(ID, 0))));
+            productCreateDTO.setId(Integer.valueOf(String.valueOf(product.getOrDefault(LIB.id, 0))));
             productCreateDTO.setNameEn(String.valueOf(product.getOrDefault(LIB.name_en, null)));
             productCreateDTO.setNameKh(String.valueOf(product.getOrDefault(LIB.name_kh, null)));
             productCreateDTO.setCode(String.valueOf(product.getOrDefault(LIB.code, null)));
@@ -70,16 +66,16 @@ public class ProductUtil {
             productCreateDTO.setDescription(String.valueOf(product.getOrDefault(LIB.description, null)));
             Map<String,Object> category = (Map<String, Object>) product.get(LIB.category);
             CategoryCreateDTO categoryCreateDTO = new CategoryCreateDTO();
-            String categoryIdString = (String) category.getOrDefault(ID, "0");
+            String categoryIdString = (String) category.getOrDefault(LIB.id, "0");
             Integer categoryId = Integer.parseInt(categoryIdString);
             categoryCreateDTO.setId(categoryId);
             productCreateDTO.setCategory(categoryCreateDTO);
             productDTO.setProduct(productCreateDTO);
         } else {
-            ProductEntity existProduct =  productRepository.findById(Integer.valueOf((String) product.get(LIB.id))).get();
+            ProductEntity existProduct = productRepository.findById(Integer.valueOf((String) product.get(LIB.id))).get();
             if(existProduct != null) {
                 existProduct.setNameEn(String.valueOf(product.get(LIB.name_en)) == null ? null : String.valueOf(product.get(LIB.name_en)));
-                existProduct.setNameEn(String.valueOf(product.get(LIB.name_kh)) == null ? null : String.valueOf(product.get(LIB.name_kh)));
+                existProduct.setNameKh(String.valueOf(product.get(LIB.name_kh)) == null ? null : String.valueOf(product.get(LIB.name_kh)));
                 existProduct.setDescription(String.valueOf(product.get(LIB.description)) == null ? null : String.valueOf(product.get(LIB.description)));
                 existProduct.setCurrency(String.valueOf(product.get(LIB.currency)) == null ? null : String.valueOf(product.get(LIB.currency)));
                 existProduct.setCode(String.valueOf(product.get(LIB.code)) == null ? null : String.valueOf(product.get(LIB.code)));
@@ -95,7 +91,7 @@ public class ProductUtil {
 
                 Map<String,Object> category = (Map<String, Object>) product.get(LIB.category);
                 if(category != null) {
-                    String categoryIdString = (String) category.getOrDefault(ID, "0");
+                    String categoryIdString = (String) category.getOrDefault(LIB.id, "0");
                     Integer categoryId = Integer.parseInt(categoryIdString);
                     CategoryEntity categoryEntity = categoryRepository.findById(categoryId).orElse(null);
                     if(categoryEntity != null) {
@@ -105,43 +101,62 @@ public class ProductUtil {
                 }
             }
         }
-
     }
 
-    public void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject variantJson,  String action) {
+    public void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject variantJson, String action) {
         if(action.equals(LIB.CREATE)) {
             Map<String,Object> variant = (Map<String, Object>) key.getValue();
             VariantCreateDTO variantDTO = new VariantCreateDTO();
-            Double basePriceInteger = Double.valueOf(String.valueOf(variant.getOrDefault(LIB.base_price, 0.0)));
-            Double basePrice = basePriceInteger != null ? basePriceInteger.doubleValue() : 0.0;
+            double basePrice = Double.parseDouble(String.valueOf(variant.getOrDefault(LIB.base_price, 0.0)));
             variantDTO.setBasePrice(basePrice);
             variantDTO.setCurrency((String) variant.getOrDefault(LIB.currency, null));
             variantDTO.setStockQuantity((Integer) variant.getOrDefault(LIB.stock_quantity, 0));
             variantDTO.setSku((String) variant.getOrDefault(LIB.sku, null));
             productDTO.setVariant(variantDTO);
         } else {
-
+            VariantEntity existVariant = variantRepository.findById(variantJson.getInt(LIB.id)).orElse(null);
+            if(existVariant != null) {
+                double basePrice = 0.0;
+                try {
+                    basePrice = variantJson.optDouble(LIB.base_price);
+                }catch (Exception e) {
+                    basePrice = variantJson.optInt(LIB.base_price);
+                }
+                existVariant.setBasePrice(basePrice);
+                existVariant.setCurrency(variantJson.optString(LIB.currency));
+                existVariant.setStockQuantity(variantJson.optInt(LIB.stock_quantity));
+                existVariant.setSku(variantJson.optString(LIB.sku));
+                variantRepository.save(existVariant);
+            }
         }
-
     }
 
-    public void mappingVariantImgInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject image,  String action) {
+    public void mappingVariantImgInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONArray imagesRemove, Integer variantId, MultipartFile[] image, String action) {
         if(action.equals(LIB.CREATE)) {
             List<VariantImageCreateDTO> listVariantImgDTO = new ArrayList<>();
             ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
             for (Object o : arrayList) {
                 Map<String, Object> map = (Map<String, Object>) o;
                 VariantImageCreateDTO variantImageCreateDTO = new VariantImageCreateDTO();
-                variantImageCreateDTO.setVariantId((Integer) map.getOrDefault(VARIANT_ID, null));
+                variantImageCreateDTO.setVariantId((Integer) map.getOrDefault(LIB.variant_id, null));
                 listVariantImgDTO.add(variantImageCreateDTO);
             }
             productDTO.setVariantImage(listVariantImgDTO);
         } else {
-
+            if(imagesRemove != null) {
+                List<String> ids = new ArrayList<>();
+                imagesRemove.iterator().forEachRemaining(i -> {
+                    ids.add(String.valueOf(i));
+                });
+                imageRepository.deleteByUuid(ids);
+            }
+            if(!ObjectUtils.isEmpty(image)) {
+                imageService.uploadMultiFiles(image, variantId);
+            }
         }
     }
 
-    public void mappingVariantAttributeInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject variantAttribute, String action) {
+    public void mappingVariantAttributeInfo(Map.Entry<String,Object> key, ProductDTO productDTO, Integer productId, String action) {
         List<VariantAttributeDTO> listVariantAttributeDTO = new ArrayList<>();
         ArrayList<?> arrayList = (ArrayList<?>) key.getValue();
         Set<Integer> existingDBId = new HashSet<>();
@@ -151,36 +166,35 @@ public class ProductUtil {
 
         for (Object o : arrayList) {
             Map<String, Object> map = (Map<String, Object>) o;
-            if (action.equals(UPDATE)) {
-                VariantEntity variant = variantRepository.findByProductId(variantAttribute.getInt(LIB.id));
+            if (action.equals(LIB.UPDATE)) {
+                VariantEntity variant = variantRepository.findByProductId(productId);
 
                 List<VariantAttributeDetailList> variantAttributeEntities = variantAttributeService.findByVariantId(variant.getId());
 
-                if (map.containsKey(ATTRIBUTE_ID)) {
+                if (map.containsKey(LIB.attribute_id)) {
                     VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
                     variantAttributeDTO.setVariantId(variant.getId());
-                    variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(ATTRIBUTE_ID, null))));
-                    variantAttributeDTO.setValue((String) map.getOrDefault(VALUE, null));
+                    variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(LIB.attribute_id, null))));
+                    variantAttributeDTO.setValue((String) map.getOrDefault(LIB.value, null));
                     variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
                 }
 
-                if (map.containsKey(ID)) {
-                    requestId.add(Integer.valueOf((String) map.get(ID)));
+                if (map.containsKey(LIB.id)) {
+                    requestId.add(Integer.valueOf((String) map.get(LIB.id)));
                     variantAttributeEntities.forEach(item -> {
                         existingDBId.add(item.getVariantAttributeId());
                     });
                 }
-            } else if (action.equals(CREATE)) {
+            } else if (action.equals(LIB.CREATE)) {
                 VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
-                variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(ATTRIBUTE_ID, null))));
-                variantAttributeDTO.setValue((String) map.getOrDefault(VALUE, null));
+                variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(LIB.attribute_id, null))));
+                variantAttributeDTO.setValue((String) map.getOrDefault(LIB.value, null));
                 listVariantAttributeDTO.add(variantAttributeDTO);
+                productDTO.setVariantAttributes(listVariantAttributeDTO);
             }
-
-            productDTO.setVariantAttributes(listVariantAttributeDTO);
         }
 
-        if(action.equals(UPDATE)) {
+        if(action.equals(LIB.UPDATE)) {
             for (Integer id : existingDBId) {
                 if (!requestId.contains(id)) {
                     idsToRemove.add(id);

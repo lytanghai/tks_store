@@ -299,17 +299,26 @@ function clearProductEndDate() {
 function populateCategoryDropdown(categories) {
     const categorySelect = document.getElementById("product_select");
     categorySelect.innerHTML = "";
-    const defaultOption = document.createElement("option");
-    defaultOption.text = "";
-    defaultOption.value = "";
-    categorySelect.appendChild(defaultOption);
+
+    let generalCategory;
+
+    const optgroup = document.createElement("optgroup");
 
     categories.forEach(category => {
         const option = document.createElement("option");
         option.value = category.id;
-        option.text = category.name + ' / ' + category.name_kh;
-        categorySelect.appendChild(option);
+//        option.text = `${category.name} / ${category.name_kh}`;
+        option.text = `${category.name_kh} / ${category.name}`;
+        option.style.fontSize = "1.6rem";
+
+        if (category.name === "ទូទៅ") {
+            generalCategory = option;
+        } else {
+            optgroup.appendChild(option);
+        }
     });
+
+    categorySelect.appendChild(optgroup);
 }
 
 function populateAttributeDropdown(attributes) {
@@ -322,6 +331,8 @@ function populateAttributeDropdown(attributes) {
 
     attributes.forEach(attr => {
         const option = document.createElement("option");
+        option.style.height= "500px";
+        option.style.overflowY= "auto";
         option.value = attr.id;
         option.text = attr.name_kh && attr.name_kh.trim() !== ""
             ? attr.name + "(" + attr.name_kh + ")"

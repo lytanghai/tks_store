@@ -21,6 +21,7 @@ import com.group.tks_store.product.product.dto.ProductDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.repository.ProductRepository;
+import com.group.tks_store.product.variant.dto.VariantCreateDTO;
 import com.group.tks_store.product.variant.dto.VariantDetailDTO;
 import com.group.tks_store.product.variant.entity.VariantEntity;
 import com.group.tks_store.product.variant.service.VariantService;
@@ -91,13 +92,15 @@ public class ProductService {
             }
 
             if(keyName.equals(LIB.IMAGES)) {
-                productUtil.mappingVariantImgInfo(
-                        key,
-                        null,
-                        productJsonObject.optJSONArray("remove_images") == null ? null : productJsonObject.optJSONArray("remove_images"),
-                        variantPayload.getInt(LIB.id),
-                        images,
-                        LIB.UPDATE);
+                if(variantPayload.optInt("id", -99) != -99) {
+                    productUtil.mappingVariantImgInfo(
+                            key,
+                            null,
+                            productJsonObject.optJSONArray("remove_images") == null ? null : productJsonObject.optJSONArray("remove_images"),
+                            variantPayload.getInt(LIB.id),
+                            images,
+                            LIB.UPDATE);
+                }
             }
 
             if(keyName.equals(LIB.VARIANT_ATTRIBUTES) && Objects.nonNull(key.getValue())) {
@@ -128,10 +131,11 @@ public class ProductService {
             }
 
             if(keyName.equals(LIB.VARIANT) && Objects.nonNull(key.getValue())) {
+                JSONObject variantObj = new JSONObject(key.getValue());
                 productUtil.mappingVariantInfo(
                         key,
                         newProductInformation,
-                        null,
+                        variantObj,
                         LIB.CREATE);
             }
 

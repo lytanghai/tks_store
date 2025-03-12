@@ -139,7 +139,7 @@ function fetchFilterProduct() {
                     loadingSpinner.style.display = "none";
                     loadingSpinner2.style.display = "none";
                 });
-    }, 1000)
+    }, 500)
 }
 function formatDate(dateString) {
     const date = new Date(dateString); // Convert to Date object
@@ -151,15 +151,28 @@ function formatDate(dateString) {
 
 
 function formatCurrency(amount, currency) {
+    // Format the number with commas every 3 digits and 2 decimal places for the amount
+    const formattedAmount = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount);
+
+    // Format the Riel amount with commas and without the unnecessary .0 (single decimal place for Riel)
+    const formattedRielAmount = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount * 4100);
+
     if (currency === 'USD') {
-//        return `${amount.toFixed(2)} ដុល្លារ = ${(amount * 4100).toFixed(0)} រៀល`;
-        return `${amount.toFixed(2)} $ = ${(amount * 4100).toFixed(0)} ៛`;
+        return `${formattedAmount} $ = ${formattedRielAmount} ៛`;
     } else if (currency === 'KHR') {
-//        return `${(amount / 4100).toFixed(2)} ដុល្លារ = ${amount.toFixed(0)} រៀល`;
-        return `${(amount / 4100).toFixed(2)} $ = ${amount.toFixed(0)} ៛`;
+        const formattedUsdAmount = (amount / 4100).toFixed(2); // Format USD to 2 decimals
+        return `${formattedUsdAmount} $ = ${formattedAmount} ៛`;
     }
-    return `${amount} ${currency}`;
+    return `${formattedAmount} ${currency}`;
 }
+
+
 
 function resetFilter() {
     document.getElementById("filterCondition").value = "defaultCondition";

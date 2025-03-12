@@ -105,28 +105,29 @@ public class ProductUtil {
 
     public void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject variantJson, String action) {
         if(action.equals(LIB.CREATE)) {
-            Map<String,Object> variant = (Map<String, Object>) key.getValue();
             VariantCreateDTO variantDTO = new VariantCreateDTO();
-            double basePrice = Double.parseDouble(String.valueOf(variant.getOrDefault(LIB.base_price, 0.0)));
+            double basePrice = variantJson.optDouble("base_price", 0.0);
             variantDTO.setBasePrice(basePrice);
-            variantDTO.setCurrency((String) variant.getOrDefault(LIB.currency, null));
-            variantDTO.setStockQuantity((Integer) variant.getOrDefault(LIB.stock_quantity, 0));
-            variantDTO.setSku((String) variant.getOrDefault(LIB.sku, null));
+            variantDTO.setCurrency(variantJson.optString("currency", "USD"));
+            variantDTO.setStockQuantity(variantJson.optInt("stock_quantity", -99));
+            variantDTO.setSku(variantJson.optString("sku", "N/A"));
             productDTO.setVariant(variantDTO);
         } else {
-            VariantEntity existVariant = variantRepository.findById(variantJson.getInt(LIB.id)).orElse(null);
-            if(existVariant != null) {
-                double basePrice = 0.0;
-                try {
-                    basePrice = variantJson.optDouble(LIB.base_price);
-                }catch (Exception e) {
-                    basePrice = variantJson.optInt(LIB.base_price);
+            if(variantJson.opt(LIB.id) != null) {
+                VariantEntity existVariant = variantRepository.findById(variantJson.getInt(LIB.id)).orElse(null);
+                if(existVariant != null) {
+                    double basePrice = 0.0;
+                    try {
+                        basePrice = variantJson.optDouble(LIB.base_price);
+                    }catch (Exception e) {
+                        basePrice = variantJson.optInt(LIB.base_price);
+                    }
+                    existVariant.setBasePrice(basePrice);
+                    existVariant.setCurrency(variantJson.optString(LIB.currency));
+                    existVariant.setStockQuantity(variantJson.optInt(LIB.stock_quantity));
+                    existVariant.setSku(variantJson.optString(LIB.sku));
+                    variantRepository.save(existVariant);
                 }
-                existVariant.setBasePrice(basePrice);
-                existVariant.setCurrency(variantJson.optString(LIB.currency));
-                existVariant.setStockQuantity(variantJson.optInt(LIB.stock_quantity));
-                existVariant.setSku(variantJson.optString(LIB.sku));
-                variantRepository.save(existVariant);
             }
         }
     }
@@ -180,10 +181,14 @@ public class ProductUtil {
                 }
 
                 if (map.containsKey(LIB.id)) {
-                    requestId.add(Integer.valueOf((String) map.get(LIB.id)));
-                    variantAttributeEntities.forEach(item -> {
-                        existingDBId.add(item.getVariantAttributeId());
-                    });
+                    if (map.get(LIB.id).equals("")) {
+                        continue;
+                    } else {
+                        requestId.add(Integer.valueOf((String) map.get(LIB.id)));
+                        variantAttributeEntities.forEach(item -> {
+                            existingDBId.add(item.getVariantAttributeId());
+                        });
+                    }
                 }
             } else if (action.equals(LIB.CREATE)) {
                 VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();

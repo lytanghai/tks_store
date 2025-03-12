@@ -18,9 +18,10 @@
     }
     .custom-sale-price{
         text-align: left;
-        font-weight: 500;
-        background-color: #9d9fa9aa;
+        font-weight: 300;
+        background-color: #D20A2E;
         padding-left: 90px;
+        color:#fff;
     }
 
     #form-modal-product-title {
@@ -66,8 +67,8 @@
     }
     .product-list-prev{
         position: relative;
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
     }
     .product-list-next{
         position: absolute;
@@ -216,7 +217,7 @@
     }
 
     .product-price-ipt {
-        width: 128px;
+        width: 160px;
         margin-bottom: -13px;
         font-size: 1.3rem;
         height: 47px;
@@ -282,10 +283,10 @@
     }
 
     .product-currency-select{
-        width: 135px;
+        width: 151px;
         margin-bottom: 6px;
-        height: 47px;
-        margin-left: -46%;
+        height: 50px;
+        margin-left: -42%;
         border: 1px solid;
     }
 
@@ -305,12 +306,37 @@
         margin-right: 80px;
 
     }
+    /**
     #product_select{
         position: absolute;
         margin-left: 3%;
-        width: 12%;
-        height: 45px;
+        width: 25%;
+        max-height: 450px;
         border: 1px solid;
+        overflow:scroll;
+        font-size: 1.5rem;
+    }
+
+    #product_select:focus {
+        height: auto;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    */
+
+    #product_select {
+        position: absolute;
+        margin-left: 3%;
+        width: 25%;
+        max-height: 450px;
+        font-size: 1.5rem;
+        padding: 10px;
+    }
+
+    #product_select:focus {
+        height: auto;
+        max-height: 300px;
+        overflow-y: auto;
     }
 
     #confirm-modal-header div , #confirm-modal-header h2{

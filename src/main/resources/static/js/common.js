@@ -1,9 +1,18 @@
+let currentImageIndex = 0;
+let imageUUIDs = [];
+let path = window.location.pathname;
+let query = window.location.search;
+
 window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
-    fetchCategories();
-    fetchAttributes();
-    showTab("Product");
+
+    if(window.location.pathname.includes("/api/product")) {
+        showTab("Product");
+        fetchCategories();
+        fetchAttributes();
+    }
+
     const popupType = sessionStorage.getItem('popupMessage');
     const popupAction = sessionStorage.getItem('popupAction');
     if (popupType) {
@@ -32,10 +41,7 @@ window.onload = function() {
         }, 500);
     }
 };
-let currentImageIndex = 0;
-let imageUUIDs = [];
-let path = window.location.pathname;
-let query = window.location.search;
+
 document.addEventListener("DOMContentLoaded", function () {
     if (path === "/api/product/list/filter" && query === "?page=0") {
         setTimeout(() => {
@@ -204,4 +210,26 @@ function showAlertMessageModal(messageTitle, messageBody) {
     setTimeout(function() {
         modal.style.display = "none";
     }, 4000);
+}
+
+function fetchCategories() {
+    fetch("/internal/category/list")
+        .then(response => response.json())
+        .then(categories => {
+            populateCategoryDropdown(categories);
+        })
+        .catch(error => {
+            console.error("Error fetching categories:", error);
+    });
+}
+
+function fetchAttributes() {
+    fetch("/internal/attribute/list")
+        .then(response => response.json())
+        .then(attributes => {
+            populateAttributeDropdown(attributes);
+        })
+        .catch(error => {
+            console.error("Error fetching attributes:", error);
+    });
 }

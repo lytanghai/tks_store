@@ -43,14 +43,30 @@ public class CategoryController {
     }
 
     @GetMapping(CommonKey.LIST)
-    public String redirect2Category(Model model, @RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber) {
-        CategoryListDTO result = categoryService.findAllByPagination(
-                Status.ACTIVE.getValue(),
-                PageRequest.of(pageNumber,
-                        10,
-                        Sort.Direction.DESC,
-                        CommonKey.ID)
-        );
+    public String redirect2Category(Model model,
+                                    @RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+                                    @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
+                                    @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+
+
+        CategoryListDTO result;
+        if(!keyword.equals("")) {
+            result = categoryService.findByKeyword(
+                    keyword,
+                    PageRequest.of(pageNumber,
+                            pageSize,
+                            Sort.Direction.DESC,
+                            CommonKey.ID)
+            );
+        } else {
+            result = categoryService.findAllByPagination(
+                    Status.ACTIVE.getValue(),
+                    PageRequest.of(pageNumber,
+                            pageSize,
+                            Sort.Direction.DESC,
+                            CommonKey.ID)
+            );
+        }
 
         model.addAttribute("page_type_en", AddressRedirect.CATEGORY);
         model.addAttribute("page_type_kh", AddressRedirect.CATEGORY_KH);

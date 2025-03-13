@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.group.tks_store.common.dto.ID;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
+import com.group.tks_store.common.static_key.LIB;
 import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
@@ -59,7 +60,7 @@ public class ProductController {
     }
 
     @PostMapping(CommonKey.UPDATE)
-    public String updateV2(@RequestPart("data") String productJson,
+    public String update(@RequestPart("data") String productJson,
                            @RequestPart(value = "images", required = false) MultipartFile[] images) throws JsonProcessingException {
         productService.updateProduct(productJson, images);
         return "/fragments/" + AddressRedirect.PRODUCT;
@@ -85,7 +86,6 @@ public class ProductController {
             categoryDTO.setName(listEntity.get(i).getName());
             list.set(i, categoryDTO);
         }
-        log.info("fetch categories");
         return list;
     }
 
@@ -94,21 +94,21 @@ public class ProductController {
                                          @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                          @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
-                                         @RequestParam(name = "code", defaultValue = "") String code,
-                                         @RequestParam(name = "product_name", defaultValue = "") String productName,
-                                         @RequestParam(name = "category_name", defaultValue = "") String categoryName,
-                                         @RequestParam(name = "sale_price", defaultValue = "") String salePrice,
+                                         @RequestParam(name = LIB.code, defaultValue = "") String code,
+                                         @RequestParam(name = LIB.product_name, defaultValue = "") String productName,
+                                         @RequestParam(name = LIB.category_name, defaultValue = "") String categoryName,
+                                         @RequestParam(name = LIB.sale_price, defaultValue = "") String salePrice,
                                          @RequestParam(name = "sale_price_val1", defaultValue = "") String salePriceVal1,
                                          @RequestParam(name = "sale_price_val2", defaultValue = "") String salePriceVal2,
                                          @RequestParam(name = "sale_price_currency", defaultValue = "") String salePriceCurrency,
-                                         @RequestParam(name = "stock_quantity", defaultValue = "") String stockQty,
+                                         @RequestParam(name = LIB.stock_quantity, defaultValue = "") String stockQty,
                                          @RequestParam(name = "stock_quantity_val1", defaultValue = "") String stockQtyVal1,
                                          @RequestParam(name = "stock_quantity_val2", defaultValue = "") String stockQtyVal2,
-                                         @RequestParam(name = "sku", defaultValue = "") String sku,
-                                         @RequestParam(name = "variant_attribute_value", defaultValue = "") String variantAttributeValue,
+                                         @RequestParam(name = LIB.sku, defaultValue = "") String sku,
+                                         @RequestParam(name = LIB.variant_attribute_value, defaultValue = "") String variantAttributeValue,
                                          @RequestParam(name = "created_date", defaultValue = "") String dateTime,
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
-                                         Model model) throws InterruptedException {
+                                         Model model) {
 
         Map<String, Object> propertiesList = this.mapPropertyList(
                 code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
@@ -134,66 +134,65 @@ public class ProductController {
         return AddressRedirect.HOME;
     }
 
-    @GetMapping(CommonKey.LIST)
-    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
-                                    @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
-                                    @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
-                                    @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
-                                    Model model) {
-
-        Page<ProductListDetailDTO> productPage = productService.getProductDetail(
-                PageRequest.of(
-                        pageNumber,
-                        pageSize,
-                        Sort.by(Sort.Direction.fromString(sortDirection), sortBy))
-        );
-
-        int totalPage = productPage.getTotalPages();
-
-        if(pageNumber == 0) {
-            totalPage += 1;
-        }
-
-        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
-        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
-        model.addAttribute("content", productPage.getContent());
-        model.addAttribute("total_records", productPage.getTotalElements());
-        model.addAttribute("total_pages",  totalPage);
-        model.addAttribute("current_page", productPage.getNumber());
-        model.addAttribute("sort_by", sortBy);
-        model.addAttribute("sort_direction", sortDirection);
-        model.addAttribute("first", productPage.isFirst());
-        model.addAttribute("last", productPage.isLast());
-
-        return AddressRedirect.HOME;
-    }
+//    @GetMapping(CommonKey.LIST)
+//    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
+//                                    @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
+//                                    @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
+//                                    @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
+//                                    Model model) {
+//
+//        Page<ProductListDetailDTO> productPage = productService.getProductDetail(
+//                PageRequest.of(
+//                        pageNumber,
+//                        pageSize,
+//                        Sort.by(Sort.Direction.fromString(sortDirection), sortBy))
+//        );
+//
+//        int totalPage = productPage.getTotalPages();
+//
+//        if(pageNumber == 0) {
+//            totalPage += 1;
+//        }
+//
+//        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
+//        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
+//        model.addAttribute("content", productPage.getContent());
+//        model.addAttribute("total_records", productPage.getTotalElements());
+//        model.addAttribute("total_pages",  totalPage);
+//        model.addAttribute("current_page", productPage.getNumber());
+//        model.addAttribute("sort_by", sortBy);
+//        model.addAttribute("sort_direction", sortDirection);
+//        model.addAttribute("first", productPage.isFirst());
+//        model.addAttribute("last", productPage.isLast());
+//
+//        return AddressRedirect.HOME;
+//    }
 
     private Map<String,Object> mapPropertyList(String code, String productName, String categoryName, String salePrice, String stockQty, String sku,
                                                String variantAttributeValue, String dateTime, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
                                                String stockQtyVal1, String stockQtyVal2, String conditionType) {
         Map<String, Object> propertiesList = new HashMap<>();
 
-        // Add non-empty properties to the list
         if (!code.isEmpty()) {
-            propertiesList.put("code", code);
+            propertiesList.put(LIB.code, code);
         }
         if (!productName.isEmpty()) {
-            propertiesList.put("product_name", productName);
+            propertiesList.put(LIB.product_name, productName);
         }
         if (!categoryName.isEmpty()) {
-            propertiesList.put("category_name", categoryName);
+            propertiesList.put(LIB.category_name, categoryName);
         }
         if (!salePrice.isEmpty()) {
-            propertiesList.put("sale_price", salePrice);
+            propertiesList.put(LIB.sale_price, salePrice);
         }
         if (!stockQty.isEmpty()) {
-            propertiesList.put("stock_quantity", stockQty);
+            propertiesList.put(LIB.stock_quantity, stockQty);
         }
         if (!sku.isEmpty()) {
-            propertiesList.put("sku", sku);
+            propertiesList.put(LIB.sku, sku);
         }
         if (!variantAttributeValue.isEmpty()) {
-            propertiesList.put("variant_attribute_value", variantAttributeValue);
+            propertiesList.put(LIB.variant_attribute_value, variantAttributeValue);
         }
         if (!dateTime.isEmpty()) {
             propertiesList.put("created_date", dateTime);

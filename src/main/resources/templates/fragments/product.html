@@ -231,9 +231,11 @@
                                 <span style="margin-left: 12%"></span>
                                 <select id="product_base_price_currency_edit"
                                         name="product_currency_edit"
-                                        style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
-                                    <option value="USD">USD</option>
-                                    <option value="KHR">KHR</option>
+                                        style="border:1px solid;font-size: 1rem; padding-left: 2%; width: 100px; height: 40px;">
+                                    <optgroup>
+                                        <option value="USD">USD</option>
+                                        <option value="KHR">KHR</option>
+                                    </optgroup>
                                 </select>
                             </div>
 
@@ -259,12 +261,17 @@
 
                                 <div style="display: block;">
                                     <div style="font-size: 1.6rem">អង្គធាតុ</div>
-                                    <div>
-                                        <select id="product_attribute_select" style="width: 150px; font-size: 1.5rem; height: 50px"></select>
+                                    <div >
+                                        <select id="product_attribute_select"
+                                                style="overflow-y: auto; max-height: 400px;"
+                                                onclick="this.size = 12;"
+                                                onblur="this.size = 0;"
+                                                >
+                                        </select>
                                     </div>
                                 </div>
 
-                                <div style="display: block; margin-left: 7%">
+                                <div style="display: block; margin-left: 0%;">
                                     <div style="font-size: 1.6rem">តម្លៃ: </div>
                                     <div>
                                         <input type="text" id="product_attribute_value" class="product-variant-attribute-value">
@@ -275,10 +282,10 @@
                                     <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
                                     <div>
                                         <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
-                                               style="width: 150px;" onchange="addImages(event)">
+                                               style="width: 150px; background: #fafafa" onchange="addImages(event)">
                                     </div>
 
-                                    <div class="preview-image-container">
+                                    <div class="preview-image-container" id="preview-image-container">
                                         <button type="button" id="preview_button"
                                                 style="display: none; margin-left: 10px;"
                                                 onclick="openPreview()">មើល</button>
@@ -294,10 +301,9 @@
                                 </div>
 
                             </div>
-
                             <div class="add-attribute-btn">
                                 <button type="button" onclick="addAttribute()"
-                                        style="width: 270px; background-color: #e28743;color: #000;">
+                                        style="width: 250px; background-color: #e28743;color: #000;">
                                          បន្ថែមអង្គធាតុទំនិញ</button>
                             </div>
                         </div>
@@ -317,7 +323,6 @@
                                 <ul id="attribute-list" class="product-attribute-ul"></ul>
                         </div>
                         <div class="product-btn-container">
-                            <button onclick="updateProductDetail()">TEST</button>
                             <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">ថយក្រោយ</button>
                             <button onclick="navigateTab('Variants', 'Verify');" class="product-btn-next">បន្ទាប់</button>
                         </div>

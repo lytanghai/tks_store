@@ -403,6 +403,7 @@
    .product-variant-attribute-value {
         border:1px solid;
         width: 100px;
+        height: 62px;
         font-size: 1.6rem;
         text-align:center
    }

@@ -35,7 +35,6 @@ function openCreateUpdateProductModal(element) {
         document.getElementById("product_currency_edit").value = 'USD'
         document.getElementById("product-submit-btn").value = "create";
         document.getElementById("product-submit-btn").textContent = "បន្ថែមទំនិញ";
-        console.log("2: " + imageUrls)
 
     } else if(formTitle == 'Update') {
         id = element.getAttribute("id");
@@ -137,9 +136,9 @@ function showProductVerify() {
     document.getElementById("verify-product-description").innerHTML = document.getElementById("product_description_edit").value
 
 //    Variant
-    document.getElementById("verify-variant-base-price").innerHTML = parseFloat(document.getElementById('product_base_price_edit').value);
-    document.getElementById("verify-variant-currency").innerHTML = document.getElementById('product_base_price_currency_edit').value;
-    document.getElementById("verify-variant-stock-quantity").innerHTML = parseInt(document.getElementById('product_stock_quantity_edit').value);
+    document.getElementById("verify-variant-base-price").innerHTML = parseFloat(document.getElementById('product_base_price_edit').value) | '';
+    document.getElementById("verify-variant-currency").innerHTML = document.getElementById('product_base_price_currency_edit').value | '';
+    document.getElementById("verify-variant-stock-quantity").innerHTML = parseInt(document.getElementById('product_stock_quantity_edit').value) | '';
     document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
 
     getLiElementsContentAsArray();
@@ -310,6 +309,7 @@ function populateCategoryDropdown(categories) {
 //        option.text = `${category.name} / ${category.name_kh}`;
         option.text = `${category.name_kh} / ${category.name}`;
         option.style.fontSize = "1.6rem";
+        option.style.border= "1px solid #0a0a0a";
 
         if (category.name === "ទូទៅ") {
             generalCategory = option;
@@ -324,20 +324,24 @@ function populateCategoryDropdown(categories) {
 function populateAttributeDropdown(attributes) {
     const attributeSelect = document.getElementById("product_attribute_select");
     attributeSelect.innerHTML = "";
-    const defaultOption = document.createElement("option");
-    defaultOption.text = "";
-    defaultOption.value = "";
-    attributeSelect.appendChild(defaultOption);
+    const groups = {};
 
     attributes.forEach(attr => {
+        if (!groups[attr.category]) {
+            const optgroup = document.createElement("optgroup");
+            groups[attr.category] = optgroup;
+            attributeSelect.appendChild(optgroup);
+        }
+
         const option = document.createElement("option");
-        option.style.height= "500px";
-        option.style.overflowY= "auto";
+        option.style.width= "auto";
+
         option.value = attr.id;
         option.text = attr.name_kh && attr.name_kh.trim() !== ""
-            ? attr.name + "(" + attr.name_kh + ")"
+            ? `${attr.name} (${attr.name_kh})`
             : attr.name;
-        attributeSelect.appendChild(option);
+
+        groups[attr.category].appendChild(option);
     });
 }
 

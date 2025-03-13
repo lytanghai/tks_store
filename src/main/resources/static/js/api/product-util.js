@@ -149,15 +149,14 @@ function formatDate(dateString) {
     return `${year}-${month}-${day}`; // Return formatted date
 }
 
-
 function formatCurrency(amount, currency) {
-    // Format the number with commas every 3 digits and 2 decimal places for the amount
+    // Format the number with commas every 3 digits and 2 decimal places for USD
     const formattedAmount = new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        minimumFractionDigits: currency === 'KHR' ? 0 : 2,
+        maximumFractionDigits: currency === 'KHR' ? 0 : 2
     }).format(amount);
 
-    // Format the Riel amount with commas and without the unnecessary .0 (single decimal place for Riel)
+    // Convert USD to Riel and format without decimals
     const formattedRielAmount = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
@@ -166,13 +165,14 @@ function formatCurrency(amount, currency) {
     if (currency === 'USD') {
         return `${formattedAmount} $ = ${formattedRielAmount} ៛`;
     } else if (currency === 'KHR') {
-        const formattedUsdAmount = (amount / 4100).toFixed(2); // Format USD to 2 decimals
+        const formattedUsdAmount = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount / 4100); // Format USD with 2 decimals
         return `${formattedUsdAmount} $ = ${formattedAmount} ៛`;
     }
     return `${formattedAmount} ${currency}`;
 }
-
-
 
 function resetFilter() {
     document.getElementById("filterCondition").value = "defaultCondition";

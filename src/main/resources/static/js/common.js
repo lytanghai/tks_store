@@ -161,6 +161,9 @@ function showVerifyImageSlider() {
     if (imageUrls.length > 0) {
         document.getElementById('verify_preview_image').src = imageUrls[currentIndex];
         document.getElementById('image_verify_preview_modal').style.display = 'block';
+    } else {
+        document.getElementById('verify_preview_image').style.display = "none";
+        document.getElementById('image_verify_preview_modal').style.display = 'none';
     }
 }
 

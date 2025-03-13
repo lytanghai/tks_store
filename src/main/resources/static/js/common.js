@@ -106,11 +106,11 @@ function addImages(event) {
 }
 
 function openPreview() {
-    showImageSlider();
     if (imageUrls.length > 0) {
         document.getElementById('preview_image').src = imageUrls[currentIndex];
         document.getElementById('image_preview_modal').style.display = 'block';
     }
+    showImageSlider();
 }
 
 function closePreview() {

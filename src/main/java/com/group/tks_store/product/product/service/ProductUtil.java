@@ -103,24 +103,24 @@ public class ProductUtil {
         }
     }
 
-    public void mappingVariantInfo(Map.Entry<String,Object> key, ProductDTO productDTO, JSONObject variantJson, String action) {
+    public void mappingVariantInfo( ProductDTO productDTO, JSONObject variantJson, String action) {
         if(action.equals(LIB.CREATE)) {
             VariantCreateDTO variantDTO = new VariantCreateDTO();
-            double basePrice = variantJson.optDouble("base_price", 0.0);
+            double basePrice = variantJson.optDouble(LIB.base_price, 0.0);
             variantDTO.setBasePrice(basePrice);
-            variantDTO.setCurrency(variantJson.optString("currency", "USD"));
-            variantDTO.setStockQuantity(variantJson.optInt("stock_quantity", -99));
-            variantDTO.setSku(variantJson.optString("sku", "N/A"));
+            variantDTO.setCurrency(variantJson.optString(LIB.currency, ""));
+            variantDTO.setStockQuantity(variantJson.optInt(LIB.stock_quantity, -99));
+            variantDTO.setSku(variantJson.optString(LIB.sku, "N/A"));
             productDTO.setVariant(variantDTO);
         } else {
             if(variantJson.opt(LIB.id) != null) {
                 VariantEntity existVariant = variantRepository.findById(variantJson.getInt(LIB.id)).orElse(null);
                 if(existVariant != null) {
-                    double basePrice = 0.0;
+                    double basePrice;
                     try {
-                        basePrice = variantJson.optDouble(LIB.base_price);
+                        basePrice = variantJson.optDouble(LIB.base_price,0.0);
                     }catch (Exception e) {
-                        basePrice = variantJson.optInt(LIB.base_price);
+                        basePrice = variantJson.optInt(LIB.base_price, 0);
                     }
                     existVariant.setBasePrice(basePrice);
                     existVariant.setCurrency(variantJson.optString(LIB.currency));

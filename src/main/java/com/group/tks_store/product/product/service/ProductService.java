@@ -63,7 +63,6 @@ public class ProductService {
     @Autowired
     private ProductUtil productUtil;
 
-
     @org.springframework.transaction.annotation.Transactional
     public void updateProduct(String productJson, MultipartFile[] images) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -85,22 +84,19 @@ public class ProductService {
 
             if(keyName.equals(LIB.VARIANT) && Objects.nonNull(key.getValue())) {
                 productUtil.mappingVariantInfo(
-                        key,
                         null,
                         variantPayload,
                         LIB.UPDATE);
             }
 
-            if(keyName.equals(LIB.IMAGES)) {
-                if(variantPayload.optInt("id", -99) != -99) {
-                    productUtil.mappingVariantImgInfo(
-                            key,
-                            null,
-                            productJsonObject.optJSONArray("remove_images") == null ? null : productJsonObject.optJSONArray("remove_images"),
-                            variantPayload.getInt(LIB.id),
-                            images,
-                            LIB.UPDATE);
-                }
+            if(keyName.equals(LIB.IMAGES) && variantPayload.optInt(LIB.id, -99) != -99) {
+                productUtil.mappingVariantImgInfo(
+                        key,
+                        null,
+                        productJsonObject.optJSONArray("remove_images") == null ? null : productJsonObject.optJSONArray("remove_images"),
+                        variantPayload.getInt(LIB.id),
+                        images,
+                        LIB.UPDATE);
             }
 
             if(keyName.equals(LIB.VARIANT_ATTRIBUTES) && Objects.nonNull(key.getValue())) {
@@ -131,9 +127,9 @@ public class ProductService {
             }
 
             if(keyName.equals(LIB.VARIANT) && Objects.nonNull(key.getValue())) {
-                JSONObject variantObj = new JSONObject(key.getValue());
+                Map<String,Object> product = (Map<String, Object>) key.getValue();
+                JSONObject variantObj = new JSONObject(product);
                 productUtil.mappingVariantInfo(
-                        key,
                         newProductInformation,
                         variantObj,
                         LIB.CREATE);
@@ -296,5 +292,4 @@ public class ProductService {
         }
         return products;
     }
-
 }

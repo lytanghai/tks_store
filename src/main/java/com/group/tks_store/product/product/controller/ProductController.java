@@ -65,12 +65,6 @@ public class ProductController {
         return "/fragments/" + AddressRedirect.PRODUCT;
     }
 
-    @PostMapping(CommonKey.CREATE)
-    public String create(@RequestBody ProductCreateDTO productCreateDTO) throws ParseException {
-        productServiceBk.create(productCreateDTO);
-        log.info("product created");
-        return AddressRedirect.REDIRECT_PRODUCT;
-    }
 
     @PostMapping(CommonKey.DELETE)
     public String delete(@RequestBody ID id) {

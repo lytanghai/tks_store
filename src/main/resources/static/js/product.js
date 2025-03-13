@@ -93,19 +93,26 @@ function openCreateUpdateProductModal(element) {
 imageIds = []
 function addToRemoveImg() {
     if (imageUrls.length === 0) return;
+    currentImageIndex = 0;
     let imageUrl = imageUrls[currentImageIndex];
-    let uuid = imageUrl.split("=")[1];
+    let uuid = imageUrl.split("/").pop();
+    console.log('uuid' + uuid)
 
-    if (!imageIds.includes(uuid)) {
-        imageIds.push(uuid);
-        imageUrls.splice(currentImageIndex , 1)
+    if(imageUrls.length === 1) {
+        imageUrls = [];
+        document.getElementById("image_preview_modal").style.display = "none";
+        return;
     }
+
+    currentImageIndex = currentImageIndex + 1;
+    imageIds.push(uuid);
+    imageUrls.splice(currentImageIndex , 1)
 
     currentIndex = (currentIndex + 1) % imageUrls.length;
     document.getElementById('preview_image').src = imageUrls[currentIndex];
 }
 function showExistingImage(imageData) {
-    let baseUrl = "/api/image/show?uuid="; // API endpoint
+    let baseUrl = "/api/image/show?uuid=";
 
     let entries = imageData.split(",");
 

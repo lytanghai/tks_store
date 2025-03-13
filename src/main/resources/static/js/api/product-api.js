@@ -18,37 +18,37 @@ function deleteProduct(id) {
     });
 }
 
-function updateProduct() {
-    let formData = {
-        id: document.getElementById("product_id_edit").value,
-        name_en: document.getElementById("product_name_en_edit").value,
-        name_kh: document.getElementById("product_name_kh_edit").value,
-        code: document.getElementById("product_code_edit").value,
-        category: {
-            id: document.getElementById("product_select").value
-        },
-        currency: document.getElementById("product_currency_edit").value,
-        sale_price: document.getElementById("product_sale_price_edit").value,
-        description: document.getElementById("product_description_edit").value
-    };
-
-    fetch('/api/product/update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        sessionStorage.setItem('popupMessage', 'success');
-        sessionStorage.setItem('popupAction', 'update');
-        showPopUpMessage('success', 'update');
-    })
-    .catch(error => {
-        showPopUpMessage('error', 'update');
-    });
-}
+//function updateProduct() {
+//    let formData = {
+//        id: document.getElementById("product_id_edit").value,
+//        name_en: document.getElementById("product_name_en_edit").value,
+//        name_kh: document.getElementById("product_name_kh_edit").value,
+//        code: document.getElementById("product_code_edit").value,
+//        category: {
+//            id: document.getElementById("product_select").value
+//        },
+//        currency: document.getElementById("product_currency_edit").value,
+//        sale_price: document.getElementById("product_sale_price_edit").value,
+//        description: document.getElementById("product_description_edit").value
+//    };
+//
+//    fetch('/api/product/update', {
+//        method: 'POST',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify(formData)
+//    })
+//    .then(response => response.json())
+//    .then(data => {
+//        sessionStorage.setItem('popupMessage', 'success');
+//        sessionStorage.setItem('popupAction', 'update');
+//        showPopUpMessage('success', 'update');
+//    })
+//    .catch(error => {
+//        showPopUpMessage('error', 'update');
+//    });
+//}
 
 async function uploadProduct() {
     let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
@@ -122,8 +122,10 @@ async function uploadProduct() {
             method: "POST",
             body: formData
         });
-
-        let result = await response.json();
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'update');
+        showPopUpMessage('success', 'update');
+//        let result = await response.json();
     } catch (error) {
         console.error("Error uploading:", error);
     }
@@ -282,6 +284,10 @@ async function updateProductDetail() {
                 method: "POST",
                 body: formData
             });
+
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'update');
+        showPopUpMessage('success', 'update');
 
 //            let result = await response.json();
         } catch (error) {

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TKS Store</title>
+    <link rel="shortcut icon" href="#">
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Battambang:wght@100;300;400;700;900&family=Changa:wght@200..800&family=Concert+One&family=Lexend+Deca:wght@100..900&family=Pridi:wght@200;300;400;500;600;700&family=Protest+Strike&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <script th:src="@{/js/store.js}" type="text/javascript" defer></script>
+
+
+    <link rel="stylesheet" th:href="@{/css/store.css}">
+
+</head>
+
+<body>
+<div class="store-container">
+    <div class="store-header">
+        <div class="left">
+            <a th:href="@{/}" class="store-back-button">🔙</a>
+        </div>
+        <div class="middle">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="right">
+            <a th:href="@{/cart}" class="store-back-button">🛒</a>
+        </div>
+    </div>
+
+    <div class="body-container">
+        <h2>Product Grid</h2>
+        <div class="grid" id="productGrid"></div>
+        <div class="pagination">
+            <button id="prevPage" disabled class="store-prev">Previous</button>
+            <span id="pageIndicator">Page 1</span>
+            <button id="nextPage" class="store-next">Next</button>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
+
+

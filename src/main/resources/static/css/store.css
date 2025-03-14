@@ -1,0 +1,93 @@
+@media only screen and (max-width: 1921px) and (max-height: 954px) {
+
+    .store-container {
+        position: fixed;
+        width: 99%;
+        height:99%;
+        border: 1px solid red;
+    }
+
+    .store-header {
+        display: flex;
+        justify-content: space-between; /* Pushes left and right elements to the edges */
+        align-items: center;
+        padding: 10px;
+        background-color: #fff; /* Adjust as needed */
+        border: 1px solid red; /*to be remove*/
+    }
+
+    .left {
+        flex: 1;
+    }
+    .right {
+        margin-right: 2%;
+    }
+
+    .middle {
+        flex: 2; /* Allows it to grow while keeping left & right at edges */
+        display: flex;
+        justify-content: center; /* Centers the middle div */
+    }
+
+    .store-back-button {
+        text-decoration: none;
+        font-size: 3rem; /* Adjust size */
+    }
+
+     .body-container {
+         max-width: 1000px;
+         margin: auto;
+         padding: 20px;
+         text-align: center;
+     }
+
+     .grid {
+         display: grid;
+         grid-template-columns: repeat(5, 1fr);
+         grid-template-rows: repeat(5, 1fr); /* Ensures 5 rows */
+         grid-gap: 10px;
+         min-height: 500px; /* Ensures consistent height */
+     }
+
+     .grid-item {
+         border: 1px solid #ddd;
+         padding: 10px;
+         text-align: center;
+         border-radius: 8px;
+         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+         background-color: white;
+     }
+
+     .grid-item img {
+         width: 100px;
+         height: 100px;
+         object-fit: cover;
+         border-radius: 8px;
+     }
+
+     .grid-placeholder {
+         background-color: #f5f5f5;
+         border-radius: 8px;
+     }
+
+     .pagination {
+         margin-top: 20px;
+     }
+
+     .store-next, .store-prev {
+         padding: 10px 15px;
+         margin: 5px;
+         border: none;
+         background-color: #007bff;
+         color: white;
+         cursor: pointer;
+         border-radius: 5px;
+     }
+
+     .store-next:disabled, .store-prev:disabled {
+         background-color: #ccc;
+         cursor: not-allowed;
+     }
+
+
+}

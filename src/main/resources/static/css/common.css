@@ -11,6 +11,7 @@
     .service-type-title{
         display: flex;
         width: 99%;
+        padding-bottom: 5%;
     }
 
     .icon-service-type{

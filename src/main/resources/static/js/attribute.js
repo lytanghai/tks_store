@@ -74,6 +74,76 @@ function updateAttribute() {
     });
 }
 
+
+function fetchAttributesFilter() {
+    let keyword = document.getElementById("search_input_attribute").value;
+    let url = keyword === ''
+        ? `/internal/attribute/list/filter?page=0`
+        : `/internal/attribute/list/filter?page=0&keyword=${encodeURIComponent(keyword)}`;
+
+    // Show loading spinners
+    document.getElementById("loading-spinner").style.display = "block";
+    document.getElementById("loading-spinner_2").style.display = "block";
+
+    console.log('Fetching URL:', url);
+
+    setTimeout(() => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => updateAttributeTable(data.totalItems))
+            .catch(error => console.error('Error fetching attributes:', error))
+            .finally(() => {
+                // Hide loading spinners after request completes
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("loading-spinner_2").style.display = "none";
+            });
+    }, 1000); // Add 1-second delay before API call
+}
+
+
+function updateAttributeTable(attributes) {
+    const tableBody = document.getElementById("attributeTable");
+    tableBody.innerHTML = ""; // Clear existing table rows
+
+    attributes.forEach(attr => {
+        const row = document.createElement("tr");
+        row.className = attributes.indexOf(attr) % 2 === 0 ? "" : "odd-row";
+
+        row.innerHTML = `
+            <td class="attribute_td">${attr.id}</td>
+            <td class="attribute_td">${attr.name}</td>
+            <td class="attribute_td">${attr.name_kh}</td>
+            <td class="attribute_td">${attr.status === 'ACTIVE' ? 'កំពុងដំណើរការ' : attr.status}</td>
+            <td style="font-size: 1rem">
+                <ul class="attribute-action">
+                    <li>
+                        <a id="${attr.id}" href="#" onclick="showAttributeConfirmationModal('delete', ${attr.id})">
+                            <img src="/icon/trash.png" class="icon" alt="Trash Icon">
+                        </a>
+                    </li>
+                    &nbsp;
+                    <li> <span>|</span> </li>
+                    &nbsp;
+                    <li>
+                        <a
+                            attribute-id="${attr.id}"
+                            data-attribute-name="${attr.name}"
+                            data-attribute-name-kh="${attr.name_kh}"
+                            data-attribute-form-title="Update"
+                            href="#"
+                            class="attribute-edit-href"
+                            onclick="resetToUpdateAttributeMode(this)">
+                            <img src="/icon/edit.png" class="icon" alt="Edit Icon">
+                        </a>
+                    </li>
+                </ul>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+
 function filterResults() {
     let searchValue = document.getElementById("search_input_attribute").value.toLowerCase();
     let rows = document.querySelectorAll("#attributeTable tr");

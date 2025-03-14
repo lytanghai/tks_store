@@ -110,4 +110,4 @@ INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Weight', 'ទ�
 INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Brand', 'ផ្លាកហាង', 'ACTIVE');
 INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Country', 'ប្រទេស', 'ACTIVE');
 INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Smell', 'ក្លិន', 'ACTIVE');
-INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Quality', 'លេខគុណភាព', 'ACTIVE');
+INSERT INTO public."attributes" ("name", name_kh, status) VALUES('Quality', 'លេខ/គុណភាព', 'ACTIVE');

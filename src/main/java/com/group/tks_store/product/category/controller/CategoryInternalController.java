@@ -33,8 +33,6 @@ public class CategoryInternalController {
     @GetMapping(CommonKey.LIST + "/filter")
     public ResponseEntity<Map<String, Object>> listFilter(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
                                                           @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
-                                                          @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
-                                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
                                                           @RequestParam(name = "keyword", defaultValue = "") String keyword,
                                                           Model model) {
 

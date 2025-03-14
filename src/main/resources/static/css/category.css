@@ -67,7 +67,7 @@
 
     .category_table_list_container {
         position: fixed;
-        top: 10%;
+        top: 2%;
         left: 35%;
         width: 64%;
         height: auto;
@@ -202,7 +202,7 @@
         width: 62%;
         height: 100px;
         top: 8%;
-        left: 35.5%;
+        left: 15%;
     }
 
     .disabled {

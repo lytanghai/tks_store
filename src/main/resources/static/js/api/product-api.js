@@ -1,23 +1,4 @@
-if(window.location.pathname.includes("/api/product")) {
-    let variantAttributes = [];
-
-    function deleteProduct(id) {
-        fetch('/api/product/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: id })
-        })
-        .then(data => {
-            sessionStorage.setItem('popupMessage', 'success');
-            sessionStorage.setItem('popupAction', 'delete');
-            location.reload();
-        })
-         .catch(error => {
-            showPopUpMessage('error', 'delete');
-        });
-    }
+let variantAttributes = [];
 
     async function uploadProduct() {
         let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
@@ -98,6 +79,26 @@ if(window.location.pathname.includes("/api/product")) {
         } catch (error) {
             console.error("Error uploading:", error);
         }
+    }
+
+if(window.location.pathname.includes("/api/product")) {
+
+    function deleteProduct(id) {
+        fetch('/api/product/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(data => {
+            sessionStorage.setItem('popupMessage', 'success');
+            sessionStorage.setItem('popupAction', 'delete');
+            location.reload();
+        })
+         .catch(error => {
+            showPopUpMessage('error', 'delete');
+        });
     }
 
     function openImageSlider(button) {

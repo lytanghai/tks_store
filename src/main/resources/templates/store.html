@@ -11,7 +11,6 @@
 
     <script th:src="@{/js/store.js}" type="text/javascript" defer></script>
 
-
     <link rel="stylesheet" th:href="@{/css/store.css}">
 
 </head>
@@ -37,9 +36,20 @@
     </div>
 
     <div class="store-body">
-        <div class="sidebar-category">
+        <div>
             <div id="listContainer">Loading...</div>
         </div>
+
+        <div class="search-container">
+            <label style="font-size:1.2rem">ស្វែងរក...</label>
+            <input type="text" placeholder="Search" id="store-keyword" oninput="lookupProductContains()">
+            <p style="font-size:1.2rem">𝑹𝑬𝑺𝑼𝑳𝑻𝑺 | លិទ្ធផល</p>
+            <div style="display: block; text-align:left">
+                <label style="font-size: 1.1rem">រកឃើញ : <span id="store-search-size" style="color:"></span></label> <br>
+                <label style="font-size: 1.1rem">កាលបរិច្ឆេទ : <span id="store-search-datetime"></span>  </label>
+            </div>
+        </div>
+
         <div class="grid-item-sidebar">
             <div class="grid" id="productGrid"></div>
         </div>

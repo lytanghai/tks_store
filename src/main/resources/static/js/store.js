@@ -1,5 +1,6 @@
 let currentStoreProductPage = 0;
 let totalStoreProductPage = 0;
+let categoryGlobalId = 0;
 let url = '';
 const itemsPerPage = 14;
 
@@ -26,8 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchFilterProduct(url) {
-
-    console.log("Fetching URL:", url);  // Log the URL for debugging
 
     fetch(url)
         .then(response => response.json())
@@ -69,6 +68,9 @@ function displayProducts(products) {
     products.forEach(product => {
         const productDiv = document.createElement("div");
         productDiv.classList.add("grid-item");
+
+        document.getElementById("store-search-size").textContent = products.length;
+        document.getElementById("store-search-datetime").textContent = displayDateTime();
 
         const productNameEn = product.name_en || "";
         const productNameKh = product.name_kh || "";
@@ -207,5 +209,31 @@ function formatStoreCurrency(amount, currency) {
 }
 
 function filterProductByCategoryId(id) {
+    categoryGlobalId = id;
     fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=0&size=16&category_id=' + id + '&condition_type=EQUAL');
+}
+
+function lookupProductContains() {
+    setTimeout(() => {
+        let keyword = document.getElementById("store-keyword").value;
+        let url = 'http://localhost:8080/internal/product/list/filter?page=0&size=16&condition_type=defaultCondition&general=' + keyword;
+        if(categoryGlobalId != 0) {
+             url = url + '&category_id=' + categoryGlobalId;
+        }
+        fetchFilterProduct(url);
+    }, 1500)
+}
+
+function displayDateTime() {
+    const now = new Date();
+    const formattedDate = now.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+    return formattedDate;
 }

@@ -90,6 +90,23 @@
         height: 90%;
      }
 
+     .search-container {
+        position: fixed;
+        bottom: 9%;
+        width: 16%;
+        height: 24%;
+        left: 1.5%;
+     }
+
+     .search-container input {
+        width: 290px;
+        height: 30px;
+        border: 1px solid;
+        font-size: 1.2rem;
+        padding: 10px;
+        border-radius: 12px;
+     }
+
     #productGrid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
@@ -206,7 +223,6 @@
         transition: opacity 0.3s;
     }
 
-    /* Show Buttons on Hover */
     .grid-item:hover .product-actions {
         opacity: 1;
     }

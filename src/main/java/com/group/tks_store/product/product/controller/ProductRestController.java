@@ -2,6 +2,7 @@ package com.group.tks_store.product.product.controller;
 
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
+import com.group.tks_store.common.static_key.LIB;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
@@ -73,7 +74,8 @@ public class ProductRestController {
                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
                                          @RequestParam(name = "code", defaultValue = "") String code,
                                          @RequestParam(name = "product_name", defaultValue = "") String productName,
-                                         @RequestParam(name = "category_name", defaultValue = "") String categoryName,
+                                         @RequestParam(name = LIB.category_id, defaultValue = "-1") Integer categoryId,
+                                         @RequestParam(name = LIB.category_name, defaultValue = "") String categoryName,
                                          @RequestParam(name = "sale_price", defaultValue = "") String salePrice,
                                          @RequestParam(name = "sale_price_val1", defaultValue = "") String salePriceVal1,
                                          @RequestParam(name = "sale_price_val2", defaultValue = "") String salePriceVal2,
@@ -83,15 +85,12 @@ public class ProductRestController {
                                          @RequestParam(name = "stock_quantity_val2", defaultValue = "") String stockQtyVal2,
                                          @RequestParam(name = "sku", defaultValue = "") String sku,
                                          @RequestParam(name = "variant_attribute_value", defaultValue = "") String variantAttributeValue,
-                                         @RequestParam(name = "from_date", defaultValue = "") String fromDate,
-                                         @RequestParam(name = "to_date", defaultValue = "") String toDate,
                                          @RequestParam(name = "general", defaultValue = "") String general,
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
                                          Model model) {
 
         Map<String, Object> propertiesList = this.mapPropertyList(
-                code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
-                fromDate,toDate, general,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
+                code, productName, categoryId, categoryName, salePrice, stockQty, sku, variantAttributeValue, general,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
 
         // Get filtered product details from the service
         Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
@@ -117,8 +116,8 @@ public class ProductRestController {
         return ResponseEntity.ok(response);
     }
 
-    private Map<String,Object> mapPropertyList(String code, String productName, String categoryName, String salePrice, String stockQty, String sku,
-                                               String variantAttributeValue, String fromDate,String toDate, String general, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
+    private Map<String,Object> mapPropertyList(String code, String productName, Integer categoryId, String categoryName, String salePrice, String stockQty, String sku,
+                                               String variantAttributeValue, String general, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
                                                String stockQtyVal1, String stockQtyVal2, String conditionType) {
         Map<String, Object> propertiesList = new HashMap<>();
 
@@ -127,6 +126,9 @@ public class ProductRestController {
         }
         if (!productName.isEmpty()) {
             propertiesList.put("product_name", productName);
+        }
+        if (categoryId != -1) {
+            propertiesList.put(LIB.category_id, categoryId);
         }
         if (!categoryName.isEmpty()) {
             propertiesList.put("category_name", categoryName);
@@ -142,13 +144,6 @@ public class ProductRestController {
         }
         if (!variantAttributeValue.isEmpty()) {
             propertiesList.put("variant_attribute_value", variantAttributeValue);
-        }
-        if (!fromDate.isEmpty()) {
-            propertiesList.put("from_date", fromDate);
-        }
-
-        if (!toDate.isEmpty()) {
-            propertiesList.put("to_date", toDate);
         }
 
         if (!general.isEmpty()) {

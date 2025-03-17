@@ -84,6 +84,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "WHERE p.status = 'ACTIVE' " +
             "AND (:code IS NULL OR :code = '' OR p.code = :code) " +
             "AND (:productName IS NULL OR :productName = '' OR p.name_en = :productName OR p.name_kh = :productName) " +
+            "AND (:categoryId IS NULL OR :categoryId = -1 OR c.id = :categoryId) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR c.name = :categoryName OR c.name_kh = :categoryName) " +
             "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
             "AND (:salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
@@ -95,6 +96,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     Page<Object[]> fetchProductByPropertyUsingEqual(Pageable pageable,
                                                        @Param("code") String code,
                                                        @Param("productName") String productName,
+                                                       @Param("categoryId") Integer categoryId,
                                                        @Param("categoryName") String categoryName,
                                                        @Param("salePriceUSD") Double salePriceUSD,
                                                        @Param("salePriceKHR") Double salePriceKHR,

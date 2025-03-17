@@ -122,12 +122,11 @@ public class ProductFilterService {
         String code = "";
         String sku = "";
         String variantAttributeValue = "";
+        Integer categoryId = -1;
         String categoryName = "";
         String productName = "";
         String salePriceCurrency = "";
         String conditionType = "";
-        String fromDate = "";
-        String toDate = "";
         String general = "";
         int stockQuantity = -1;
         Double salePrice = null;
@@ -144,14 +143,11 @@ public class ProductFilterService {
                     case "product_name":
                         productName = entry.getValue().toString();
                         break;
-                    case "from_date":
-                        fromDate = entry.getValue().toString();
-                        break;
-                    case "to_date":
-                        toDate = entry.getValue().toString();
-                        break;
                     case "general":
                         general = entry.getValue().toString();
+                        break;
+                    case "category_id":
+                        categoryId = (Integer) entry.getValue();
                         break;
                     case "category_name":
                         categoryName = entry.getValue().toString();
@@ -227,6 +223,7 @@ public class ProductFilterService {
                         pageable,
                         code.equals("") ? null : code,
                         productName.equals("") ? null : productName,
+                        categoryId == -1 ? null : categoryId,
                         categoryName.equals("") ? null : categoryName,
                         salePriceUSD,
                         salePriceKHR,

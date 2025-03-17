@@ -20,7 +20,7 @@
 <div class="store-container">
     <div class="store-header">
         <div class="left">
-            <a th:href="@{/}" class="store-back-button">🔙</a>
+            <a th:href="@{/}" class="store-back-button">↩ ត្រលប់ក្រោយ</a>
         </div>
         <div class="middle">
             <div></div>
@@ -37,14 +37,19 @@
     </div>
 
     <div class="store-body">
-        <div class="grid" id="productGrid"></div>
+        <div class="sidebar-category">
+            <div id="listContainer">Loading...</div>
+        </div>
+        <div class="grid-item-sidebar">
+            <div class="grid" id="productGrid"></div>
+        </div>
     </div>
 
     <div class="store-footer">
         <div class="pagination">
-            <button id="prevPage" disabled class="store-prev"> < </button>
+            <button id="prevPage" disabled class="store-prev" style="font-size:1.2rem"> < </button>
             <span id="pageIndicator">Page 1</span>
-            <button id="nextPage" class="store-next"> > </button>
+            <button id="nextPage" class="store-next" style="font-size:1.2rem"> > </button>
         </div>
     </div>
 

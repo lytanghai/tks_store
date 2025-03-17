@@ -29,4 +29,5 @@ public class LIB {
     public static final String product_name = "product_name";
     public static final String category_name = "category_name";
     public static final String variant_attribute_value = "variant_attribute_value";
+    public static final String category_id = "category_id";
 }

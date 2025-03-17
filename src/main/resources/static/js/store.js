@@ -1,27 +1,31 @@
 let currentStoreProductPage = 0;
 let totalStoreProductPage = 0;
-const itemsPerPage = 16;
+let url = '';
+const itemsPerPage = 14;
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetchFilterProduct();
+    url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
+    fetchFilterProduct(url);
+    fetchItems();
 
     document.getElementById("prevPage").addEventListener("click", () => {
         if (currentStoreProductPage >= 1) {
             currentStoreProductPage--;
-            fetchFilterProduct();
+            url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
+            fetchFilterProduct(url);
         }
     });
 
     document.getElementById("nextPage").addEventListener("click", () => {
         if (currentStoreProductPage < totalStoreProductPage) {
             currentStoreProductPage++;
-            fetchFilterProduct();
+            url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
+            fetchFilterProduct(url);
         }
     });
 });
 
-function fetchFilterProduct() {
-    const url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
+function fetchFilterProduct(url) {
 
     console.log("Fetching URL:", url);  // Log the URL for debugging
 
@@ -36,7 +40,7 @@ function fetchFilterProduct() {
             }
 
             totalStoreProductPage = data.totalPages - 1;
-            document.getElementById("pageIndicator").textContent = `Page ${currentStoreProductPage} of ${totalStoreProductPage}`;
+            document.getElementById("pageIndicator").textContent = `ទំព័រ ${currentStoreProductPage + 1} នៃ ${totalStoreProductPage}`;
 
             document.getElementById("prevPage").disabled = currentStoreProductPage === 1;
             document.getElementById("nextPage").disabled = currentStoreProductPage === totalStoreProductPage;
@@ -80,7 +84,9 @@ function displayProducts(products) {
         const categoryNameKh = product.category.name_kh || "";
         const categoryName = truncateText(categoryNameKh + " | " + categoryNameEn, 30);
 
-        const productPrice = product.sale_price ? `${product.sale_price} ${product.currency || ""}` : "Price Unavailable";
+        let productPrice = product.sale_price ? `${product.sale_price} ${product.currency || ""}` : "Price Unavailable";
+
+        productPrice = formatStoreCurrency(product.sale_price, product.currency);
 
         const variant = product.variants[0]; // Get first variant if available
         let stockQuantity = variant.stock_quantity || "Out of Stock";
@@ -139,4 +145,67 @@ function addToCartProduct(productId) {
 
 function viewProductDetails(productId) {
     alert(`Viewing details for Product ID: ${productId}`);
+}
+
+function fetchItems() {
+    fetch('http://localhost:8080/internal/category/list') // Replace with your API endpoint
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById("listContainer");
+            container.innerHTML = "";
+
+            if(data.length === 0) {
+                container.textContent = "No items available.";
+                return;
+            }
+            const button = document.createElement("button");
+            button.classList.add("item-button");
+            button.style.backgroundColor = "#fafafa";
+            button.style.textAlign = "center";
+            button.style.borderBottom = "1px dashed";
+            button.textContent = `ＲＥＦＲＥＳＨ`;
+            button.onclick = () => location.reload();
+            container.appendChild(button);
+
+            data.forEach(item => {
+                const button = document.createElement("button");
+                button.classList.add("item-button");
+                button.textContent = `${item.name_kh} | ${item.name}`;
+                button.onclick = () => filterProductByCategoryId(`${item.id}`);
+                container.appendChild(button);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+            document.getElementById("listContainer").textContent = "Failed to load data.";
+        });
+}
+
+function formatStoreCurrency(amount, currency) {
+    // Format the number with commas every 3 digits and 2 decimal places for USD
+    const formattedAmount = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: currency === 'KHR' ? 0 : 2,
+        maximumFractionDigits: currency === 'KHR' ? 0 : 2
+    }).format(amount);
+
+    // Convert USD to Riel and format without decimals
+    const formattedRielAmount = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount * 4100);
+
+    if (currency === 'USD') {
+        return `${formattedAmount}$ = ${formattedRielAmount}៛`;
+    } else if (currency === 'KHR') {
+        const formattedUsdAmount = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount / 4100);
+        return `${formattedUsdAmount}$ = ${formattedAmount}៛`;
+    }
+    return `${formattedAmount} ${currency}`;
+}
+
+function filterProductByCategoryId(id) {
+    fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=0&size=16&category_id=' + id + '&condition_type=EQUAL');
 }

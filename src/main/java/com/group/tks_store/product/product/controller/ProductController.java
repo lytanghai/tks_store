@@ -97,6 +97,7 @@ public class ProductController {
                                          @RequestParam(name = LIB.code, defaultValue = "") String code,
                                          @RequestParam(name = LIB.product_name, defaultValue = "") String productName,
                                          @RequestParam(name = LIB.category_name, defaultValue = "") String categoryName,
+                                         @RequestParam(name = LIB.category_id, defaultValue = "-1") Integer categoryId,
                                          @RequestParam(name = LIB.sale_price, defaultValue = "") String salePrice,
                                          @RequestParam(name = "sale_price_val1", defaultValue = "") String salePriceVal1,
                                          @RequestParam(name = "sale_price_val2", defaultValue = "") String salePriceVal2,
@@ -106,13 +107,11 @@ public class ProductController {
                                          @RequestParam(name = "stock_quantity_val2", defaultValue = "") String stockQtyVal2,
                                          @RequestParam(name = LIB.sku, defaultValue = "") String sku,
                                          @RequestParam(name = LIB.variant_attribute_value, defaultValue = "") String variantAttributeValue,
-                                         @RequestParam(name = "created_date", defaultValue = "") String dateTime,
                                          @RequestParam(name = "condition_type", defaultValue = "") String conditionType,
                                          Model model) {
 
         Map<String, Object> propertiesList = this.mapPropertyList(
-                code, productName, categoryName, salePrice, stockQty, sku, variantAttributeValue,
-                dateTime,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
+                code, productName, categoryId, categoryName, salePrice, stockQty, sku, variantAttributeValue, salePriceCurrency, salePriceVal1, salePriceVal2, stockQtyVal1, stockQtyVal2, conditionType);
 
         Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
                         pageNumber,
@@ -134,42 +133,8 @@ public class ProductController {
         return AddressRedirect.HOME;
     }
 
-//    @GetMapping(CommonKey.LIST)
-//    public String getProductDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "1") Integer pageNumber,
-//                                    @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
-//                                    @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
-//                                    @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
-//                                    Model model) {
-//
-//        Page<ProductListDetailDTO> productPage = productService.getProductDetail(
-//                PageRequest.of(
-//                        pageNumber,
-//                        pageSize,
-//                        Sort.by(Sort.Direction.fromString(sortDirection), sortBy))
-//        );
-//
-//        int totalPage = productPage.getTotalPages();
-//
-//        if(pageNumber == 0) {
-//            totalPage += 1;
-//        }
-//
-//        model.addAttribute("page_type_en", AddressRedirect.PRODUCT);
-//        model.addAttribute("page_type_kh", AddressRedirect.PRODUCT_KH);
-//        model.addAttribute("content", productPage.getContent());
-//        model.addAttribute("total_records", productPage.getTotalElements());
-//        model.addAttribute("total_pages",  totalPage);
-//        model.addAttribute("current_page", productPage.getNumber());
-//        model.addAttribute("sort_by", sortBy);
-//        model.addAttribute("sort_direction", sortDirection);
-//        model.addAttribute("first", productPage.isFirst());
-//        model.addAttribute("last", productPage.isLast());
-//
-//        return AddressRedirect.HOME;
-//    }
-
-    private Map<String,Object> mapPropertyList(String code, String productName, String categoryName, String salePrice, String stockQty, String sku,
-                                               String variantAttributeValue, String dateTime, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
+    private Map<String,Object> mapPropertyList(String code, String productName, Integer categoryId, String categoryName, String salePrice, String stockQty, String sku,
+                                               String variantAttributeValue, String salePriceCurrency, String salePriceVal1, String salePriceVal2,
                                                String stockQtyVal1, String stockQtyVal2, String conditionType) {
         Map<String, Object> propertiesList = new HashMap<>();
 
@@ -178,6 +143,9 @@ public class ProductController {
         }
         if (!productName.isEmpty()) {
             propertiesList.put(LIB.product_name, productName);
+        }
+        if (categoryId != -1) {
+            propertiesList.put(LIB.category_id, categoryId);
         }
         if (!categoryName.isEmpty()) {
             propertiesList.put(LIB.category_name, categoryName);
@@ -193,9 +161,6 @@ public class ProductController {
         }
         if (!variantAttributeValue.isEmpty()) {
             propertiesList.put(LIB.variant_attribute_value, variantAttributeValue);
-        }
-        if (!dateTime.isEmpty()) {
-            propertiesList.put("created_date", dateTime);
         }
         if (!salePriceCurrency.isEmpty()) {
             propertiesList.put("sale_price_currency", salePriceCurrency);

@@ -14,7 +14,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        background-color: #1f1c1c;
+        background-color: #1e2738;
         top: 0;
         position: fixed;
         width: 99%;
@@ -51,23 +51,32 @@
         margin-top: 3%;
      }
 
+     .store-left-sidebar {
+        position: fixed;
+        left:0;
+        top: 5%;
+        width: 18.5%;
+        height: 100%;
+        background-color: #1e2738;
+     }
+
      #listContainer {
         position: fixed;
         display: flex;
         flex-direction: column;
         gap: 10px;
         padding: 20px;
-        border: 1px solid #ddd;
         border-radius: 8px;
-        background: #f9f9f9;
+        background: #fffdfc;
         width: 16%;
         margin: 20px auto;
         height: 46%;
         overflow-y: auto;
         left: 0;
+        margin-top: 1.5%;
      }
      .item-button {
-         padding: 12px;
+         padding: 8px;
          border: none;
          background-color: #e28743;
          color: #000;
@@ -85,6 +94,7 @@
 
      .grid-item-sidebar{
         position: absolute;
+        top: 1%;
         right: 0px;
         width: 82%;
         height: 90%;
@@ -95,7 +105,7 @@
         bottom: 13%;
         width: 16%;
         height: 24%;
-        left: 1.5%;
+        left: 1%;
         border-bottom: 1px solid;
      }
 
@@ -114,7 +124,7 @@
         grid-template-rows: repeat(3, auto);
         gap: 15px;
         justify-content: center;
-        padding: 10px;
+        padding: 20px 10px;
         text-align: center;
         width: 99%;
     }
@@ -126,7 +136,6 @@
         height: 340px;
         flex-direction: column;
         align-items: center;
-        border: 1px solid #ddd;
         border-radius: 8px;
         padding: 10px;
         background: #fff;
@@ -182,7 +191,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        background-color: #edeaea;
+        background-color: #d9c7ca;
     }
     .product-title {
         font-size: 1.3rem;
@@ -290,7 +299,7 @@
         width: 5%;
         height: 3%;
         left: 14%;
-        top: 71.5%;
+        top: 67.5%;
     }
 
 }

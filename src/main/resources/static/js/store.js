@@ -124,7 +124,7 @@ function displayProducts(products) {
                     <div class="product-title" title="${productName}">${productName}</div>
                     <div class="product-category" title="${categoryNameEn}">${categoryNameEn} </br> ${categoryNameKh}</div>
                     <div class="product-price">${productPrice}</div>
-                    <div class="product-stock">Stock:&nbsp;<span style="color: #e28743; font-weight: bold"> ${stockQuantity} </span></div>
+                    <div class="product-stock">ស្ដុក:&nbsp;<span style="color: #e28743; font-weight: bold"> ${stockQuantity} </span></div>
                 </div>
                 <div class="product-actions">
                     <button class="action-btn view" onclick="viewProductDetails(${product.id})">👁️ View</button>
@@ -193,7 +193,7 @@ function fetchItems() {
                     button.style.borderBottom = "1px dashed";
 //                    button.textContent = `ＲＥＦＲＥＳＨ`;
                     button.textContent = `𝑺𝒆𝒂𝒓𝒄𝒉 | ស្វែងរកតាមរយះ`;
-                    button.onclick = () => location.reload();
+                    button.onclick = () => fetchFilterProduct('/internal/product/list/filter?page=1&size=14');
                     container.appendChild(button);
 
                     data.forEach(item => {
@@ -213,7 +213,6 @@ function fetchItems() {
                    loadingSpinner2.style.display = "none";
                 });
     } ,500)
-
 }
 
 function formatStoreCurrency(amount, currency) {
@@ -238,7 +237,7 @@ function formatStoreCurrency(amount, currency) {
     }
     return `${formattedAmount} ${currency}`;
 }
-97
+
 function filterProductByCategoryId(id) {
     categoryGlobalId = id;
     fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=1&size=16&category_id=' + id + '&condition_type=EQUAL');

@@ -187,18 +187,16 @@
                                 <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;"><span style="color: red">*</span>តម្លៃ:</label>
                                 <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                             </div>
-                            <div class="general-form-group flex-item" id="product-grid-currency">
+                            <div  class="general-form-group flex-item">
                                 <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label"><span style="color: red">*</span>ជ្រើសរើសរូបីយប័ណ្ណ:</label>
-                                <select id="product_currency_edit"
-                                        name="product_currency_edit"
-                                        class="product-currency-select"
-                                        style="width: 40%">
-                                    <optgroup style="width: 15%">
-                                        <option value="USD">USD</option>
+                                <div class="product-tab-currency-container">
+                                    <select id="product_currency_edit" name="product_id" style="width: 135px; height: 50px;">
+                                        <option value="USD">USD</option>-->
                                         <option value="KHR">KHR</option>
-                                    </optgroup>
-                                </select>
+                                    </select>
+                                </div>
                             </div>
+
                             <div class="general-form-group" id="product-grid-description">
                                 <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
                                 <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
@@ -229,14 +227,11 @@
                             <div id="product-base-price-grid-currency">
                                 <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
                                 <span style="margin-left: 12%"></span>
-                                <select id="product_base_price_currency_edit"
-                                        name="product_currency_edit"
-                                        style="border:1px solid;font-size: 1rem; padding-left: 2%; width: 100px; height: 40px;">
-                                    <optgroup>
-                                        <option value="USD">USD</option>
-                                        <option value="KHR">KHR</option>
-                                    </optgroup>
+                                <select id="product_base_price_currency_edit" name="product_id" style="width: 135px; height: 50px;">
+                                    <option value="USD">USD</option>-->
+                                    <option value="KHR">KHR</option>
                                 </select>
+
                             </div>
 
                             <div id="product-grid-stock-quantity">
@@ -263,7 +258,7 @@
                                     <div style="font-size: 1.6rem">អង្គធាតុ</div>
                                     <div >
                                         <select id="product_attribute_select"
-                                                style="overflow-y: auto; max-height: 400px;"
+                                                style="overflow-y: auto; max-height: 300px;"
                                                 onclick="this.size = 12;"
                                                 onblur="this.size = 0;"
                                                 >

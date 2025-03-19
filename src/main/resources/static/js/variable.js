@@ -22,4 +22,5 @@ let currentStoreProductPage = 1;
 let totalStoreProductPage = 0;
 let categoryGlobalId = 0;
 let url = '';
+let clearStoreFilter = false;
 const itemsPerPage = 14;

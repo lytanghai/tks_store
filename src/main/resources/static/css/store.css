@@ -51,6 +51,15 @@
         margin-top: 3%;
      }
 
+     .center-content {
+        align-items: center;
+        height: 100%;
+        margin-left: 0%;
+        font-size: 3rem;
+        margin-top: 22%;
+        display: none;
+     }
+
      .store-left-sidebar {
         position: fixed;
         left:0;
@@ -81,9 +90,8 @@
          background-color: #e28743;
          color: #000;
          cursor: pointer;
-         border-radius: 5px;
          font-size: 1.1rem;
-         text-align: left;
+         text-align: center;
          width: 100%;
          font-weight: 500;
          border-radius: 15px;
@@ -192,6 +200,8 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         background-color: #d9c7ca;
+        border-radius: 10px;
+        letter-spacing: 1px;
     }
     .product-title {
         font-size: 1.3rem;

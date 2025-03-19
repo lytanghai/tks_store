@@ -34,7 +34,7 @@
                 <div></div>
             </div>
             <div class="right">
-                <a th:href="@{/cart}" class="store-back-button">🛒</a>
+                <a th:href="@{/}" class="store-back-button">🛒</a>
             </div>
         </div>
 
@@ -45,19 +45,23 @@
                 <div id="listContainer">កំពុងទាញយកទិន្ន័យ...</div>
 
                 <div class="search-container">
-<!--                    <label  style="font-size:1.2rem; color:#fff">ស្វែងរក...</label>-->
+                    <label style="font-size:1.2rem; color:#fff;">ស្វែងរក...</label>
                     <div class="cross-text-container" id="cross-text-container">
                         <button style="font-size: 1.2rem; background-color: transparent; border: none; outline: none;" id="clear-store-search">❌</button>
                     </div>
-                    <input type="text" placeholder="ស្វែងរក..." id="store-keyword">
+                    <input type="text" placeholder="ទំនិញ | ប្រភេទទំនិញ | តម្លៃ | ចំនួនស្ដុក" id="store-keyword" style="text-align:center">
                     <p style="font-size:1.2rem; background-color:#5dbea3; border-radius:12px;">𝑹𝑬𝑺𝑼𝑳𝑻𝑺 | លិទ្ធផល</p>
                     <div style="display: block; text-align:left">
-                        <label style="font-size: 1.2rem; color:#fff">រកឃើញ : <span id="store-search-size" style="color:#d43c3c"></span> ទំនិញ </label> <br>
+                        <label style="font-size: 1.2rem; color:#fff">រកឃើញ&nbsp;&nbsp;&nbsp;: <span id="store-search-size" style="color:#d43c3c"></span> ទំនិញ </label> <br>
                         <label style="font-size: 1.2rem;color:#fff">កាលបរិច្ឆេទ : <span id="store-search-datetime" style="color:#d43c3c"></span>  </label>
                     </div>
                 </div>
             </div>
             <div class="grid-item-sidebar">
+                <div class="center-content" id="center-content">
+
+                    <p style="color:#bbb;">មិនមានទំនិញប្រភេទនេះទេ!</p>
+                </div>
                 <div class="grid" id="productGrid"></div>
             </div>
         </div>
@@ -65,7 +69,7 @@
         <div class="store-footer">
             <div class="pagination">
                 <button id="prevPage" disabled class="store-prev" style="font-size:1.2rem"> < </button>
-                <span id="pageIndicator">Page 1</span>
+                <span id="pageIndicator"></span>
                 <button id="nextPage" class="store-next" style="font-size:1.2rem"> > </button>
             </div>
         </div>

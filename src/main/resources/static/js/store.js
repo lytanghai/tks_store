@@ -44,10 +44,15 @@ function fetchFilterProduct(url) {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log("API Response:", data);  // Log the response from the API
+                console.log("API Response:", data);
                 if (!data.products || data.products.length === 0) {
                     console.warn("No products found.");
                     displayProducts([]);
+                    document.getElementById("store-search-size").textContent = 0;
+                    document.getElementById("store-search-datetime").textContent = displayDateTime();
+                    document.getElementById("pageIndicator").textContent = `ទំព័រ 1 នៃ 1`;
+                    document.getElementById("prevPage").style.display = "none";
+                    document.getElementById("nextPage").style.display = "none";
                     return;
                 }
 
@@ -72,6 +77,21 @@ function fetchFilterProduct(url) {
 
 }
 
+function resetFilterTitle() {
+    let clearStoreBtn = document.getElementById("clear-store-category");
+    if(clearStoreBtn !== '') {
+        if(clearStoreFilter) {
+            clearStoreBtn.textContent = "𝑪𝒍𝒆𝒂𝒓 | សំអាត";
+            clearStoreBtn.style.backgroundColor = "#1e2738";
+            clearStoreBtn.style.color = "#fff";
+        } else {
+            clearStoreBtn.textContent = "𝑺𝒆𝒂𝒓𝒄𝒉 | ស្វែងរកតាមរយះ";
+            clearStoreBtn.style.backgroundColor = "rgb(93, 190, 163)";
+            clearStoreBtn.style.color = "#000";
+        }
+    }
+}
+
 function truncateText(text, maxLength) {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
@@ -80,10 +100,12 @@ function displayProducts(products) {
     const productGrid = document.getElementById("productGrid");
     productGrid.innerHTML = "";
 
+    const centerContent = document.getElementById("center-content");
     if (products.length === 0) {
-        productGrid.innerHTML = `<p style="color:#bbb;">No products available</p>`;
-        return;
+      centerContent.style.display = "block";
+      return;
     }
+    centerContent.style.display = "none";
 
     products.forEach(product => {
         const productDiv = document.createElement("div");
@@ -167,7 +189,6 @@ function viewProductDetails(productId) {
 }
 
 function fetchItems() {
-
     clearTimeout(storeCategoryDebounceTimeout);
     const loadingSpinner = document.getElementById("loading-spinner");
     loadingSpinner.style.display = "block";
@@ -188,12 +209,16 @@ function fetchItems() {
                     }
                     const button = document.createElement("button");
                     button.classList.add("item-button");
+                    button.setAttribute("id", "clear-store-category");
                     button.style.backgroundColor = "#5dbea3";
                     button.style.textAlign = "center";
                     button.style.borderBottom = "1px dashed";
-//                    button.textContent = `ＲＥＦＲＥＳＨ`;
                     button.textContent = `𝑺𝒆𝒂𝒓𝒄𝒉 | ស្វែងរកតាមរយះ`;
-                    button.onclick = () => fetchFilterProduct('/internal/product/list/filter?page=1&size=14');
+                    button.onclick =function () {
+                         fetchFilterProduct('/internal/product/list/filter?page=1&size=14');
+                         clearStoreFilter = false;
+                         resetFilterTitle();
+                    };
                     container.appendChild(button);
 
                     data.forEach(item => {
@@ -239,8 +264,11 @@ function formatStoreCurrency(amount, currency) {
 }
 
 function filterProductByCategoryId(id) {
+    clearStoreFilter = true;
+    resetFilterTitle();
     categoryGlobalId = id;
     fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=1&size=16&category_id=' + id + '&condition_type=EQUAL');
+
 }
 
 function lookupProductContains() {

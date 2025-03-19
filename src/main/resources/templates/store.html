@@ -9,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
     <script th:src="@{/js/store.js}" type="text/javascript" defer></script>
+    <script th:src="@{/js/variable.js}" type="text/javascript" defer></script>
 
     <link rel="stylesheet" th:href="@{/css/store.css}">
 
@@ -36,17 +39,22 @@
     </div>
 
     <div class="store-body">
+        <div th:replace="fragments/util/loading :: loading"></div>
+
         <div>
-            <div id="listContainer">Loading...</div>
+            <div id="listContainer">កំពុងទាញយកទិន្ន័យ...</div>
         </div>
 
         <div class="search-container">
-            <label style="font-size:1.2rem">ស្វែងរក...</label>
-            <input type="text" placeholder="Search" id="store-keyword" oninput="lookupProductContains()">
-            <p style="font-size:1.2rem">𝑹𝑬𝑺𝑼𝑳𝑻𝑺 | លិទ្ធផល</p>
+            <label  style="font-size:1.2rem;">ស្វែងរក...</label>
+            <div class="cross-text-container" id="cross-text-container">
+                <button style="font-size: 1.2rem; background-color: transparent; border: none; outline: none;" id="clear-store-search">❌</button>
+            </div>
+            <input type="text" placeholder="Search" id="store-keyword">
+            <p style="font-size:1.2rem; background-color:#5dbea3; border-radius:12px;">𝑹𝑬𝑺𝑼𝑳𝑻𝑺 | លិទ្ធផល</p>
             <div style="display: block; text-align:left">
-                <label style="font-size: 1.1rem">រកឃើញ : <span id="store-search-size" style="color:"></span></label> <br>
-                <label style="font-size: 1.1rem">កាលបរិច្ឆេទ : <span id="store-search-datetime"></span>  </label>
+                <label style="font-size: 1.1rem">រកឃើញ : <span id="store-search-size" style="color:#d43c3c"></span> ទំនិញ </label> <br>
+                <label style="font-size: 1.1rem">កាលបរិច្ឆេទ : <span id="store-search-datetime" style="color:#d43c3c"></span>  </label>
             </div>
         </div>
 

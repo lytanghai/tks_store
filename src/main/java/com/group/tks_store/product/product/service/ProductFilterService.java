@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.common.util.CurrencyFormatUtil;
 import com.group.tks_store.common.util.ImageUtil;
 import com.group.tks_store.common.util.MappingUtil;
+import com.group.tks_store.common.util.NumericUtil;
 import com.group.tks_store.product.category.dto.CategoryDetailDTO;
 import com.group.tks_store.product.images.dto.ImageDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
@@ -60,61 +61,64 @@ public class ProductFilterService {
         /** 17  = AttributeName(AttributeNameKh) : VariantAttributeValue*/
         /** 18  = ImageId:UUID*/
 
-        for (Object[] row : response) {
-            Integer productId = (Integer) row[0];
-            String nameEn = (String) row[1];
-            String nameKh = (String) row[2];
-            String code = (String) row[3];
-            Double salePrice = ((Number) row[4]).doubleValue();
-            String currency = (String) row[5];
-            String description = (String) row[6];
-            String status = (String) row[7];
-            Date createdAt = (Date) row[8];
+        if(response != null) {
+            for (Object[] row : response) {
+                Integer productId = (Integer) row[0];
+                String nameEn = (String) row[1];
+                String nameKh = (String) row[2];
+                String code = (String) row[3];
+                Double salePrice = ((Number) row[4]).doubleValue();
+                String currency = (String) row[5];
+                String description = (String) row[6];
+                String status = (String) row[7];
+                Date createdAt = (Date) row[8];
 
-            // Mapping category
-            CategoryDetailDTO category = new CategoryDetailDTO(
-                    (Integer) row[9],
-                    (String) row[10],
-                    (String) row[11],
-                    (String) row[12]
-            );
-
-            VariantDetailDTO variant = null;
-
-            if(row[13] != null) {
-                List<ImageDTO> images = new ArrayList<>();
-                if(row [19] != null) {
-                    images = ImageUtil.mapImageUUIDPair((String) row[19]);
-                }
-                if(row [17] != null) {
-                    variant = new VariantDetailDTO(
-                            (Integer) row[13],
-                            (String) row[14],
-                            ((Number) row[15]).doubleValue(),
-                            (String) row[16],
-                            ((Number) row[17]).intValue(),
-                            images,
-                            MappingUtil.mapVariantAttributes((String) row[18]));
-                }
-
-            }
-
-            // Check if product already exists in list
-            ProductListDetailDTO existingProduct = productResponse.stream()
-                    .filter(p -> p.getId().equals(productId))
-                    .findFirst()
-                    .orElse(null);
-
-            if (existingProduct == null) {
-                existingProduct = new ProductListDetailDTO(
-                        productId, nameEn, nameKh, code, salePrice, currency, description, status, createdAt, category, new ArrayList<>()
+                // Mapping category
+                CategoryDetailDTO category = new CategoryDetailDTO(
+                        (Integer) row[9],
+                        (String) row[10],
+                        (String) row[11],
+                        (String) row[12]
                 );
-                productResponse.add(existingProduct);
-            }
-            if(variant != null) {
-                existingProduct.getVariants().add(variant);
+
+                VariantDetailDTO variant = null;
+
+                if(row[13] != null) {
+                    List<ImageDTO> images = new ArrayList<>();
+                    if(row [19] != null) {
+                        images = ImageUtil.mapImageUUIDPair((String) row[19]);
+                    }
+                    if(row [17] != null) {
+                        variant = new VariantDetailDTO(
+                                (Integer) row[13],
+                                (String) row[14],
+                                ((Number) row[15]).doubleValue(),
+                                (String) row[16],
+                                ((Number) row[17]).intValue(),
+                                images,
+                                MappingUtil.mapVariantAttributes((String) row[18]));
+                    }
+
+                }
+
+                // Check if product already exists in list
+                ProductListDetailDTO existingProduct = productResponse.stream()
+                        .filter(p -> p.getId().equals(productId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (existingProduct == null) {
+                    existingProduct = new ProductListDetailDTO(
+                            productId, nameEn, nameKh, code, salePrice, currency, description, status, createdAt, category, new ArrayList<>()
+                    );
+                    productResponse.add(existingProduct);
+                }
+                if(variant != null) {
+                    existingProduct.getVariants().add(variant);
+                }
             }
         }
+
         return productResponse;
     }
 
@@ -211,7 +215,7 @@ public class ProductFilterService {
                         categoryName.equals("") ? null : categoryName,
                         salePriceUSD,
                         salePriceKHR,
-                        salePriceCurrency,
+                        salePriceCurrency.equals("") ? null: salePriceCurrency,
                         sku.equals("") ? null : sku,
                         stockQuantity == -1 ? null : stockQuantity,
                         variantAttributeValue.equals("") ? null : variantAttributeValue);
@@ -259,11 +263,17 @@ public class ProductFilterService {
                         salePriceCurrency.equals("") ? null : salePriceCurrency,
                         stockQuantity);
                 break;
+            case "storeCondition" :
+                result = productRepository.fetchProductByPropertyUsingStoreGeneral(
+                        pageable,
+                        general.equals("") ? null : general);
+                break;
 
             case "defaultCondition" :
                 result = productRepository.fetchProductByPropertyUsingGeneral(
-                        pageable,
-                        general.equals("") ? null : general);
+                            pageable,
+                            general.equals("") ? null : general);
+
                 break;
 
             default:
@@ -272,4 +282,5 @@ public class ProductFilterService {
         }
         return result;
     }
+
 }

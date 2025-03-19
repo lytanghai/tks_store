@@ -1,8 +1,3 @@
-let currentStoreProductPage = 0;
-let totalStoreProductPage = 0;
-let categoryGlobalId = 0;
-let url = '';
-const itemsPerPage = 14;
 
 document.addEventListener("DOMContentLoaded", () => {
     url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
@@ -10,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchItems();
 
     document.getElementById("prevPage").addEventListener("click", () => {
-        if (currentStoreProductPage >= 1) {
+        if (currentStoreProductPage > 1) {
             currentStoreProductPage--;
             url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
             fetchFilterProduct(url);
@@ -27,29 +22,54 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchFilterProduct(url) {
+    console.log("request url: " + url)
+    clearTimeout(storeDebounceTimeout);
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log("API Response:", data);  // Log the response from the API
-            if (!data.products || data.products.length === 0) {
-                console.warn("No products found.");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    loadingSpinner.style.display = "block";
+
+    const loadingSpinner2 = document.getElementById("loading-spinner_2");
+    loadingSpinner2.style.display = "block";
+
+    const inputValue = document.getElementById("store-keyword").value;
+    const crossTextContainer = document.getElementById("cross-text-container");
+
+    if (inputValue.length > 0) {
+        crossTextContainer.style.display = "block";
+    } else {
+        crossTextContainer.style.display = "none";
+    }
+
+    storeDebounceTimeout = setTimeout(() => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log("API Response:", data);  // Log the response from the API
+                if (!data.products || data.products.length === 0) {
+                    console.warn("No products found.");
+                    displayProducts([]);
+                    return;
+                }
+
+                totalStoreProductPage = data.totalPages;
+                document.getElementById("pageIndicator").textContent = `ទំព័រ ${currentStoreProductPage} នៃ ${totalStoreProductPage}`;
+
+                document.getElementById("prevPage").disabled = currentStoreProductPage === 1;
+                document.getElementById("nextPage").disabled = currentStoreProductPage === totalStoreProductPage;
+                document.getElementById("store-search-size").textContent = data.totalItems;
+                document.getElementById("store-search-datetime").textContent = displayDateTime();
+                displayProducts(data.products);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
                 displayProducts([]);
-                return;
-            }
+            })
+            .finally(() => {
+               loadingSpinner.style.display = "none";
+               loadingSpinner2.style.display = "none";
+            });
+    }, 500)
 
-            totalStoreProductPage = data.totalPages - 1;
-            document.getElementById("pageIndicator").textContent = `ទំព័រ ${currentStoreProductPage + 1} នៃ ${totalStoreProductPage}`;
-
-            document.getElementById("prevPage").disabled = currentStoreProductPage === 1;
-            document.getElementById("nextPage").disabled = currentStoreProductPage === totalStoreProductPage;
-
-            displayProducts(data.products);
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-            displayProducts([]);
-        });
 }
 
 function truncateText(text, maxLength) {
@@ -68,9 +88,6 @@ function displayProducts(products) {
     products.forEach(product => {
         const productDiv = document.createElement("div");
         productDiv.classList.add("grid-item");
-
-        document.getElementById("store-search-size").textContent = products.length;
-        document.getElementById("store-search-datetime").textContent = displayDateTime();
 
         const productNameEn = product.name_en || "";
         const productNameKh = product.name_kh || "";
@@ -150,47 +167,61 @@ function viewProductDetails(productId) {
 }
 
 function fetchItems() {
-    fetch('http://localhost:8080/internal/category/list') // Replace with your API endpoint
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById("listContainer");
-            container.innerHTML = "";
 
-            if(data.length === 0) {
-                container.textContent = "No items available.";
-                return;
-            }
-            const button = document.createElement("button");
-            button.classList.add("item-button");
-            button.style.backgroundColor = "#fafafa";
-            button.style.textAlign = "center";
-            button.style.borderBottom = "1px dashed";
-            button.textContent = `ＲＥＦＲＥＳＨ`;
-            button.onclick = () => location.reload();
-            container.appendChild(button);
+    clearTimeout(storeCategoryDebounceTimeout);
+    const loadingSpinner = document.getElementById("loading-spinner");
+    loadingSpinner.style.display = "block";
 
-            data.forEach(item => {
-                const button = document.createElement("button");
-                button.classList.add("item-button");
-                button.textContent = `${item.name_kh} | ${item.name}`;
-                button.onclick = () => filterProductByCategoryId(`${item.id}`);
-                container.appendChild(button);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-            document.getElementById("listContainer").textContent = "Failed to load data.";
-        });
+    const loadingSpinner2 = document.getElementById("loading-spinner_2");
+    loadingSpinner2.style.display = "block";
+
+    storeCategoryDebounceTimeout = setTimeout(() => {
+        fetch('http://localhost:8080/internal/category/list')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById("listContainer");
+                    container.innerHTML = "";
+
+                    if(data.length === 0) {
+                        container.textContent = "No items available.";
+                        return;
+                    }
+                    const button = document.createElement("button");
+                    button.classList.add("item-button");
+                    button.style.backgroundColor = "#5dbea3";
+                    button.style.textAlign = "center";
+                    button.style.borderBottom = "1px dashed";
+//                    button.textContent = `ＲＥＦＲＥＳＨ`;
+                    button.textContent = `𝑺𝒆𝒂𝒓𝒄𝒉 | ស្វែងរកតាមរយះ`;
+                    button.onclick = () => location.reload();
+                    container.appendChild(button);
+
+                    data.forEach(item => {
+                        const button = document.createElement("button");
+                        button.classList.add("item-button");
+                        button.textContent = `${item.name_kh} | ${item.name}`;
+                        button.onclick = () => filterProductByCategoryId(`${item.id}`);
+                        container.appendChild(button);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    document.getElementById("listContainer").textContent = "Failed to load data.";
+                })
+                .finally(() => {
+                   loadingSpinner.style.display = "none";
+                   loadingSpinner2.style.display = "none";
+                });
+    } ,500)
+
 }
 
 function formatStoreCurrency(amount, currency) {
-    // Format the number with commas every 3 digits and 2 decimal places for USD
     const formattedAmount = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: currency === 'KHR' ? 0 : 2,
         maximumFractionDigits: currency === 'KHR' ? 0 : 2
     }).format(amount);
 
-    // Convert USD to Riel and format without decimals
     const formattedRielAmount = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
@@ -207,16 +238,16 @@ function formatStoreCurrency(amount, currency) {
     }
     return `${formattedAmount} ${currency}`;
 }
-
+97
 function filterProductByCategoryId(id) {
     categoryGlobalId = id;
-    fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=0&size=16&category_id=' + id + '&condition_type=EQUAL');
+    fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=1&size=16&category_id=' + id + '&condition_type=EQUAL');
 }
 
 function lookupProductContains() {
     setTimeout(() => {
         let keyword = document.getElementById("store-keyword").value;
-        let url = 'http://localhost:8080/internal/product/list/filter?page=0&size=16&condition_type=defaultCondition&general=' + keyword;
+        let url = 'http://localhost:8080/internal/product/list/filter?page=1&size=14&condition_type=storeCondition&general=' + keyword;
         if(categoryGlobalId != 0) {
              url = url + '&category_id=' + categoryGlobalId;
         }
@@ -237,3 +268,8 @@ function displayDateTime() {
     });
     return formattedDate;
 }
+
+document.getElementById("store-keyword").addEventListener("input", lookupProductContains);
+document.getElementById("clear-store-search").addEventListener("click", () => {
+    location.reload()
+;});

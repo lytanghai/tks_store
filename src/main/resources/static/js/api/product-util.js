@@ -1,6 +1,5 @@
 if(window.location.pathname.includes("/api/product")) {
-    let currentPage = 0;
-    let totalPage = 0;
+
     const buttonBackPage = document.getElementById("back-page");
     const buttonToPage = document.getElementById("to-page");
     if (buttonBackPage) {
@@ -183,7 +182,7 @@ if(window.location.pathname.includes("/api/product")) {
         if (document.getElementById("filterValue")) document.getElementById("filterValue").value = "";
         if (document.getElementById("filterValue1")) document.getElementById("filterValue1").value = "";
         if (document.getElementById("filterValue2")) document.getElementById("filterValue2").value = "";
-        currentPage = 0;
+        currentPage = 1;
 
         fetchFilterProduct();
     }
@@ -203,8 +202,8 @@ if(window.location.pathname.includes("/api/product")) {
                    return;
                 }
             } else {
-                if(document.getElementById("filterValue1").value === '' && document.getElementById("filterValue2").value === '') {
-                    showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!')
+                if(document.getElementById("filterCondition").value === 'BETWEEN' && document.getElementById("filterValue1").value === '' && document.getElementById("filterValue2").value === '') {
+                    showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!2')
                     return;
                 }
             }

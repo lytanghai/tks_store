@@ -1,8 +1,4 @@
 if(window.location.pathname.includes("/api/product")) {
-    let resultList = [];
-    let currentTab = "Product";
-    let variantId = '';
-
     function openCreateUpdateProductModal(element) {
             let id = '';
             let nameEn = '';
@@ -91,7 +87,6 @@ if(window.location.pathname.includes("/api/product")) {
         document.getElementById("myProductModal").style.display = "block";
     }
 
-    imageIds = []
     function addToRemoveImg() {
         if (imageUrls.length === 0) return;
         currentImageIndex = 0;

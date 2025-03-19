@@ -1,5 +1,3 @@
-let categoryGlobalAction = 'Create';
-
 function fetchFilteredCategories() {
     let keyword = document.getElementById("search_input_category").value;
     const url = `/internal/category/list/filter?keyword=${encodeURIComponent(keyword)}`;
@@ -194,7 +192,6 @@ function clearCategoryEndDate() {
         categoryFilterResults();
 }
 
-let num = 0;
 function resetToCreateCategoryMode(element) {
     categoryGlobalAction = 'Create';
 

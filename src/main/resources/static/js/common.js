@@ -1,8 +1,3 @@
-let currentImageIndex = 0;
-let imageUUIDs = [];
-let path = window.location.pathname;
-let query = window.location.search;
-
 window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
@@ -43,7 +38,7 @@ window.onload = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (path === "/api/product/list/filter" && query === "?page=0") {
+    if (path === "/api/product/list/filter" && query === "?page=1") {
         setTimeout(() => {
             fetchFilterProduct();
         }, 500);
@@ -92,8 +87,6 @@ function getSelectOptionTextByValue(selectElement, selectedValue) {
     return null;
 }
 
-let imageUrls = [];
-let currentIndex = 0;
 function addImages(event) {
     const files = event.target.files;
 
@@ -192,8 +185,6 @@ function showAlertMessageModal(messageTitle, messageBody) {
     const modalMessageBody = document.getElementById("alert_modal_message_body");
     const modalImg = document.getElementById("alert-msg-image");
     modalImg.src ='/icon/exclamation-mark.png/';
-    //exclamation-mark.png
-
     modalMessage.textContent = messageTitle;
     modalMessageBody.textContent = messageBody;
 

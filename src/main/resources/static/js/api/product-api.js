@@ -1,88 +1,85 @@
-let variantAttributes = [];
+async function uploadProduct() {
+    let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
+    let files = fileInput.files;
+    let formData = new FormData();
 
-    async function uploadProduct() {
-        let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
-        let files = fileInput.files;
-        let formData = new FormData();
+    let prodNameEn = document.getElementById("product_name_en_edit").value;
+    let prodNameKh = document.getElementById("product_name_kh_edit").value;
+    if(prodNameEn === '' && prodNameKh === '') {
+        alert("ឈ្មោះទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
 
-        let prodNameEn = document.getElementById("product_name_en_edit").value;
-        let prodNameKh = document.getElementById("product_name_kh_edit").value;
-        if(prodNameEn === '' && prodNameKh === '') {
-            alert("ឈ្មោះទំនិញមិនអាចទទេរបានទេ!");
-            return;
-        }
+    let categoryId = document.getElementById("product_select").value;
+    if(categoryId === '') {
+         alert("ប្រភេទទំនិញមិនអាចទទេរបានទេ!");
+         return;
+    }
 
-        let categoryId = document.getElementById("product_select").value;
-        if(categoryId === '') {
-             alert("ប្រភេទទំនិញមិនអាចទទេរបានទេ!");
-             return;
-        }
+    let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
+    if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
+        alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
+        return;
+    }
 
-        let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
-        if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
-            alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
-            return;
-        }
+    let salePriceCurrency = document.getElementById("product_currency_edit").value;
+    if(salePriceCurrency === '') {
+        alert("រូបីយប័ណ្ណមិនអាចទទេរបានទេ!");
+        return;
+    }
 
-        let salePriceCurrency = document.getElementById("product_currency_edit").value;
-        if(salePriceCurrency === '') {
-            alert("រូបីយប័ណ្ណមិនអាចទទេរបានទេ!");
-            return;
-        }
+    let jsonData = {
+        product: {
+            name_en: prodNameEn,
+            name_kh: prodNameKh,
+            code: document.getElementById("product_code_edit").value,
+            category: { id: categoryId },
+            sale_price: salePrice,
+            currency: salePriceCurrency,
+            description: document.getElementById("product_description_edit").value
+        },
+        variant: {
+            base_price: parseFloat(document.getElementById('product_base_price_edit').value).toFixed(2),
+            currency: document.getElementById('product_base_price_currency_edit').value,
+            stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
+            sku: document.getElementById('product_stock_sku').value
+        },
+        images: [],
+        variant_attributes: []
+    };
 
-        let jsonData = {
-            product: {
-                name_en: prodNameEn,
-                name_kh: prodNameKh,
-                code: document.getElementById("product_code_edit").value,
-                category: { id: categoryId },
-                sale_price: salePrice,
-                currency: salePriceCurrency,
-                description: document.getElementById("product_description_edit").value
-            },
-            variant: {
-                base_price: parseFloat(document.getElementById('product_base_price_edit').value).toFixed(2),
-                currency: document.getElementById('product_base_price_currency_edit').value,
-                stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
-                sku: document.getElementById('product_stock_sku').value
-            },
-            images: [],
-            variant_attributes: []
-        };
-
-        if(files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                formData.append("images", files[i]);
-                jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
-            }
-        }
-
-        if(variantAttributes.length > 0) {
-            for (let y = 0; y < variantAttributes.length; y++) {
-                jsonData.variant_attributes.push({
-                    attribute_id: variantAttributes[y].attribute_id,
-                    value: variantAttributes[y].value
-                });
-            }
-        }
-
-        formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
-        try {
-            let response = await fetch("http://localhost:8080/api/product/upload", {
-                method: "POST",
-                body: formData
-            });
-            sessionStorage.setItem('popupMessage', 'success');
-            sessionStorage.setItem('popupAction', 'update');
-            showPopUpMessage('success', 'update');
-    //        let result = await response.json();
-        } catch (error) {
-            console.error("Error uploading:", error);
+    if(files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+            jsonData.images.push({ variant_id: files[i].variant_id, image: files[i].name });
         }
     }
 
-if(window.location.pathname.includes("/api/product")) {
+    if(variantAttributes.length > 0) {
+        for (let y = 0; y < variantAttributes.length; y++) {
+            jsonData.variant_attributes.push({
+                attribute_id: variantAttributes[y].attribute_id,
+                value: variantAttributes[y].value
+            });
+        }
+    }
 
+    formData.append("data", new Blob([JSON.stringify(jsonData)], { type: "application/json" }));
+    try {
+        let response = await fetch("http://localhost:8080/api/product/upload", {
+            method: "POST",
+            body: formData
+        });
+        sessionStorage.setItem('popupMessage', 'success');
+        sessionStorage.setItem('popupAction', 'update');
+        showPopUpMessage('success', 'update');
+//        let result = await response.json();
+    } catch (error) {
+        console.error("Error uploading:", error);
+    }
+}
+
+if(window.location.pathname.includes("/api/product")) {
     function deleteProduct(id) {
         fetch('/api/product/delete', {
             method: 'POST',
@@ -121,7 +118,6 @@ if(window.location.pathname.includes("/api/product")) {
             console.error("Error fetching images:", error);
         });
 }
-
     function showImage() {
         let imageElement = document.getElementById("sliderImage");
         let uuid = imageUUIDs[currentImageIndex];

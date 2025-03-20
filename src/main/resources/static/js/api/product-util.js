@@ -207,7 +207,7 @@ if(window.location.pathname.includes("/api/product")) {
                 }
             } else {
                 if(document.getElementById("filterCondition").value === 'BETWEEN' && document.getElementById("filterValue1").value === '' && document.getElementById("filterValue2").value === '') {
-                    showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!2')
+                    showAlertMessageModal('ERROR!','សូមធ្វើការបញ្ជូលតម្លៃដើម្បីស្វែងរក!')
                     return;
                 }
             }

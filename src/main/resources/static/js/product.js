@@ -169,10 +169,10 @@ if(window.location.pathname.includes("/api/product")) {
         if(typeof(variantAttributes) === 'object') {
             //create
             existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
-            if (existingIndex !== -1) {
-                alert("This attribute is already added!");
-                return;
-            }
+//            if (existingIndex !== -1) {
+//                alert("This attribute is already added!");
+//                return;
+//            }
              variantAttributes.push({
                 attribute_id: attributeId,
                 name: attributeName,
@@ -184,10 +184,10 @@ if(window.location.pathname.includes("/api/product")) {
             variantAttributes = JSON.parse(variantAttributes);
             existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
 
-            if (existingIndex !== -1) {
-                alert("This attribute is already added!");
-                return;
-            }
+//            if (existingIndex !== -1) {
+//                alert("This attribute is already added!");
+//                return;
+//            }
             variantAttributes.push({
                 attribute_id: attributeId,
                 name: attributeName,

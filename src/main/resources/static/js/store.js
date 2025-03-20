@@ -121,9 +121,18 @@ function displayProducts(products) {
             productName = truncateText(productNameKh, 25);
         }
 
+        let code = product.code;
+
         const categoryNameEn = product.category.name || "";
         const categoryNameKh = product.category.name_kh || "";
-        const categoryName = truncateText(categoryNameKh + " | " + categoryNameEn, 30);
+//        const categoryName = truncateText(categoryNameKh + " | " + categoryNameEn, 30);
+
+       let categoryName = "";
+       if(categoryNameKh === "") {
+            categoryName = truncateText(categoryNameEn, 25);
+       } else {
+            categoryName = truncateText(categoryNameKh, 25);
+       }
 
         let productPrice = product.sale_price ? `${product.sale_price} ${product.currency || ""}` : "Price Unavailable";
 
@@ -135,6 +144,7 @@ function displayProducts(products) {
         if(stockQuantity < 0) {
             stockQuantity = "Out of Stock";
         }
+
         const imageUUID = variant?.images?.[0]?.uuid;
 
         productDiv.innerHTML = `
@@ -144,8 +154,11 @@ function displayProducts(products) {
                 </div>
                 <div class="product-info">
                     <div class="product-title" title="${productName}">${productName}</div>
-                    <div class="product-category" title="${categoryNameEn}">${categoryNameEn} </br> ${categoryNameKh}</div>
+                    <div class="product-category" title="${categoryName}">${categoryName}</div>
                     <div class="product-price">${productPrice}</div>
+                    <div class="custom-code-container">
+                        <div>${code}</div>
+                     </div>
                     <div class="product-stock">ស្ដុក:&nbsp;<span style="color: #e28743; font-weight: bold"> ${stockQuantity} </span></div>
                 </div>
                 <div class="product-actions">

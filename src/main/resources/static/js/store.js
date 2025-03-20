@@ -162,7 +162,7 @@ function displayProducts(products) {
                     <div class="product-stock">ស្ដុក:&nbsp;<span style="color: #e28743; font-weight: bold"> ${stockQuantity} </span></div>
                 </div>
                 <div class="product-actions">
-                    <button class="action-btn view" onclick="viewProductDetails(${product.id})">👁️ View</button>
+                    <button class="action-btn view" onclick="viewProductDetails(${product.id})" id="store-view-btn">👁️ View</button>
                     <button class="action-btn" onclick="addToCartProduct(${product.id})">🛒 Add to Cart</button>
                 </div>
             </div>
@@ -198,7 +198,13 @@ function addToCartProduct(productId) {
 }
 
 function viewProductDetails(productId) {
-    alert(`Viewing details for Product ID: ${productId}`);
+    document.getElementById("store-view-detail-container").style.display = "block";
+    document.getElementById("store-view-detail-container").style.zIndex = "2";
+//    alert(`Viewing details for Product ID: ${productId}`);
+}
+
+function closeStoreProductDetail() {
+    document.getElementById("store-view-detail-container").style.display = "none";
 }
 
 function fetchItems() {

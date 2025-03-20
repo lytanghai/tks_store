@@ -311,7 +311,7 @@
         left: 2.5%;
     }
 
-    .cross-text-container{
+    .cross-text-container {
         position: fixed;
         display: none;
         width: 5%;
@@ -320,4 +320,35 @@
         top: 67.5%;
     }
 
+    /* store-view-detail-container */
+    .store-view-detail-container {
+        position: absolute;
+        display: none;
+        width: 82%;
+        height: 97%;
+        border: 1px solid red;
+        left: 18.3%;
+        opacity: 0.6;
+        z-index: -1;
+        top: 1.5%;
+        opacity: 0.8;
+        background: #000;
+    }
+
+    .store-cross-text-container {
+        z-index: 1;
+        position: absolute;
+        display: block;
+        width: 5%;
+        height: 3%;
+        right: 3%;
+        top: 1.5%;
+    }
+
+    .store-view-detail-image-container {
+        position: absolute;
+        width: 33%;
+        height: 100%;
+        border: 1px solid blue;
+    }
 }

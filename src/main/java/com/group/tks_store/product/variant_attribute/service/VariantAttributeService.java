@@ -163,4 +163,8 @@ public class VariantAttributeService {
         }
         return response;
     }
+
+    public void removeByVariantId(Integer productId) {
+        variantAttributeRepository.removeByVariantId(productId);
+    }
 }

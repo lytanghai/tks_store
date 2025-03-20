@@ -1,6 +1,6 @@
 let storeDebounceTimeout;
 let storeCategoryDebounceTimeout;
-
+let searchTimeout;
 let categoryGlobalAction = 'Create';
 let resultList = [];
 let currentTab = "Product";

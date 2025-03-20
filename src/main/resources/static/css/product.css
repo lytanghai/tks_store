@@ -306,31 +306,10 @@
         margin-right: 80px;
 
     }
-    /**
-    #product_select{
-        position: absolute;
-        margin-left: 3%;
-        width: 25%;
-        max-height: 450px;
-        border: 1px solid;
-        overflow:scroll;
-        font-size: 1.5rem;
-    }
-
-    #product_select:focus {
-        height: auto;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    */
 
     #product_select {
         position: absolute;
         margin-left: 3%;
-        width: 25%;
-        max-height: 450px;
-        font-size: 1.5rem;
-        padding: 10px;
     }
 
     #product_select:focus {

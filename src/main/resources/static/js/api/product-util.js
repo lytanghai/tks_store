@@ -4,8 +4,8 @@ if(window.location.pathname.includes("/api/product")) {
     const buttonToPage = document.getElementById("to-page");
     if (buttonBackPage) {
         buttonBackPage.addEventListener("click", function () {
-            if (currentPage >= 1) {
-                currentPage -= 1;
+            if (currentPage > 1) {
+                currentPage--;
                 fetchFilterProduct();
             }
         });
@@ -15,8 +15,8 @@ if(window.location.pathname.includes("/api/product")) {
 
     if (buttonToPage) {
             buttonToPage.addEventListener("click", function () {
-            if(currentPage <= totalPage - 2) {
-                currentPage += 1;
+            if(currentPage < totalPage) {
+                currentPage++;
                 fetchFilterProduct();
             }
         });
@@ -61,7 +61,7 @@ if(window.location.pathname.includes("/api/product")) {
                     .then(data => {
                         const productTable = document.getElementById("productTable");
                         totalPage = data.totalPages;
-                        document.getElementById("display-page-num").textContent = currentPage + 1;
+                        document.getElementById("display-page-num").textContent = currentPage;
                         document.getElementById("display-page-total").textContent = totalPage;
 
                         productTable.innerHTML = '';
@@ -187,9 +187,13 @@ if(window.location.pathname.includes("/api/product")) {
         fetchFilterProduct();
     }
 
-    document.getElementById("search_input_product").addEventListener("keyup", function() {
-        setTimeout(fetchFilterProduct, 1500);
-    })
+    document.getElementById("search_input_product").addEventListener("keyup", function () {
+        clearTimeout(searchTimeout); // Cancel previous timeout
+
+        searchTimeout = setTimeout(() => {
+            fetchFilterProduct();
+        }, 1500);
+    });
 
     document.getElementById("btn-submit-filter").addEventListener("click", function () {
         if(document.getElementById("filterColumn").value === 'defaultChoice' || document.getElementById("filterCondition").value === 'defaultCondition') {

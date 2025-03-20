@@ -88,7 +88,10 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function addToRemoveImg() {
-        if (imageUrls.length === 0) return;
+        console.log("removed")
+        if (imageUrls.length === 0) {
+            return;
+        }
         currentImageIndex = 0;
         let imageUrl = imageUrls[currentImageIndex];
         let uuid = imageUrl.split("/").pop();
@@ -97,6 +100,7 @@ if(window.location.pathname.includes("/api/product")) {
         if(imageUrls.length === 1) {
             imageUrls = [];
             document.getElementById("image_preview_modal").style.display = "none";
+            document.getElementById("preview_button").style.display = "none";
             return;
         }
 
@@ -504,6 +508,7 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function prevProductImage() {
+        console.log("currenct Image Index: " + currentImageIndex)
         if (currentImageIndex > 0) {
             currentImageIndex--;
         } else {

@@ -147,7 +147,8 @@ public class ProductUtil {
             if(imagesRemove != null) {
                 List<String> ids = new ArrayList<>();
                 imagesRemove.iterator().forEachRemaining(i -> {
-                    ids.add(String.valueOf(i));
+                    String[] each = String.valueOf(i).split("uuid=");
+                    ids.add(each[1]);
                 });
                 imageRepository.deleteByUuid(ids);
             }
@@ -165,13 +166,15 @@ public class ProductUtil {
 
         List<Integer> idsToRemove = new ArrayList<>();
 
+        VariantEntity variant = variantRepository.findByProductId(productId);
+        if(arrayList.isEmpty()) {
+            variantAttributeService.removeByVariantId(variant.getId());
+            return;
+        }
         for (Object o : arrayList) {
             Map<String, Object> map = (Map<String, Object>) o;
             if (action.equals(LIB.UPDATE)) {
-                VariantEntity variant = variantRepository.findByProductId(productId);
-
                 List<VariantAttributeDetailList> variantAttributeEntities = variantAttributeService.findByVariantId(variant.getId());
-
                 if (map.containsKey(LIB.attribute_id)) {
                     VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
                     variantAttributeDTO.setVariantId(variant.getId());
@@ -185,9 +188,7 @@ public class ProductUtil {
                         continue;
                     } else {
                         requestId.add(Integer.valueOf((String) map.get(LIB.id)));
-                        variantAttributeEntities.forEach(item -> {
-                            existingDBId.add(item.getVariantAttributeId());
-                        });
+                        variantAttributeEntities.forEach(item -> existingDBId.add(item.getVariantAttributeId()));
                     }
                 }
             } else if (action.equals(LIB.CREATE)) {

@@ -78,85 +78,6 @@ async function uploadProduct() {
         console.error("Error uploading:", error);
     }
 }
-
-if(window.location.pathname.includes("/api/product")) {
-    function deleteProduct(id) {
-        fetch('/api/product/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: id })
-        })
-        .then(data => {
-            sessionStorage.setItem('popupMessage', 'success');
-            sessionStorage.setItem('popupAction', 'delete');
-            location.reload();
-        })
-         .catch(error => {
-            showPopUpMessage('error', 'delete');
-        });
-    }
-
-    function openImageSlider(button) {
-        let variantId = button.getAttribute("data-variant-id");
-
-        fetch(`/api/get/images?variant_id=${variantId}`)
-            .then(response => response.json())
-            .then(uuids => {
-                if (!uuids.length) {
-                    alert("❌ទំនិញនេះមិនមានរូបភាពទេ!");
-                    return;
-                }
-
-                imageUUIDs = uuids;
-                currentImageIndex = 0;
-                showImage(); // Display first image
-            document.getElementById("imageSlider").style.display = "flex";
-        })
-        .catch(error => {
-            console.error("Error fetching images:", error);
-        });
-}
-    function showImage() {
-        let imageElement = document.getElementById("sliderImage");
-        let uuid = imageUUIDs[currentImageIndex];
-        console.log(uuid)
-        fetch(`/api/image/show?uuid=${uuid}`)
-            .then(response => response.blob())
-            .then(blob => {
-                imageElement.src = URL.createObjectURL(blob);
-            })
-            .catch(error => console.error("Error loading image:", error));
-    }
-
-    function openVariantAttributeDetail(button) {
-        let variantId = button.getAttribute("data-variant-id");
-        // Fetch data using AJAX
-        fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
-        .then(response => response.json())
-        .then(data => {
-            let attributeList = document.getElementById("attributeList");
-            attributeList.innerHTML = "";
-
-            if (data.length > 0) {
-                data.forEach(attr => {
-                    let listItemName = document.createElement("li");
-                    listItemName.textContent = `${attr.attribute_name}: ${attr.value}`;
-                    listItemName.style.listStyle = 'none'
-                    listItemName.style.paddingRight = '5%'
-
-                    attributeList.appendChild(listItemName);
-                });
-
-                document.getElementById("customModal").style.display = "flex";
-            } else {
-                alert("No attributes found!");
-            }
-        })
-        .catch(error => console.error("Error fetching data:", error));
-    }
-
     async function updateProductDetail() {
             let fileInput = document.getElementById('product_variant_image_value');
             let files = fileInput.files;
@@ -229,6 +150,7 @@ if(window.location.pathname.includes("/api/product")) {
                     body: formData
                 });
 
+
             sessionStorage.setItem('popupMessage', 'success');
             sessionStorage.setItem('popupAction', 'update');
             showPopUpMessage('success', 'update');
@@ -238,4 +160,85 @@ if(window.location.pathname.includes("/api/product")) {
                 console.error("Error uploading:", error);
             }
     }
+
+if(window.location.pathname.includes("/api/product")) {
+    function deleteProduct(id) {
+        fetch('/api/product/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(data => {
+            sessionStorage.setItem('popupMessage', 'success');
+            sessionStorage.setItem('popupAction', 'delete');
+            location.reload();
+        })
+         .catch(error => {
+            showPopUpMessage('error', 'delete');
+        });
+    }
+
+    function openImageSlider(button) {
+        let variantId = button.getAttribute("data-variant-id");
+
+        fetch(`/api/get/images?variant_id=${variantId}`)
+            .then(response => response.json())
+            .then(uuids => {
+                if (!uuids.length) {
+                    alert("❌ទំនិញនេះមិនមានរូបភាពទេ!");
+                    return;
+                }
+
+                imageUUIDs = uuids;
+                currentImageIndex = 0;
+                showImage(); // Display first image
+            document.getElementById("imageSlider").style.display = "flex";
+        })
+        .catch(error => {
+            console.error("Error fetching images:", error);
+        });
+}
+    function showImage() {
+        let imageElement = document.getElementById("sliderImage");
+        let uuid = imageUUIDs[currentImageIndex];
+        if(uuid !== undefined) {
+            fetch(`/api/image/show?uuid=${uuid}`)
+            .then(response => response.blob())
+            .then(blob => {
+                imageElement.src = URL.createObjectURL(blob);
+            })
+            .catch(error => console.error("Error loading image:", error));
+        }
+
+    }
+
+    function openVariantAttributeDetail(button) {
+        let variantId = button.getAttribute("data-variant-id");
+        // Fetch data using AJAX
+        fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
+        .then(response => response.json())
+        .then(data => {
+            let attributeList = document.getElementById("attributeList");
+            attributeList.innerHTML = "";
+
+            if (data.length > 0) {
+                data.forEach(attr => {
+                    let listItemName = document.createElement("li");
+                    listItemName.textContent = `${attr.attribute_name}: ${attr.value}`;
+                    listItemName.style.listStyle = 'none'
+                    listItemName.style.paddingRight = '5%'
+
+                    attributeList.appendChild(listItemName);
+                });
+
+                document.getElementById("customModal").style.display = "flex";
+            } else {
+                alert("No attributes found!");
+            }
+        })
+        .catch(error => console.error("Error fetching data:", error));
+    }
+
 }

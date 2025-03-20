@@ -34,4 +34,8 @@ public interface VariantAttributeRepository extends JpaRepository<VariantAttribu
     @Query(value = "DELETE FROM variant_attributes WHERE id IN (:ids)", nativeQuery = true)
     void deleteRecordById(List<Integer> ids);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM variant_attributes WHERE variant_id = :variantId", nativeQuery = true)
+    void removeByVariantId(Integer variantId);
 }

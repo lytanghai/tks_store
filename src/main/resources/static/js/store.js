@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     url = `/internal/product/list/filter?page=${currentStoreProductPage}&size=${itemsPerPage}`;
     fetchFilterProduct(url);
@@ -162,7 +161,10 @@ function displayProducts(products) {
                     <div class="product-stock">ស្ដុក:&nbsp;<span style="color: #e28743; font-weight: bold"> ${stockQuantity} </span></div>
                 </div>
                 <div class="product-actions">
-                    <button class="action-btn view" onclick="viewProductDetails(${product.id})" id="store-view-btn">👁️ View</button>
+                     <button class="action-btn view store-view-btn"
+                        data-product='${JSON.stringify(product)}'>
+                        👁️ View
+                    </button>
                     <button class="action-btn" onclick="addToCartProduct(${product.id})">🛒 Add to Cart</button>
                 </div>
             </div>
@@ -197,10 +199,77 @@ function addToCartProduct(productId) {
     alert(`Product ID ${productId} added to cart!`);
 }
 
-function viewProductDetails(productId) {
-    document.getElementById("store-view-detail-container").style.display = "block";
-    document.getElementById("store-view-detail-container").style.zIndex = "2";
-//    alert(`Viewing details for Product ID: ${productId}`);
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#productGrid").addEventListener("click", function(event) {
+        let targetElement = event.target;
+        while (targetElement && !targetElement.classList.contains("store-view-btn")) {
+            targetElement = targetElement.parentElement;
+        }
+
+        if (targetElement) {
+            const productData = targetElement.getAttribute("data-product");
+            try {
+                viewProductDetails(JSON.parse(productData));
+            } catch (error) {
+                console.error("Error parsing product data:", error);
+            }
+        }
+    });
+});
+
+function viewProductDetails(product) {
+    let container = document.querySelector('.store-view-detail-container');
+    container.classList.add('show');
+    const imageSliderContainer = document.querySelector('.store-image-slider-container');
+    const imageThumbnailContainer = document.querySelector('.store-image-thumbnail-container');
+
+    imageSliderContainer.innerHTML = '';
+    imageThumbnailContainer.innerHTML = '';
+
+    const imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
+
+    if (imageUUIDs.length === 0) {
+        const noImageMessage = document.createElement('div');
+        noImageMessage.textContent = 'No image preview available';
+        noImageMessage.style.textAlign = 'center';
+        noImageMessage.style.fontSize = '16px';
+        noImageMessage.style.color = '#888'; // Optional styling
+        imageSliderContainer.appendChild(noImageMessage);
+        return;
+    }
+    // Create and append the main image (slider)
+    imageUUIDs.forEach((uuid, index) => {
+        const mainImage = document.createElement('img');
+        mainImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+        mainImage.alt = `Image ${index + 1}`;
+        mainImage.setAttribute('data-uuid', uuid);
+        mainImage.style.display = (index === 0) ? 'block' : 'none'; // Show the first image by default
+        imageSliderContainer.appendChild(mainImage);
+    });
+
+    // Create and append thumbnail images
+    imageUUIDs.forEach((uuid, index) => {
+        const thumbImage = document.createElement('img');
+        thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+        thumbImage.alt = `Thumb ${index + 1}`;
+        thumbImage.onclick = () => goToSlide(index); // Add click handler for each thumbnail
+        imageThumbnailContainer.appendChild(thumbImage);
+    });
+}
+
+function goToSlide(index) {
+    const slider = document.querySelector('.store-image-slider-container');
+    const images = slider.getElementsByTagName('img');
+
+    if (images.length === 0) return;
+
+    for (let img of images) {
+        img.style.display = 'none';
+    }
+
+    if (images[index]) {
+        images[index].style.display = 'block';
+    }
 }
 
 function closeStoreProductDetail() {
@@ -287,7 +356,6 @@ function filterProductByCategoryId(id) {
     resetFilterTitle();
     categoryGlobalId = id;
     fetchFilterProduct('http://localhost:8080/internal/product/list/filter?page=1&size=16&category_id=' + id + '&condition_type=EQUAL');
-
 }
 
 function lookupProductContains() {
@@ -319,3 +387,8 @@ document.getElementById("store-keyword").addEventListener("input", lookupProduct
 document.getElementById("clear-store-search").addEventListener("click", () => {
     location.reload()
 ;});
+
+function closeProductDetails() {
+    let container = document.querySelector('.store-view-detail-container');
+    container.classList.remove('show');
+}

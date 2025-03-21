@@ -320,12 +320,11 @@
         top: 67.5%;
     }
 
-    /* store-view-detail-container */
     .store-view-detail-container {
         position: absolute;
-        display: block; /* Keep it block for smooth transitions */
+        display: block;
         width: 82%;
-        height: 97%;
+        height: 100%;
         left: 18.3%;
         top: 1.5%;
         background: rgba(0, 0, 0, 0.8);
@@ -349,7 +348,7 @@
         position: absolute;
         display: block;
         width: 5%;
-        height: 3%;
+        height: 1%;
         right: 3%;
         top: 1.5%;
         cursor: pointer;
@@ -379,7 +378,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #fafafa;
+        background: #fff;
     }
 
     .store-image-slider-container img {
@@ -406,8 +405,11 @@
         height: 90px;
         object-fit: contain;
         cursor: pointer;
-        margin: 0 12px;
         transition: border 0.3s;
+        margin: 6px;
+        background: #8e8989;
+        border: 1px solid;
+        border-radius: 12px
     }
 
     .store-image-thumbnail-container img:hover {

@@ -222,7 +222,7 @@ function viewProductDetails(product) {
     container.classList.add('show');
     const imageSliderContainer = document.querySelector('.store-image-slider-container');
     const imageThumbnailContainer = document.querySelector('.store-image-thumbnail-container');
-
+    document.getElementById("store-footer").style.display = "none";
     imageSliderContainer.innerHTML = '';
     imageThumbnailContainer.innerHTML = '';
 
@@ -270,10 +270,6 @@ function goToSlide(index) {
     if (images[index]) {
         images[index].style.display = 'block';
     }
-}
-
-function closeStoreProductDetail() {
-    document.getElementById("store-view-detail-container").style.display = "none";
 }
 
 function fetchItems() {
@@ -391,4 +387,5 @@ document.getElementById("clear-store-search").addEventListener("click", () => {
 function closeProductDetails() {
     let container = document.querySelector('.store-view-detail-container');
     container.classList.remove('show');
+    document.getElementById("store-footer").style.display = "block";
 }

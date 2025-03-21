@@ -1,6 +1,5 @@
 package com.group.tks_store.product.attribute.repository;
 
-import com.group.tks_store.product.attribute.dto.AttributeDTO;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +21,11 @@ public interface AttributeRepository extends JpaRepository<AttributeEntity, Inte
             nativeQuery = true)
     Page<AttributeEntity> findAllByPagination(@Param("status") String status,
                                              Pageable pageable);
+
+    @Query(value = "SELECT * FROM attributes WHERE (" +
+            "LOWER(name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(name_kh) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR CAST(id AS TEXT) LIKE CONCAT('%', :keyword, '%'))",
+            nativeQuery = true)
+    Page<AttributeEntity> findByKeyword(@Param("keyword")String keyword, Pageable pageable);
 }

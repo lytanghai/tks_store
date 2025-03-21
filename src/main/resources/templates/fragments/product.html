@@ -1,18 +1,79 @@
 <div class="content" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="product">
 
     <div class="product-search-bar-container">
-        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." onkeyup="productFilterResults()" class="search-ipt">
-        <div class="filter-date-container">
-        <label for="productStartDate" class="start_from">ចាប់ពី:</label>
-            <input type="date" id="productStartDate" onchange="productFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
+        &nbsp; &nbsp;
+        <input type="text" id="search_input_product" placeholder="ស្វែងរក..." class="search-ipt">
+        <div class="filter-container">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="filterColumn" >
+                    <optgroup>
+                        <option value="defaultChoice" disabled selected> ជ្រើសរើស </option>
+                        <option value="code">លេខកូដ</option>
+                        <option value="product_name">ឈ្មោះទំនិញ</option>
+                        <option value="category_name">ប្រភេទទំនិញ</option>
+                        <option value="sale_price">តម្លៃ</option>
+                        <option value="stock_quantity">ចំនួនស្ដុក</option>
+                        <option value="sku">SKU</option>
+                        <!--                <option value="10">ថ្ងៃខែបញ្ជូល</option>-->
+                    </optgroup>
+                </select>
+            &nbsp;&nbsp;
+            <select id="filterCondition" onchange="toggleInputFields()" style="width: 150px;">
+                <optgroup>
+                    <option value="defaultCondition" disabled selected>លក្ខខណ្ឌ</option>
+                    <option value="EQUAL">ស្មើរ</option>
+                    <option value="CONTAINS">ប្រហែល</option>
+                    <option value="BETWEEN">ចន្លោះ(លេខ)</option>
+                    <option value="GREATER_THAN">ធំជាង(លេខ)</option>
+                    <option value="LESS_THAN">តូចជាង(លេខ)</option>
+                </optgroup>
+
+            </select>
+            &nbsp;&nbsp;
+            <div id="inConditionFields" style="display: none;">
+                <div style="display: flex; height:100%;">
+                    <input type="text" style="border-radius: 8px;" id="filterValue1" placeholder="បញ្ជូលតម្លៃទី 1" required>
+                    <span style="margin-left: 2%"></span>
+                    <input type="text" style="border-radius: 8px;" id="filterValue2" placeholder="បញ្ជូលតម្លៃទី 2" required>
+                </div>
+            </div>
+            &nbsp;&nbsp;
+            <div id="singleConditionField" style="display:none">
+                <input type="text" id="filterValue" style="border-radius: 8px;" placeholder="បញ្ជូលតម្លៃ" required>
+            </div>
+            &nbsp;
+            <select id="product_filter_search_currency"
+                    name="product_currency_edit"
+                    style="text-align: center; display:none; width: 75px">
+                <option value="none" selected disabled></option>
+                <option value="USD">USD</option>
+                <option value="KHR">KHR</option>
+            </select>
         </div>
 
-        <div class="filter-date-container">
-        <label for="productEndDate" class="start_to">រហូតដល់:</label>
-            <input type="date" id="productEndDate" onchange="productFilterResults()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
-            <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
+        &nbsp;&nbsp;&nbsp;
+        <div class="group-filter-btn">
+            <span style="margin-left: 2%"></span>
+            <button class="common-btn" id="btn-submit-filter" style="height: 65px; width:65px"></button>
+            <span style="margin-left: 5%"></span>
+            <button class="reset-btn" onclick="resetFilter()" id="btn-reset-filter" style="height: 65px; width:65px"></button>
         </div>
+
+        <!-- Date Filter -->
+        <div id="dateFilter">
+            <div class="filter-date-container" id="filter-start-date" style="display: none;">
+                <label for="productStartDate" class="start_from">ចាប់ពី:</label>
+                <input type="date" id="productStartDate" onchange="filterInputValueDateTime()" class="date-obj">
+                <button type="button" class="clear-btn" onclick="clearProductStartDate()">&#10005;</button>
+            </div>
+
+            <div class="filter-date-container" id="filter-end-date" style="display: none;">
+                <label for="productEndDate" class="start_to">រហូតដល់:</label>
+                <input type="date" id="productEndDate" onchange="filterInputValueDateTime()" class="date-obj" placeholder="ថ្ងៃ/ខែ/ឆ្នាំ">
+                <button type="button" class="clear-btn" onclick="clearProductEndDate()">&#10005;</button>
+            </div>
+        </div>
+
     </div>
 
     <div id="product-create-container">
@@ -39,97 +100,37 @@
             <th class="table_th">លេខកូដ</th>
             <th class="table_th">ឈ្មោះទំនិញ</th>
             <th class="table_th">ប្រភេទទំនិញ</th>
-            <th class="table_th">តម្លៃ</th>
-            <th class="table_th">ចំនួនស្ដុក</th>
-            <th class="table_th">SKU</th>
+            <th class="table_th">តម្លៃ(ដុល្លារ) | តម្លៃ(រៀល)</th>
+<!--            <th class="table_th">SKU</th>-->
+            <th class="table_th" width="50px">ចំនួនស្ដុក</th>
             <th class="table_th">អង្គធាតុ</th>
             <th class="table_th">រូបភាព</th>
+<!--            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>-->
             <th class="table_th">សកម្មភាព</th>
         </tr>
         </thead>
         <tbody id="productTable">
-        <tr th:each="row,iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
-            <td class="table_td" th:text="${row.code}"></td>
-            <td class="table_td" th:text="${row.nameKh != null and row.nameKh != '' ? row.nameEn + ' (' + row.nameKh + ')' : row.nameEnn}"></td>
-            <td class="table_td" th:text="${row.category.name != null and row.category.nameKh != '' ? row.category.name + ' (' + row.category.nameKh + ')' : row.category.name}"></td>
-            <td class="table_td custom-sale-price" th:text="${#numbers.formatDecimal(row.salePrice, 1, 2)} + ' ' + ${row.currency}"></td>
-            <td>
-                <ul>
-                    <li th:each="variant : ${row.variants}">
-                        <span th:text="${variant.stockQuantity}"></span><br>
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li th:each="variant : ${row.variants}">
-                        <span th:text="${variant.sku}"></span><br>
-                    </li>
-                </ul>
-            </td>
-
-            <td>
-                <ul>
-                    <li th:each="variant : ${row.variants}">
-                        <ul>
-                            <li th:each="attribute : ${variant.attributes}" style="text-align: left; width: 150px">
-                                <span th:text="${attribute.name}"></span>:<span th:text="${attribute.value}"></span><br>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-
-            <td class="view_img_td">
-                <ul>
-                    <li th:each="variant : ${row.variants}">
-                        <button class="view-image-btn" th:data-variant-id="${variant.id}" onclick="openImageSlider(this)">&#128065;រូបភាព</button>
-                    </li>
-                </ul>
-            </td>
-
-            <div id="imageSlider" class="slider-container" style="display: none;">
-                <span class="close-btn" onclick="closeSlider()">✖</span>
-                <button class="prev-btn" onclick="prevProductImage()">⮜</button>
-                <img id="sliderImage" class="slider-image" src="" alt="Product Image">
-                <button class="next-btn" onclick="nextProductImage()">⮞</button>
-            </div>
-
-            <td class="table_td">
-                <ul class="product-action ">
-                    <li>
-                        <a th:id="${row.id}" th:href="'#'" th:onclick="'showConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-                            <span class="unicode-icon">&#128465</span>
-                            <span th:text="លុប"></span>
-                        </a>
-                    </li>
-                    &nbsp;
-                    <li> <span style="font-size:1.5rem">|</span> </li>
-                    &nbsp;
-                    <li>
-                        <a
-                                th:id="${row.id}"
-                                th:data-code="${row.code}"
-                                th:data-categoryEn="${row.category.name}"
-                                th:data-categoryKh="${row.category.nameKh}"
-                                th:data-name-en="${row.nameEn}"
-                                th:data-name-kh="${row.nameKh}"
-                                th:data-sale-price="${row.salePrice}"
-                                th:data-currency="${row.currency}"
-                                th:data-description="${row.description}"
-                                th:data-form-title="'Update'"
-                                th:href="'#'"
-                                onclick="openCreateUpdateProductModal(this)">
-                            <span class="unicode-icon">&#x270E;</span>
-                            <span th:text="'កែ'"></span>
-                        </a>
-                    </li>
-                </ul>
-            </td>
-        </tr>
         </tbody>
     </table>
 
+    <div id="imageSlider" class="slider-container" style="display: none;">
+        <div class="product-prev-btn-container">
+            <button class="prev-btn" onclick="prevProductImage()">⮜</button>
+        </div>
+        <span class="close-btn" onclick="closeSlider()">✖</span>
+        <img id="sliderImage" class="slider-image" src="" alt="Product Image">
+        <div class="product-next-btn-container">
+            <button class="next-btn" onclick="nextProductImage()">⮞</button>
+        </div>
+    </div>
+
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="close-var-att-btn" onclick="closeVariantAttributeModal()">&times;</span>
+            <p style="font-size: 2.3rem">ពត័មានអង្គធាតុ</p>
+            <ul id="attributeList" style="font-size: 2rem"></ul>
+        </div>
+    </div>
 
     <div id="myProductModal" class="product-modal product-tab-container">
         <div class="product-modal-content">
@@ -172,25 +173,30 @@
                             <div class="general-form-group flex-item" id="product-grid-category">
                                 <label for="product_select" class="general_label custom-product-category-label"><span style="color: red">*</span>ប្រភេទទំនិញ:</label>
                                 <input type="text" disabled id="product-category-edit"
-                                       style="display: none; margin-left:9%; width:190px; height: 50px; text-align:center; font-size: 1.5rem">
-                                <select id="product_select" name="product_id" class="product-name" style="font-size: 1rem" required>
-                                </select>
+                                       style="display: none; margin-left:9%; width:400px; height: 50px; text-align:center; font-size: 1.5rem">
+                                <div style="width: 30%;">
+                                    <select id="product_select" name="product_id" class="product-name"
+                                            style="font-size: 1.5rem; width: 25%; padding: 10px; max-height: 350px; overflow-y: auto;"
+                                            onclick="this.size = 12;"
+                                            onblur="this.size = 0;" required>
+                                    </select>
+                                </div>
+
                             </div>
                             <div class="general-form-group flex-item" id="product-grid-sale-price">
                                 <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;"><span style="color: red">*</span>តម្លៃ:</label>
                                 <input type="text" id="product_sale_price_edit" style="border:1px solid;" name="product_sale_price" class="product-price-ipt" placeholder="បញ្ជូលតម្លៃទំនិញ">
                             </div>
-                            <div class="general-form-group flex-item" id="product-grid-currency">
+                            <div  class="general-form-group flex-item">
                                 <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label"><span style="color: red">*</span>ជ្រើសរើសរូបីយប័ណ្ណ:</label>
-                                <select id="product_currency_edit"
-                                        name="product_currency_edit"
-                                        class="product-currency-select"
-                                        style="text-align: center">
-<!--                                    <option value="USD" selected disabled hidden style="font-size: 1.3rem">USD</option>-->
-                                    <option value="USD">USD</option>
-                                    <option value="KHR">KHR</option>
-                                </select>
+                                <div class="product-tab-currency-container">
+                                    <select id="product_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem">
+                                        <option value="USD">USD</option>-->
+                                        <option value="KHR">KHR</option>
+                                    </select>
+                                </div>
                             </div>
+
                             <div class="general-form-group" id="product-grid-description">
                                 <label for="product_description_edit" class="general_label">ពត៍មានបន្ថែម:</label>
                                 <textarea id="product_description_edit" name="product_description" placeholder="ពត៍មានបន្ថែម" class="general_textarea"></textarea>
@@ -207,7 +213,7 @@
                 <div class="product-create-modal-content">
                     <div class="product-service-type-title">
                         <img class="icon-service-type" th:src="@{/icon/edit-product-icon.png}">
-                        <h2 id="form-modal-product-title-2">បញ្ជូលអង្គធាតុទំនិញ</h2>
+                        <h2 id="form-modal-product-title-2">X</h2>
                     </div>
                     <form id="gridFormVariant">
                         <div class="product-variant-container">
@@ -221,13 +227,11 @@
                             <div id="product-base-price-grid-currency">
                                 <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
                                 <span style="margin-left: 12%"></span>
-                                <select id="product_base_price_currency_edit"
-                                        name="product_currency_edit"
-                                        style="border:1px solid;font-size: 1rem; text-align: center; width: 100px; height: 50px;">
-<!--                                    <option value="USD" selected disabled hidden style="font-size: .8rem">USD</option>-->
-                                    <option value="USD">USD</option>
+                                <select id="product_base_price_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem">
+                                    <option value="USD">USD</option>-->
                                     <option value="KHR">KHR</option>
                                 </select>
+
                             </div>
 
                             <div id="product-grid-stock-quantity">
@@ -252,12 +256,17 @@
 
                                 <div style="display: block;">
                                     <div style="font-size: 1.6rem">អង្គធាតុ</div>
-                                    <div>
-                                        <select id="product_attribute_select" style="width: 150px; font-size: 1.5rem; height: 50px"></select>
+                                    <div >
+                                        <select id="product_attribute_select"
+                                                style="overflow-y: auto; max-height: 300px;"
+                                                onclick="this.size = 12;"
+                                                onblur="this.size = 0;"
+                                                >
+                                        </select>
                                     </div>
                                 </div>
 
-                                <div style="display: block; margin-left: 7%">
+                                <div style="display: block; margin-left: 0%;">
                                     <div style="font-size: 1.6rem">តម្លៃ: </div>
                                     <div>
                                         <input type="text" id="product_attribute_value" class="product-variant-attribute-value">
@@ -268,33 +277,31 @@
                                     <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
                                     <div>
                                         <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
-                                               style="width: 150px;" onchange="addImages(event)">
+                                               style="width: 150px; background: #fafafa" onchange="addImages(event)">
                                     </div>
 
-                                    <div class="preview-image-container">
+                                    <div class="preview-image-container" id="preview-image-container">
                                         <button type="button" id="preview_button"
                                                 style="display: none; margin-left: 10px;"
                                                 onclick="openPreview()">មើល</button>
                                     </div>
 
                                     <div id="image_preview_modal" class="image-preview">
-                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 1.5rem; position: absolute; top: 5px; right: 10px;">×</span>
-                                        <button onclick="prevImageUpload()" class="preview-prev-img">◀</button>
+                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
+                                        <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
+                                        <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
                                         <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
-                                        <button onclick="nextImageUpload()" class="preview-next-img">▶</button>
+                                        <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
                                     </div>
                                 </div>
 
                             </div>
-
-
                             <div class="add-attribute-btn">
                                 <button type="button" onclick="addAttribute()"
-                                        style="width: 270px; background-color: #e28743;color: #000;">
+                                        style="width: 250px; background-color: #e28743;color: #000;">
                                          បន្ថែមអង្គធាតុទំនិញ</button>
                             </div>
                         </div>
-
 
                         <div class="attribute-list-title">
                             <h2 class="product-attribute-list-table"> អង្គធាតុទំនិញ: </h2>
@@ -309,7 +316,6 @@
                                 </div>
                             </div>
                                 <ul id="attribute-list" class="product-attribute-ul"></ul>
-
                         </div>
                         <div class="product-btn-container">
                             <button onclick="navigateTab('Variants', 'Product')" class="product-btn-back">ថយក្រោយ</button>
@@ -390,33 +396,24 @@
     </div>
 
     <div class="product-page-redirect">
-        <div th:if="${total_records < 0}">
-            <p>ទំព័រ: <span>0</span> of <span th:text="${total_pages}"></span></p>
-        </div>
-        <div th:unless="${total_records < 0}">
-            <div th:if="${total_records == 0}">
-                <p>ទំព័រ: 0</span> of <span th:text="${total_pages}"></span></p>
-            </div>
-            <div th:unless="${total_records == 0}">
-                <div th:if="${total_records > 0}">
-                    <p>ទំព័រ: <span th:text="${current_page + 1}"></span> of <span th:text="${total_pages}"></span></p>
-                </div>
-            </div>
-        </div>
-
+        <p >ទំព័រ: <span id="display-page-num">X</span> of <span id="display-page-total">X</span></p>
         <div class="product-page-number">
-            <div th:if="${current_page == 0}" class="product-list-prev">
-                <a href="#" class="product-redirect-href"><</a>
+
+            <div class="product-list-prev" id="back-page-init-container">
+                <button id="back-page-init" onclick="fetchFilterProduct()"> < </button>
             </div>
 
-            <div th:if="${current_page != 0}" class="product-list-prev">
-                <a th:if="${current_page > 0}" th:href="@{/api/product/list/(page=${current_page - 1})}" class="product-redirect-href"> < </a>
+            <div class="product-list-next" id="to-page-init-container">
+                <button id="to-page-init" onclick="fetchFilterProduct()"> > </button>
             </div>
 
-            <div th:if="${current_page < total_pages}" class="product-list-next">
-                <a th:if="${current_page < total_pages - 1}" th:href="@{/api/product/list/(page=${current_page + 1})}" class="product-redirect-href"> > </a>
+            <div class="product-list-prev" id="back-page-container" style="display:none">
+                <button id="back-page"> < </button>
+            </div>
+
+            <div class="product-list-next" id="to-page-container" style="display:none">
+                <button id="to-page"> > </button>
             </div>
         </div>
     </div>
-
 </div>

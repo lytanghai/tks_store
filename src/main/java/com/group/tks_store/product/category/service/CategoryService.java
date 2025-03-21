@@ -90,4 +90,26 @@ public class CategoryService {
 
         return response;
     }
+    public CategoryListDTO findByKeyword(String keyword, PageRequest pageRequest) {
+        Page<CategoryEntity> result  = categoryRepository.findByKeyword(keyword, pageRequest);
+        CategoryListDTO response = new CategoryListDTO();
+        response.setRecords(result.getContent());
+        response.setTotalPages(result.getTotalPages());
+        response.setTotalRecords(result.getSize());
+        response.setFirst(result.isFirst());
+        response.setLast(result.isLast());
+        response.setPageNumber(result.getPageable().getPageNumber());
+
+        if (pageRequest.getSort().isSorted()) {
+            pageRequest.getSort().get().findFirst().ifPresent(order -> {
+                response.setSortBy(order.getProperty());
+                response.setSortDirection(order.getDirection().toString());
+            });
+        } else {
+            response.setSortBy(null);
+            response.setSortDirection(null);
+        }
+
+        return response;
+    }
 }

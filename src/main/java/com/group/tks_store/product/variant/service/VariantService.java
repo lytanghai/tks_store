@@ -55,7 +55,6 @@ public class VariantService {
 
         VariantEntity variant = new VariantEntity();
         variant.setProduct(product);
-
         variant.setBasePrice(variantCreateDTO.getBasePrice());
         variant.setSku(variantCreateDTO.getSku());
         variant.setCurrency(variantCreateDTO.getCurrency());

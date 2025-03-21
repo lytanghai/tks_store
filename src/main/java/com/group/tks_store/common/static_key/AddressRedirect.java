@@ -18,4 +18,5 @@ public class AddressRedirect {
     public static final String REDIRECT_PRODUCT = "redirect:/product";
 
     public static final String ATTRIBUTE = "attribute";
+    public static final String VARIANT_ATTRIBUTE = "variant-attributes";
 }

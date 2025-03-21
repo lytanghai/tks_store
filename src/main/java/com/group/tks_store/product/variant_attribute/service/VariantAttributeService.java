@@ -6,14 +6,18 @@ import com.group.tks_store.product.attribute.repository.AttributeRepository;
 import com.group.tks_store.product.variant.entity.VariantEntity;
 import com.group.tks_store.product.variant.repository.ProductVariantRepository;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
+import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDetailList;
 import com.group.tks_store.product.variant_attribute.dto.VariantAttributeListDTO;
+import com.group.tks_store.product.variant_attribute.dto.interfaze.VariantAttributeDetailInterface;
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
 import com.group.tks_store.product.variant_attribute.repository.VariantAttributeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +32,10 @@ public class VariantAttributeService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+
+    public void removeItems(List<Integer> id) {
+        variantAttributeRepository.deleteRecordById(id);
+    }
 
     public VariantAttributeDTO createVariantAttribute(VariantAttributeDTO dto) {
         VariantEntity variant = variantRepository.findById(dto.getVariantId())
@@ -133,4 +141,30 @@ public class VariantAttributeService {
         return response;
     }
 
+    public List<VariantAttributeDetailList> findByVariantId(Integer variantId) {
+        List<VariantAttributeDetailList> response = new ArrayList<>();
+        List<VariantAttributeDetailInterface> result = variantAttributeRepository.findVariantAttributeDetailByVariantId(variantId);
+        if(!result.isEmpty()) {
+            for (VariantAttributeDetailInterface variantAttr: result) {
+                VariantAttributeDetailList each = new VariantAttributeDetailList();
+                each.setVariantAttributeId(variantAttr.getVariantAttributeId());
+                each.setValue(variantAttr.getValue());
+                if(!ObjectUtils.isEmpty(variantAttr.getAttributeName()) && !ObjectUtils.isEmpty(variantAttr.getAttributeNameKh())) {
+                    each.setAttributeName(variantAttr.getAttributeName() + "(" + variantAttr.getAttributeNameKh() + ")");
+                } else if(ObjectUtils.isEmpty(variantAttr.getAttributeName())) {
+                    each.setAttributeName(variantAttr.getAttributeNameKh());
+                } else if(ObjectUtils.isEmpty(variantAttr.getAttributeNameKh())) {
+                    each.setAttributeName(variantAttr.getAttributeName());
+                }
+                each.setAttributeId(variantAttr.getAttributeId());
+                each.setVariantId(variantId);
+                response.add(each);
+            }
+        }
+        return response;
+    }
+
+    public void removeByVariantId(Integer productId) {
+        variantAttributeRepository.removeByVariantId(productId);
+    }
 }

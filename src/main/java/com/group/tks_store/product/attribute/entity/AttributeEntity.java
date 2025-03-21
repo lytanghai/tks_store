@@ -1,9 +1,6 @@
 package com.group.tks_store.product.attribute.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.variant_attribute.entity.VariantAttributeEntity;
@@ -14,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "attributes")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AttributeEntity {
 
     @Id
@@ -30,8 +28,8 @@ public class AttributeEntity {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<VariantAttributeEntity> variantAttributes;
 
     public Integer getId() {

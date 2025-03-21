@@ -1,4 +1,80 @@
-let categoryGlobalAction = 'Create';
+function fetchFilteredCategories() {
+    let keyword = document.getElementById("search_input_category").value;
+    const url = `/internal/category/list/filter?keyword=${encodeURIComponent(keyword)}`;
+
+    document.getElementById("loading-spinner").style.display = "block";
+    document.getElementById("loading-spinner_2").style.display = "block";
+
+    console.log('url: ' + url)
+    setTimeout(() => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log("API Response:", data);
+
+                const categoryTable = document.getElementById("categoryTable");
+                categoryTable.innerHTML = ""; // Clear previous data
+
+                if (!data.totalItems || data.totalItems.length === 0) {
+                    categoryTable.innerHTML = "<tr><td colspan='7'>ស្វែងរកមិនឃើញទេ!</td></tr>";
+                    return;
+                }
+
+                data.totalItems.forEach(category => {
+                    const createdAt = new Date(category.created_at).toLocaleDateString("en-US");
+
+                    const row = document.createElement("tr");
+                    row.classList.add("table-row");
+
+                    row.innerHTML = `
+                        <td class="table_td">${category.id}</td>
+                        <td class="table_td">${category.name}</td>
+                        <td class="table_td">${category.name_kh}</td>
+                        <td class="table_td">${category.description ? category.description : "N/A"}</td>
+                        <td class="table_td">${category.status === "ACTIVE" ? "កំពុងដំណើរការ" : category.status}</td>
+                        <td class="table_td">${createdAt}</td>
+                        <td>
+                            <ul class="category-action">
+                                <li>
+                                    <a id="${category.id}" href="#" onclick="showCategoryConfirmationModal('delete', ${category.id})">
+                                        <img src="/icon/trash.png" class="icon" alt="Trash Icon">
+                                        <span>លុប</span>
+                                    </a>
+                                </li>
+                                &nbsp;
+                                <li> <span>|</span> </li>
+                                &nbsp;
+                                <li>
+                                    <a id="${category.id}"
+                                       data-name="${category.name}"
+                                       data-name-kh="${category.name_kh}"
+                                       data-description="${category.description ? category.description : ''}"
+                                       data-form-title="Update"
+                                       href="#"
+                                       class="category-edit-href"
+                                       onclick="resetToUpdateCategoryMode(this)">
+                                        <img src="/icon/edit.png" class="icon" alt="Edit Icon">
+                                        <span>កែ</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    `;
+                    categoryTable.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+                alert("Error fetching category data!");
+            })
+            .finally(() => {
+                document.getElementById("loading-spinner").style.display = "none"; // Hide loader
+                document.getElementById("loading-spinner_2").style.display = "none"; // Hide loader
+            });
+     }, 1000)
+
+}
+
 
 function clearCategoryModalInput() {
 //    document.getElementById("category_name").value = '';
@@ -116,10 +192,8 @@ function clearCategoryEndDate() {
         categoryFilterResults();
 }
 
-let num = 0;
 function resetToCreateCategoryMode(element) {
     categoryGlobalAction = 'Create';
-//    alert('resetToCreateCategoryMode: Create')
 
     let allElements = document.querySelectorAll('.category-edit-href');
     allElements.forEach(function(el) {
@@ -150,7 +224,6 @@ function resetToCreateCategoryMode(element) {
 
 function resetToUpdateCategoryMode(element) {
     categoryGlobalAction = 'Update';
-//    alert('resetToUpdateCategoryMode: Update')
     let allElements = document.querySelectorAll('.category-edit-href');
     allElements.forEach(function(el) {
         el.style.pointerEvents = 'auto';
@@ -185,7 +258,6 @@ function resetToUpdateCategoryMode(element) {
 }
 
 function showCategoryConfirmationModal(action, id) {
-//    alert('showCategoryConfirmationModal: ' + action)
     document.getElementById("category-confirmation-modal").style.display = "block";
     const modalText = document.getElementById("category-confirm-modal-text");
     if (action === 'create') {
@@ -204,8 +276,6 @@ function closeConfirmationCategoryModal() {
 }
 
 function confirmCategoryActionConfirmation() {
-//    alert('confirmCategoryActionConfirmation ' + window.currentAction)
-
     if (window.currentAction === 'create') {
         createNewCategory();
     } else if (window.currentAction === 'update') {
@@ -219,7 +289,6 @@ function confirmCategoryActionConfirmation() {
 
 function handleCategoryFormSubmit(event) {
     event.preventDefault();
-//    alert('handleCategoryFormSubmit ' + document.getElementById("category-edit-btn").textContent)
     if(document.getElementById("category-edit-btn").textContent === 'បញ្ជូល') {
         showCategoryConfirmationModal('create');
     } else {

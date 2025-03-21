@@ -13,8 +13,8 @@ public class MappingUtil {
             String[] attributeEntries = attributes.split(",");
             for (String attr : attributeEntries) {
                 String[] parts = attr.split(":");
-                if (parts.length == 2) {
-                    variantAttributes.add(new VariantAttributeDTOV2(String.valueOf(parts[0]), parts[1]));
+                if (parts.length == 3) {
+                    variantAttributes.add(new VariantAttributeDTOV2(Integer.valueOf(parts[0]), String.valueOf(parts[1]), parts[2]));
                 }
             }
         }

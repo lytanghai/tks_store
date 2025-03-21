@@ -1,9 +1,12 @@
 window.onload = function() {
     clearAttributeModalInput();
     clearCategoryModalInput();
-    fetchCategories();
-    fetchAttributes();
-    showTab("Product");
+
+    if(window.location.pathname.includes("/api/product")) {
+        showTab("Product");
+        fetchCategories();
+        fetchAttributes();
+    }
 
     const popupType = sessionStorage.getItem('popupMessage');
     const popupAction = sessionStorage.getItem('popupAction');
@@ -34,6 +37,13 @@ window.onload = function() {
     }
 };
 
+document.addEventListener("DOMContentLoaded", function () {
+    if (path === "/api/product/list/filter" && query === "?page=1") {
+        setTimeout(() => {
+            fetchFilterProduct();
+        }, 500);
+    }
+});
 document.addEventListener("click", function(event) {
       let modal = document.getElementById("myProductModal");
       if (event.target === modal) {
@@ -41,7 +51,8 @@ document.addEventListener("click", function(event) {
       }
 
     //close preview image on product list when click anywhere
-      document.getElementById("imageSlider").style.display = 'none';
+//    document.getElementById("imageSlider").style.display = 'none';
+    document.getElementById("customModal").style.display = 'none';
 
   });
 
@@ -76,8 +87,6 @@ function getSelectOptionTextByValue(selectElement, selectedValue) {
     return null;
 }
 
-let imageUrls = [];
-let currentIndex = 0;
 function addImages(event) {
     const files = event.target.files;
 
@@ -96,11 +105,11 @@ function addImages(event) {
 }
 
 function openPreview() {
-    showImageSlider();
     if (imageUrls.length > 0) {
         document.getElementById('preview_image').src = imageUrls[currentIndex];
         document.getElementById('image_preview_modal').style.display = 'block';
     }
+    showImageSlider();
 }
 
 function closePreview() {
@@ -115,22 +124,24 @@ function prevImage(id) {
 }
 
 function nextImage(id) {
-console.log('nextImage: ' + id)
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         document.getElementById(id).src = imageUrls[currentIndex];
     }
 }
 
-function prevImageUpload() {
-console.log('prevImageUpload:')
+function prevImageUpload(event) {
+       event.preventDefault();
+       event.stopPropagation();
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
         document.getElementById('preview_image').src = imageUrls[currentIndex];
     }
 }
 
-function nextImageUpload() {
+function nextImageUpload(event) {
+       event.preventDefault();
+       event.stopPropagation();
     if (imageUrls.length > 0) {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         document.getElementById('preview_image').src = imageUrls[currentIndex];
@@ -149,10 +160,67 @@ function showVerifyImageSlider() {
     if (imageUrls.length > 0) {
         document.getElementById('verify_preview_image').src = imageUrls[currentIndex];
         document.getElementById('image_verify_preview_modal').style.display = 'block';
+    } else {
+        document.getElementById('verify_preview_image').style.display = "none";
+        document.getElementById('image_verify_preview_modal').style.display = 'none';
     }
 }
 
+function extractNumber(value) {
+    // Extract numeric part from value (e.g., "100 USD" → 100)
+    let number = parseFloat(value.replace(/[^\d.]/g, ""));
+    return isNaN(number) ? null : number;
+}
 
-//window.onclick = function(event) {
-//    showImageSlider();
-//}
+function convertToJSONArray(input) {
+    return input.split(',').map(pair => {
+        let [id, name, value] = pair.split(':').map(item => item.trim());
+        return { id , name, value };
+    });
+}
+
+function showAlertMessageModal(messageTitle, messageBody) {
+    const modal = document.getElementById("alert_msg_modal");
+    const modalMessage = document.getElementById("alert_modal_message_title");
+    const modalMessageBody = document.getElementById("alert_modal_message_body");
+    const modalImg = document.getElementById("alert-msg-image");
+    modalImg.src ='/icon/exclamation-mark.png/';
+    modalMessage.textContent = messageTitle;
+    modalMessageBody.textContent = messageBody;
+
+    modal.style.display = "block";
+
+    modal.classList.remove('fade-out');
+    modal.classList.add('fade-in');
+
+    setTimeout(function() {
+        modal.classList.remove('fade-in');
+        modal.classList.add('fade-out');
+    }, 3000);
+
+    setTimeout(function() {
+        modal.style.display = "none";
+    }, 4000);
+}
+
+function fetchCategories() {
+    fetch("/internal/category/list")
+        .then(response => response.json())
+        .then(categories => {
+            populateCategoryDropdown(categories);
+        })
+        .catch(error => {
+            console.error("Error fetching categories:", error);
+    });
+}
+
+function fetchAttributes() {
+    fetch("/internal/attribute/list")
+        .then(response => response.json())
+        .then(attributes => {
+            populateAttributeDropdown(attributes);
+        })
+        .catch(error => {
+            console.error("Error fetching attributes:", error);
+    });
+}

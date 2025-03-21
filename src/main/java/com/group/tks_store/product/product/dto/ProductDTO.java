@@ -10,7 +10,7 @@ import com.group.tks_store.product.variant_attribute.dto.VariantAttributeDTO;
 import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ProductFullCreateDTO {
+public class ProductDTO {
     private ProductCreateDTO product;
     private VariantCreateDTO variant;
     @JsonProperty("variant_attributes")
@@ -34,20 +34,20 @@ public class ProductFullCreateDTO {
         this.variant = variant;
     }
 
-    public List<VariantAttributeDTO> getVariantAttribute() {
-        return variantAttributes;
-    }
-
-    public void setVariantAttribute(List<VariantAttributeDTO> variantAttribute) {
-        this.variantAttributes = variantAttribute;
-    }
-
     public List<VariantAttributeDTO> getVariantAttributes() {
         return variantAttributes;
     }
 
     public void setVariantAttributes(List<VariantAttributeDTO> variantAttributes) {
         this.variantAttributes = variantAttributes;
+    }
+
+    public List<VariantImageCreateDTO> getImages() {
+        return images;
+    }
+
+    public void setImages(List<VariantImageCreateDTO> images) {
+        this.images = images;
     }
 
     public List<VariantImageCreateDTO> getVariantImage() {

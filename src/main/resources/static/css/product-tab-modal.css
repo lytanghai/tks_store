@@ -11,8 +11,22 @@
         background-color: rgba(0, 0, 0, 0.5);
     }
 
+    #product_attribute_select {
+        font-size: 1.2rem;
+        width: 80%;
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    #product_attribute_select:focus {
+        width: 320px;
+        height: 200px;
+        overflow-y: auto;
+    }
+
     #product_attribute_select option {
-        font-size: 1rem;
+        font-size: 1.5rem;
+        overflow-y: auto;
     }
 
     .product-modal-content {
@@ -68,7 +82,6 @@
         background-color: #ccc;
         font-size: 16px;
         cursor: not-allowed;
-        font-weight: bold;
     }
 
     .tab button.active {
@@ -107,8 +120,6 @@
         cursor: pointer;
         border-radius: 4px;
         height: 50px;
-        width: 150px;
-        color: #000;
         font-size: 1.3rem;
     }
 
@@ -141,12 +152,13 @@
         height: 59%;
         overflow: auto;
         border: 1px solid #000;
+        z-index: 1;
     }
 
     .add-attribute-btn{
         width: 300px;
         height: 50px;
-        margin-left: 23%;
+        margin-left: 0%;
     }
 
     .attribute-list-title{

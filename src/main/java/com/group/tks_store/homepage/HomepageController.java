@@ -23,6 +23,13 @@ public class HomepageController {
         return "home";
     }
 
+    @GetMapping("/store")
+    public String store(Model model) {
+        model.addAttribute("page_type_kh", "ហាង");
+        model.addAttribute("page_type_en", "store");
+        return "store";
+    }
+
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("page_type_kh", "ទំព័រដើម");

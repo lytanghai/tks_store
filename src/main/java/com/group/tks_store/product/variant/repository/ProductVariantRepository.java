@@ -19,4 +19,5 @@ public interface ProductVariantRepository extends JpaRepository<VariantEntity, I
             nativeQuery = true)
     Page<Object[]> findByStatus(@Param("status") String status, Pageable pageable);
 
+    VariantEntity findByProductId(Integer id);
 }

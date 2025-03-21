@@ -67,7 +67,7 @@
 
     .category_table_list_container {
         position: fixed;
-        top: 10%;
+        top: 2%;
         left: 35%;
         width: 64%;
         height: auto;
@@ -76,14 +76,11 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 7px;
         border-radius: 12px;
-        z-index: 1;
+        z-index: 0;
         border: 1px solid #000;
     }
     .category_table_list_container table {
-        width: 40%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        border-radius: 24px;
+
     }
 
     .odd-row {
@@ -205,7 +202,7 @@
         width: 62%;
         height: 100px;
         top: 8%;
-        left: 35.5%;
+        left: 15%;
     }
 
     .disabled {
@@ -214,7 +211,7 @@
     }
 
     .category-search-ipt {
-        width: 27%;
+        width: 29%;
         padding: 18px;
         height: 1rem;
         border-radius: 8px;
@@ -224,14 +221,14 @@
 
     .category-page-redirect {
         position: fixed;
-        top: 85%;
+        top: 91%;
         border-bottom: 1px solid #000;
         left: 63%;
     }
 
     .category-page-number{
         position: fixed;
-        top: 87.2%;
+        top: 93%;
         left: 60%;
         display: inline-flex;
     }

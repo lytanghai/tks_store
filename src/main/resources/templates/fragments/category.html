@@ -36,73 +36,75 @@
             <button type="submit" id="category-edit-btn" class="update_button category_create_btn_container" style="margin-right: 3%;">បញ្ជូល</button>
         </form>
     </div>
-
-    <table class="category_table_list_container">
-        <thead>
-        <tr>
-            <th class="table_th">លេខរៀង</th>
-            <th class="table_th">ឈ្មោះ(ខ្មែរ)</th>
-            <th class="table_th">ឈ្មោះ(អង់គ្លេស)</th>
-            <th class="table_th">ពត៍មានបន្ថែម</th>
-            <th class="table_th">ស្ថានភាព</th>
-            <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
-            <th class="table_th">សកម្មភាព</th>
-        </tr>
-        </thead>
-        <tbody id="categoryTable">
-        <tr th:each="row, iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
-            <div th:if="${content != null}">
-                <td class="table_td" th:text="${row.id}"></td>
-                <td class="table_td" th:text="${row.name}"></td>
-                <td class="table_td" th:text="${row.nameKh}"></td>
-                <td class="table_td" th:text="${row.description}"></td>
-                <td class="table_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
-                <td class="table_td" th:text="${row.createdAt}"></td>
-                <td class="table_td">
-                    <ul class="category-action">
-                        <li>
-                            <a th:id="${row.id}" th:href="'#'" th:onclick="'showCategoryConfirmationModal(\'delete\', ' + ${row.id} + ')'">
-                                <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
-                                <span th:text="លុប"></span>
-                            </a>
-                        </li>
-                        &nbsp;
-                        <li> <span>|</span> </li>
-                        &nbsp;
-                        <li>
-                            <a th:id="${row.id}"
-                               th:data-name="${row.name}"
-                               th:data-name-kh="${row.nameKh}"
-                               th:data-description="${row.description}"
-                               th:data-form-title="'Update'"
-                               th:href="'#'"
-                               class="category-edit-href"
-                               onclick="resetToUpdateCategoryMode(this)">
-                                <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
-                                <span th:text="'កែ'"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </td>
-            </div>
-        </tr>
-        </tbody>
-    </table>
+    <div class="category_table_container">
+        <table class="category_table_list_container">
+            <thead>
+            <tr>
+                <th class="table_th">លេខរៀង</th>
+                <th class="table_th">ឈ្មោះ(ខ្មែរ)</th>
+                <th class="table_th">ឈ្មោះ(អង់គ្លេស)</th>
+                <th class="table_th">ពត៍មានបន្ថែម</th>
+                <th class="table_th">ស្ថានភាព</th>
+                <th class="table_th">ថ្ងៃខែបញ្ជូល</th>
+                <th class="table_th">សកម្មភាព</th>
+            </tr>
+            </thead>
+            <tbody id="categoryTable">
+            <tr th:each="row, iterStat : ${content}" th:class="${iterStat.index % 2 == 0} ? '' : 'odd-row'">
+                <div th:if="${content != null}">
+                    <td class="table_td" th:text="${row.id}"></td>
+                    <td class="table_td" th:text="${row.name}"></td>
+                    <td class="table_td" th:text="${row.nameKh}"></td>
+                    <td class="table_td" th:text="${row.description}"></td>
+                    <td class="table_td" th:text="${row.status == 'ACTIVE' ? 'កំពុងដំណើរការ' : row.status}"></td>
+                    <td class="table_td" th:text="${row.createdAt}"></td>
+                    <td class="table_td">
+                        <ul class="category-action">
+                            <li>
+                                <a th:id="${row.id}" th:href="'#'" th:onclick="'showCategoryConfirmationModal(\'delete\', ' + ${row.id} + ')'">
+                                    <img th:src="@{/icon/trash.png}" class="icon" alt="Trash Icon">
+                                    <span th:text="លុប"></span>
+                                </a>
+                            </li>
+                            &nbsp;
+                            <li> <span>|</span> </li>
+                            &nbsp;
+                            <li>
+                                <a th:id="${row.id}"
+                                   th:data-name="${row.name}"
+                                   th:data-name-kh="${row.nameKh}"
+                                   th:data-description="${row.description}"
+                                   th:data-form-title="'Update'"
+                                   th:href="'#'"
+                                   class="category-edit-href"
+                                   onclick="resetToUpdateCategoryMode(this)">
+                                    <img th:src="@{/icon/edit.png}" class="icon" alt="Trash Icon">
+                                    <span th:text="'កែ'"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="category-search-bar-container">
-        <input type="text" id="search_input_category" placeholder="ស្វែងរក..." onkeyup="categoryFilterResults()" class="category-search-ipt">
+        <input type="text" id="search_input_category" placeholder="ស្វែងរក..." onkeyup="fetchFilteredCategories()" class="category-search-ipt">
 
-        <div class="filter-date-container">
-        <label for="categoryStartDate" class="start_from">ចាប់ពី:</label>
-            <input type="date" id="categoryStartDate" onchange="categoryFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearCategoryStartDate()">&#10005;</button>
-        </div>
+<!--        <div class="filter-date-container">-->
+<!--        <label for="categoryStartDate" class="start_from">ចាប់ពី:</label>-->
+<!--            <input type="date" id="categoryStartDate" onchange="categoryFilterResults()" class="date-obj">-->
+<!--            <button type="button" class="clear-btn" onclick="clearCategoryStartDate()">&#10005;</button>-->
+<!--        </div>-->
 
-        <div class="filter-date-container">
-        <label for="categoryEndDate" class="start_to">រហូតដល់:</label>
-            <input type="date" id="categoryEndDate" onchange="categoryFilterResults()" class="date-obj">
-            <button type="button" class="clear-btn" onclick="clearCategoryEndDate()">&#10005;</button>
-        </div>
+<!--        <div class="filter-date-container">-->
+<!--        <label for="categoryEndDate" class="start_to">រហូតដល់:</label>-->
+<!--            <input type="date" id="categoryEndDate" onchange="categoryFilterResults()" class="date-obj">-->
+<!--            <button type="button" class="clear-btn" onclick="clearCategoryEndDate()">&#10005;</button>-->
+<!--        </div>-->
+
     </div>
 
     <div id="category-confirmation-modal" class="confirm-modal" style="z-index:999">

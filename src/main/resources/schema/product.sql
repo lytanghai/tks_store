@@ -33,18 +33,6 @@ CREATE table tks.public.product_images (
 );
 
 
--- Product Variants Table (E.g., Red Shirt, Blue Shirt)
-CREATE TABLE tks.public.product_variants (
-    id SERIAL PRIMARY KEY,
-    product_id INT REFERENCES product(id) ON DELETE CASCADE,
-    sku VARCHAR(255) UNIQUE,
-    base_price DECIMAL(10,2),
-    currency VARCHAR(5),
-    stock_quantity INT,
-    created_at TIMESTAMP,
-    last_updated_at TIMESTAMP
-);
-
 Brand: Nike
 Model: Air Zoom Pegasus
 Gender: Men

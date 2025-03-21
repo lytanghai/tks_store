@@ -10,10 +10,10 @@
     }
     .attribute_container {
         position: fixed;
-        top: 14%;
-        left: 14%;
-        width: 300px;
-        height: 360px;
+        top: 10%;
+        left: 15%;
+        width: 23%;
+        height: 57.5%;
         margin: 50px auto;
         padding: 20px;
         border-radius: 8px;
@@ -53,8 +53,7 @@
         position: fixed;
         top: 10%;
         left: 40%;
-        width: 791px;
-        height:auto;
+        width: 58%;
         margin: 50px 10px;
         background: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -73,7 +72,7 @@
     .attribute_td {
         border: 1px solid #ddd;
         text-align: center;
-        font-size: 15px;
+        font-size: 1.5rem;
         width: 20%;
     }
 
@@ -81,6 +80,7 @@
         font-weight: 500;
         background-color: #fff;
         padding: 2px;
+        font-size: 1.7rem;
     }
     .odd-row {
         background-color: #f2f2f2;
@@ -93,15 +93,18 @@
     .attribute_tr:nth-child(even) {
         background-color: #f9f9f9;
     }
-    .page-redirect{
+    .page-redirect-attribute{
         position: fixed;
-        top: 72.8%;
+        top: 78.8%;
         left: 64%;
     }
-    .page-number{
+    .page-redirect-attribute p {
+        font-size: 1.5rem;
+    }
+    .page-number-attribute{
         position: fixed;
-        top: 74.7%;
-        left: 59%;
+        top: 81.3%;
+        left: 61%;
         display: inline-flex;
     }
     .attribute-list-prev{
@@ -109,10 +112,19 @@
         width: 200px;
         height: 200px;
     }
+    .attribute-list-prev a {
+        font-size: 1.5rem;
+    }
+
     .attribute-list-next{
         position: absolute;
         margin-left: 200px;
     }
+
+    .attribute-list-next a{
+        font-size: 1.5rem;
+    }
+
     .attribute-redirect-href{
         text-decoration: none;
         color: #000;
@@ -123,7 +135,7 @@
         height: 5px;
         display: flex;
         list-style-type: none;
-        padding-right: 14px;
+        padding-left: 34%;
     }
     .attribute-action li {
         justify-content: center;
@@ -174,16 +186,17 @@
         background-color: #e28743;
         color: #000;
         font-weight: normal;
-        right: 59%;
-        width: 75px;
-        bottom: 42%;
+        right: 58%;
+        width: 120px;
+        bottom: 26%;
+        font-size: 1.3rem;
     }
 
     .attribute-search-bar-container{
         position: fixed;
-        width: 62%;
+        width: 107%;
         height: 100px;
-        top: 10%;
+        top: 8%;
         left: 40.5%;
     }
 
@@ -194,7 +207,7 @@
 
     .attribute-close-container{
         position: absolute;
-        top: 27%;
-        right: 29%;
+        top: 25%;
+        right: 28%;
     }
 }

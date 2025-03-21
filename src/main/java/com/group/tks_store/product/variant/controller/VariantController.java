@@ -1,12 +1,6 @@
 package com.group.tks_store.product.variant.controller;
 
 import com.group.tks_store.common.dto.ID;
-import com.group.tks_store.product.category.dto.CategoryDTO;
-import com.group.tks_store.product.category.entity.CategoryEntity;
-import com.group.tks_store.product.category.service.CategoryService;
-import com.group.tks_store.product.product.dto.ProductCreateDTO;
-import com.group.tks_store.product.product.dto.ProductListDTO;
-import com.group.tks_store.product.product.dto.ProductUpdateDto;
 import com.group.tks_store.product.product.service.ProductService;
 import com.group.tks_store.product.variant.dto.VariantCreateDTO;
 import com.group.tks_store.product.variant.dto.VariantListDTO;
@@ -21,8 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/variant")

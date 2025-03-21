@@ -22,7 +22,7 @@ CREATE TABLE public."attributes" (
 	CONSTRAINT attributes_pkey PRIMARY KEY (id)
 );
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---3
+--3 OLD
 CREATE TABLE public.product (
 	id serial4 NOT NULL,
 	name_en varchar(255) NOT NULL,
@@ -39,14 +39,46 @@ CREATE TABLE public.product (
 );
 -- public.product foreign keys
 ALTER TABLE public.product ADD CONSTRAINT product_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.category(id) ON DELETE SET NULL;
+
+//NEW
+CREATE TABLE public.product (
+	id serial4 NOT NULL,
+	name_en varchar(255) NOT NULL,
+	name_kh varchar(255) NOT NULL,
+	code varchar(100) NULL,
+	category_id int4 NULL,
+	description text NULL,
+	status varchar(10) NULL,
+	created_at timestamp NULL,
+	last_updated_at timestamp NULL,
+	CONSTRAINT product_pkey PRIMARY KEY (id)
+);
+-- public.product foreign keys
+ALTER TABLE public.product ADD CONSTRAINT product_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.category(id) ON DELETE SET NULL;
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---4
+--4 OLD
 CREATE TABLE public.variants (
 	id serial4 NOT NULL,
 	product_id int4 NULL,
 	sku varchar(255) NULL,
 	base_price numeric(10, 2) NULL,
 	currency varchar(5) NULL,
+	stock_quantity int4 NULL DEFAULT 0,
+	status varchar(10) NOT NULL,
+	created_at timestamp NULL DEFAULT now(),
+	last_updated_at timestamp NULL DEFAULT now(),
+	CONSTRAINT variants_pkey PRIMARY KEY (id)
+);
+
+//NEW
+CREATE TABLE public.variants (
+	id serial4 NOT NULL,
+	product_id int4 NULL,
+	sku varchar(255) NULL,
+	base_price numeric(10, 2) NULL,
+	base_price_currency varchar(5) NULL,
+    sale_price numeric(10, 2) NULL,
+	sale_price_currency varchar(5) NULL,
 	stock_quantity int4 NULL DEFAULT 0,
 	status varchar(10) NOT NULL,
 	created_at timestamp NULL DEFAULT now(),

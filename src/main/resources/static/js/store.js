@@ -217,60 +217,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-function viewProductDetails(product) {
-    let container = document.querySelector('.store-view-detail-container');
-    container.classList.add('show');
-    const imageSliderContainer = document.querySelector('.store-image-slider-container');
-    const imageThumbnailContainer = document.querySelector('.store-image-thumbnail-container');
-    document.getElementById("store-footer").style.display = "none";
-    imageSliderContainer.innerHTML = '';
-    imageThumbnailContainer.innerHTML = '';
+//function viewProductDetails(product) {
+//    let container = document.querySelector('.store-view-detail-container');
+//    container.classList.add('show');
+//    const imageSliderContainer = document.querySelector('.store-image-slider-container');
+//    const imageThumbnailContainer = document.querySelector('.store-image-thumbnail-container');
+//    document.getElementById("store-footer").style.display = "none";
+//    imageSliderContainer.innerHTML = '';
+//    imageThumbnailContainer.innerHTML = '';
+//
+//    const imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
+//
+//    if (imageUUIDs.length === 0) {
+//        const noImageMessage = document.createElement('div');
+//        noImageMessage.textContent = 'No image preview available';
+//        noImageMessage.style.textAlign = 'center';
+//        noImageMessage.style.fontSize = '16px';
+//        noImageMessage.style.color = '#888'; // Optional styling
+//        imageSliderContainer.appendChild(noImageMessage);
+//        return;
+//    }
+//
+//    // Limit the number of images shown to 3
+//    const imagesToShow = imageUUIDs.slice(0, 3);
+//
+//    // Create and append the main image (slider)
+//    imagesToShow.forEach((uuid, index) => {
+//        const mainImage = document.createElement('img');
+//        mainImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+//        mainImage.alt = `Image ${index + 1}`;
+//        mainImage.setAttribute('data-uuid', uuid);
+//        mainImage.style.display = (index === 0) ? 'block' : 'none'; // Show the first image by default
+//        imageSliderContainer.appendChild(mainImage);
+//    });
+//
+//    // Create and append thumbnail images
+//    imagesToShow.forEach((uuid, index) => {
+//        const thumbImage = document.createElement('img');
+//        thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+//        thumbImage.alt = `Thumb ${index + 1}`;
+//        thumbImage.onclick = () => goToSlide(index); // Add click handler for each thumbnail
+//        imageThumbnailContainer.appendChild(thumbImage);
+//    });
 
-    const imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
-
-    if (imageUUIDs.length === 0) {
-        const noImageMessage = document.createElement('div');
-        noImageMessage.textContent = 'No image preview available';
-        noImageMessage.style.textAlign = 'center';
-        noImageMessage.style.fontSize = '16px';
-        noImageMessage.style.color = '#888'; // Optional styling
-        imageSliderContainer.appendChild(noImageMessage);
-        return;
-    }
-    // Create and append the main image (slider)
-    imageUUIDs.forEach((uuid, index) => {
-        const mainImage = document.createElement('img');
-        mainImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
-        mainImage.alt = `Image ${index + 1}`;
-        mainImage.setAttribute('data-uuid', uuid);
-        mainImage.style.display = (index === 0) ? 'block' : 'none'; // Show the first image by default
-        imageSliderContainer.appendChild(mainImage);
-    });
-
-    // Create and append thumbnail images
-    imageUUIDs.forEach((uuid, index) => {
-        const thumbImage = document.createElement('img');
-        thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
-        thumbImage.alt = `Thumb ${index + 1}`;
-        thumbImage.onclick = () => goToSlide(index); // Add click handler for each thumbnail
-        imageThumbnailContainer.appendChild(thumbImage);
-    });
-}
-
-function goToSlide(index) {
-    const slider = document.querySelector('.store-image-slider-container');
-    const images = slider.getElementsByTagName('img');
-
-    if (images.length === 0) return;
-
-    for (let img of images) {
-        img.style.display = 'none';
-    }
-
-    if (images[index]) {
-        images[index].style.display = 'block';
-    }
-}
+// let currentSlide = 0;
+//    function goToSlide(index) {
+//        const allImages = imageSliderContainer.querySelectorAll('img');
+//        // Hide the current image
+//        allImages[currentSlide].style.display = 'none';
+//        // Show the new image
+//        currentSlide = index;
+//        allImages[currentSlide].style.display = 'block';
+//    }
 
 function fetchItems() {
     clearTimeout(storeCategoryDebounceTimeout);
@@ -389,3 +387,75 @@ function closeProductDetails() {
     container.classList.remove('show');
     document.getElementById("store-footer").style.display = "block";
 }
+
+function viewProductDetails(product) {
+    let container = document.querySelector('.store-view-detail-container');
+    container.classList.add('show');
+    const imageSliderContainer = document.querySelector('.store-image-slider-container');
+    const imageThumbnailContainer = document.querySelector('.store-image-thumbnail-container');
+    document.getElementById("store-footer").style.display = "none";
+    imageSliderContainer.innerHTML = '';
+    imageThumbnailContainer.innerHTML = '';
+
+    const imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
+
+    if (imageUUIDs.length === 0) {
+        const noImageMessage = document.createElement('div');
+        noImageMessage.textContent = 'No image preview available';
+        noImageMessage.style.textAlign = 'center';
+        noImageMessage.style.fontSize = '16px';
+        noImageMessage.style.color = '#888'; // Optional styling
+        imageSliderContainer.appendChild(noImageMessage);
+        return;
+    }
+
+    // Create and append the main image (slider)
+    imageUUIDs.forEach((uuid, index) => {
+        const mainImage = document.createElement('img');
+        mainImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+        mainImage.alt = `Image ${index + 1}`;
+        mainImage.setAttribute('data-uuid', uuid);
+        mainImage.style.display = (index === 0) ? 'block' : 'none'; // Show the first image by default
+        imageSliderContainer.appendChild(mainImage);
+    });
+
+    // Handle the thumbnail images - initially show only the first 3
+    let currentThumbnailIndex = 0; // Start showing from the first image
+    function updateThumbnails() {
+        imageThumbnailContainer.innerHTML = ''; // Clear current thumbnails
+
+        const imagesToShow = imageUUIDs.slice(currentThumbnailIndex, currentThumbnailIndex + 3); // Show 3 at a time
+        imagesToShow.forEach((uuid, index) => {
+            const thumbImage = document.createElement('img');
+            thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+            thumbImage.alt = `Thumb ${currentThumbnailIndex + index + 1}`;
+            thumbImage.onclick = () => {
+                goToSlide(currentThumbnailIndex + index);
+                shiftThumbnails();
+            };
+            imageThumbnailContainer.appendChild(thumbImage);
+        });
+    }
+
+    updateThumbnails(); // Call the function to initially load thumbnails
+
+    // Function to handle slider navigation
+    let currentSlide = 0;
+    function goToSlide(index) {
+        const allImages = imageSliderContainer.querySelectorAll('img');
+        allImages[currentSlide].style.display = 'none';
+        currentSlide = index;
+        allImages[currentSlide].style.display = 'block';
+    }
+
+    // Shift thumbnails: hide the first one and show the next one
+    function shiftThumbnails() {
+        if (currentThumbnailIndex + 3 < imageUUIDs.length) {
+            currentThumbnailIndex += 1; // Shift the thumbnails by one
+        } else {
+            currentThumbnailIndex = 0;
+        }
+        updateThumbnails();
+    }
+}
+

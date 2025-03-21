@@ -430,8 +430,7 @@ function viewProductDetails(product) {
             thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
             thumbImage.alt = `Thumb ${currentThumbnailIndex + index + 1}`;
             thumbImage.onclick = () => {
-                goToSlide(currentThumbnailIndex + index);
-                shiftThumbnails();
+                goToSlide(currentThumbnailIndex + index); // Change the main image based on the thumbnail clicked
             };
             imageThumbnailContainer.appendChild(thumbImage);
         });
@@ -448,14 +447,50 @@ function viewProductDetails(product) {
         allImages[currentSlide].style.display = 'block';
     }
 
-    // Shift thumbnails: hide the first one and show the next one
-    function shiftThumbnails() {
-        if (currentThumbnailIndex + 3 < imageUUIDs.length) {
-            currentThumbnailIndex += 1; // Shift the thumbnails by one
-        } else {
-            currentThumbnailIndex = 0;
+    // Function to shift thumbnails: hide the first one and show the next images
+    function shiftThumbnails(direction) {
+        const totalImages = imageUUIDs.length;
+
+        // Calculate new thumbnail index based on direction
+        if (direction === "next") {
+            if (currentThumbnailIndex + 3 < totalImages) {
+                currentThumbnailIndex += 1; // Move thumbnails forward
+            }
+        } else if (direction === "prev") {
+            if (currentThumbnailIndex > 0) {
+                currentThumbnailIndex -= 1; // Move thumbnails backward
+            }
         }
+
+        // Re-render the thumbnails after shifting
         updateThumbnails();
     }
+
+    // Event listeners for next and prev buttons
+    document.getElementById("go-next").addEventListener("click", () => {
+        // Move the main image to the next image
+        if (currentSlide < imageUUIDs.length - 1) {
+            goToSlide(currentSlide + 1); // Show the next image
+        } else {
+            goToSlide(0); // Loop back to the first image
+        }
+
+        // Shift thumbnails forward
+        shiftThumbnails("next");
+    });
+
+    document.getElementById("back-prev").addEventListener("click", () => {
+        // Move the main image to the previous image
+        if (currentSlide > 0) {
+            goToSlide(currentSlide - 1); // Show the previous image
+        } else {
+            goToSlide(imageUUIDs.length - 1); // Loop back to the last image
+        }
+
+        // Shift thumbnails backward
+        shiftThumbnails("prev");
+    });
 }
+
+
 

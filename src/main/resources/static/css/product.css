@@ -478,6 +478,12 @@
          top: -3%;
      }
 
+     .image-uploader{
+        position: absolute;
+        top: 67%;
+        right: 11%;
+     }
+
      .view-image-btn {
         background-color: #053914a3;
         color: #fff;

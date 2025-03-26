@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.group.tks_store.product.attribute.entity.AttributeEntity;
 import com.group.tks_store.product.variant.entity.VariantEntity;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name = "variant_attributes")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -31,46 +33,10 @@ public class VariantAttributeEntity {
     @Column(name = "value", nullable = false)
     private String value;
 
+    @Column(name = "group_num")
+    private Integer groupNum;
+
     @Column(name = "status")
     private String status;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public VariantEntity getVariant() {
-        return variant;
-    }
-
-    public void setVariant(VariantEntity variant) {
-        this.variant = variant;
-    }
-
-    public AttributeEntity getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(AttributeEntity attribute) {
-        this.attribute = attribute;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

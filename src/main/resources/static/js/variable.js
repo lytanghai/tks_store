@@ -24,3 +24,6 @@ let categoryGlobalId = 0;
 let url = '';
 let clearStoreFilter = false;
 const itemsPerPage = 14;
+
+let groupNum = 1;
+

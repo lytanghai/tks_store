@@ -180,6 +180,7 @@ public class ProductUtil {
                     variantAttributeDTO.setVariantId(variant.getId());
                     variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(LIB.attribute_id, null))));
                     variantAttributeDTO.setValue((String) map.getOrDefault(LIB.value, null));
+                    variantAttributeDTO.setGroupNum(Integer.valueOf(String.valueOf(map.getOrDefault("group_num", 0))));
                     variantAttributeService.createVariantAttribute2(variantAttributeDTO, variant.getId());
                 }
 
@@ -195,6 +196,7 @@ public class ProductUtil {
                 VariantAttributeDTO variantAttributeDTO = new VariantAttributeDTO();
                 variantAttributeDTO.setAttributeId(Integer.valueOf(String.valueOf(map.getOrDefault(LIB.attribute_id, null))));
                 variantAttributeDTO.setValue((String) map.getOrDefault(LIB.value, null));
+                variantAttributeDTO.setGroupNum(Integer.valueOf(String.valueOf(map.getOrDefault("group_num", 0))));
                 listVariantAttributeDTO.add(variantAttributeDTO);
                 productDTO.setVariantAttributes(listVariantAttributeDTO);
             }

@@ -128,7 +128,7 @@
         <div class="custom-modal-content">
             <span class="close-var-att-btn" onclick="closeVariantAttributeModal()">&times;</span>
             <p style="font-size: 2.3rem">ពត័មានអង្គធាតុ</p>
-            <ul id="attributeList" style="font-size: 2rem"></ul>
+            <ul id="attributeList" style="font-size: 1.5rem"></ul>
         </div>
     </div>
 
@@ -181,7 +181,6 @@
                                             onblur="this.size = 0;" required>
                                     </select>
                                 </div>
-
                             </div>
                             <div class="general-form-group flex-item" id="product-grid-sale-price">
                                 <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;"><span style="color: red">*</span>តម្លៃ:</label>
@@ -221,18 +220,16 @@
                                 <label for="product_sale_price_edit" style=" font-size: 1.6rem;">តម្លៃដើម:</label>
                                 <span style="margin-left: 14%"></span>
                                 <input type="text" id="product_base_price_edit"
-                                       style="border:1px solid; width: 350px; font-size: 1.6rem; text-align:center"
+                                       style="border:1px solid; width: 160px; font-size: 1.6rem; text-align:center"
                                        name="product_base_price">
-                            </div>
-                            <div id="product-base-price-grid-currency">
+                                <span style="margin-left: 3%"></span>
                                 <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
-                                <span style="margin-left: 12%"></span>
                                 <select id="product_base_price_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem">
                                     <option value="USD">USD</option>-->
                                     <option value="KHR">KHR</option>
                                 </select>
-
                             </div>
+
 
                             <div id="product-grid-stock-quantity">
                                 <label for="product_code_edit" style="font-size: 1.6rem" >ចំនួនស្ដុកឥវ៉ាន់:</label>
@@ -273,34 +270,41 @@
                                     </div>
                                 </div>
 
-                                <div style="display: block;margin-left: 7%">
-                                    <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
-                                    <div>
-                                        <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
-                                               style="width: 150px; background: #fafafa" onchange="addImages(event)">
-                                    </div>
-
-                                    <div class="preview-image-container" id="preview-image-container">
-                                        <button type="button" id="preview_button"
-                                                style="display: none; margin-left: 10px;"
-                                                onclick="openPreview()">មើល</button>
-                                    </div>
-
-                                    <div id="image_preview_modal" class="image-preview">
-                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
-                                        <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
-                                        <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
-                                        <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
-                                        <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
-                                    </div>
+                                <div style="display: block; margin-left: 2%; margin-top: 6%">
+                                    <button type="button" onclick="addAttribute()"
+                                            style="width: 155px; background-color: #e28743;color: #000;height:56px">
+                                        បន្ថែមអង្គធាតុ</button>
                                 </div>
 
+
+                            </div>
+                            <div class="image-uploader" style="display: block; margin-left: 7%">
+                                <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
+                                <div>
+                                    <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
+                                           style="width: 150px; background: #fafafa" onchange="addImages(event)">
+                                </div>
+
+                                <div class="preview-image-container" id="preview-image-container">
+                                    <button type="button" id="preview_button"
+                                            style="display: none; margin-left: 10px;"
+                                            onclick="openPreview()">មើល</button>
+                                </div>
+
+                                <div id="image_preview_modal" class="image-preview">
+                                    <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
+                                    <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
+                                    <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
+                                    <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
+                                    <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
+                                </div>
                             </div>
                             <div class="add-attribute-btn">
-                                <button type="button" onclick="addAttribute()"
-                                        style="width: 250px; background-color: #e28743;color: #000;">
-                                         បន្ថែមអង្គធាតុទំនិញ</button>
+                                <button type="button" onclick="addNewGroupVariantAttribute()"
+                                        style="width: 250px; background-color: #e28743;color: #000;">បន្ថែមថ្មី</button>
                             </div>
+
+
                         </div>
 
                         <div class="attribute-list-title">

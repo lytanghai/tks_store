@@ -96,7 +96,7 @@ public class ProductFilterService {
                                 (String) row[16],
                                 ((Number) row[17]).intValue(),
                                 images,
-                                MappingUtil.mapVariantAttributes((String) row[18]));
+                                MappingUtil.mapVariantAttributes(row[18] + "&" + row[20]));
                     }
 
                 }

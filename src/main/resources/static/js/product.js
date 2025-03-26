@@ -56,7 +56,7 @@ if(window.location.pathname.includes("/api/product")) {
 
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
-                attributes = JSON.stringify(attributeArr, null, 3)
+                attributes = JSON.stringify(attributeArr, null, 4)
             }
 
             document.getElementById("product_base_price_edit").value = basePrice;
@@ -174,6 +174,7 @@ if(window.location.pathname.includes("/api/product")) {
 //                return;
 //            }
              variantAttributes.push({
+                group_num: groupNum,
                 attribute_id: attributeId,
                 name: attributeName,
                 value: value
@@ -189,6 +190,7 @@ if(window.location.pathname.includes("/api/product")) {
 //                return;
 //            }
             variantAttributes.push({
+                group_num: groupNum,
                 attribute_id: attributeId,
                 name: attributeName,
                 value: value
@@ -532,6 +534,7 @@ if(window.location.pathname.includes("/api/product")) {
         try {
             if(variantAttributes.length > 0) {
                 const attributes = JSON.parse(variantAttributes);
+                console.log('attri ' + JSON.stringify(attributes))
                 if (Array.isArray(attributes)) {
                     attributes.forEach((attribute, index) => {
                     const listItem = document.createElement('li');
@@ -549,16 +552,18 @@ if(window.location.pathname.includes("/api/product")) {
                     const nameSpan = document.createElement('span');
                     nameSpan.classList.add('attribute-name');
                     nameSpan.style.flex = "1";
-                    nameSpan.textContent = attribute.name;
+                    nameSpan.textContent = attribute.name + '[' + attribute.group_num + ']';
 
                     const valueSpan = document.createElement('span');
                     valueSpan.classList.add('attribute-value');
                     valueSpan.style.flex = "1";
                     valueSpan.style.paddingRight = "10%";
+                    valueSpan.style.marginRight = "6%";
                     valueSpan.textContent = attribute.value;
 
                     const actionsSpan = document.createElement('span');
                     actionsSpan.classList.add('product-attribute-actions');
+                    actionsSpan.style.marginRight = "10%";
 
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Delete';
@@ -617,6 +622,11 @@ if(window.location.pathname.includes("/api/product")) {
         } else {
             previewButton.style.display = "none";
         }
+    }
+
+    function addNewGroupVariantAttribute() {
+        groupNum += 1;
+        document.getElementById("attribute-list").innerHTML = "";
     }
 
 }

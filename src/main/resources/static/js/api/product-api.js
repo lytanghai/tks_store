@@ -59,7 +59,8 @@ async function uploadProduct() {
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
                 attribute_id: variantAttributes[y].attribute_id,
-                value: variantAttributes[y].value
+                value: variantAttributes[y].value,
+                group_num: variantAttributes[y].group_num
             });
         }
     }
@@ -73,9 +74,11 @@ async function uploadProduct() {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
+        groupNum = 1;
 //        let result = await response.json();
     } catch (error) {
         console.error("Error uploading:", error);
+        groupNum = 1;
     }
 }
     async function updateProductDetail() {
@@ -125,7 +128,8 @@ async function uploadProduct() {
                         id: variantAttr[i].id,
                         attribute_id: variantAttr[i].attribute_id,
                         name: variantAttr[i].name,
-                        value: variantAttr[i].value
+                        value: variantAttr[i].value,
+                        group_num: variantAttr[i].group_num
                     });
                 }
             }
@@ -154,9 +158,10 @@ async function uploadProduct() {
             sessionStorage.setItem('popupMessage', 'success');
             sessionStorage.setItem('popupAction', 'update');
             showPopUpMessage('success', 'update');
-
+            groupNum = 1;
     //            let result = await response.json();
             } catch (error) {
+                groupNum = 1;
                 console.error("Error uploading:", error);
             }
     }
@@ -216,29 +221,41 @@ if(window.location.pathname.includes("/api/product")) {
 
     function openVariantAttributeDetail(button) {
         let variantId = button.getAttribute("data-variant-id");
+
         // Fetch data using AJAX
         fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
-        .then(response => response.json())
-        .then(data => {
-            let attributeList = document.getElementById("attributeList");
-            attributeList.innerHTML = "";
+            .then(response => response.json())
+            .then(data => {
+                let attributeList = document.getElementById("attributeList");
+                attributeList.innerHTML = "";
 
-            if (data.length > 0) {
-                data.forEach(attr => {
-                    let listItemName = document.createElement("li");
-                    listItemName.textContent = `${attr.attribute_name}: ${attr.value}`;
-                    listItemName.style.listStyle = 'none'
-                    listItemName.style.paddingRight = '5%'
+                if (data.length > 0) {
+                    // Group attributes by `group_num`
+                    let groupedAttributes = data.reduce((acc, attr) => {
+                        if (!acc[attr.group_num]) {
+                            acc[attr.group_num] = [];
+                        }
+                        acc[attr.group_num].push(`${attr.attribute_name}: ${attr.value}`);
+                        return acc;
+                    }, {});
 
-                    attributeList.appendChild(listItemName);
-                });
+                    // Create list items for each group
+                    Object.keys(groupedAttributes).forEach(groupNum => {
+                        let listItem = document.createElement("li");
+                        listItem.textContent = `អង្គធាតុទី ${groupNum}: ${groupedAttributes[groupNum].join(" | ")}`;
+                        listItem.style.textAlign = "left";
+                        listItem.style.listStyle = "none";
+                        listItem.style.marginTop = "10px";
+                        attributeList.appendChild(listItem);
+                    });
 
-                document.getElementById("customModal").style.display = "flex";
-            } else {
-                alert("No attributes found!");
-            }
-        })
-        .catch(error => console.error("Error fetching data:", error));
+                    document.getElementById("customModal").style.display = "flex";
+                } else {
+                    alert("No attributes found!");
+                }
+            })
+            .catch(error => console.error("Error fetching data:", error));
     }
+
 
 }

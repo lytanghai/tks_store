@@ -173,6 +173,7 @@ function extractNumber(value) {
 }
 
 function convertToJSONArray(input) {
+    console.log(input)
     return input.split(',').map(pair => {
         let [id, name, value, group_num] = pair.split(':').map(item => item.trim());
         return { id , name, value, group_num };

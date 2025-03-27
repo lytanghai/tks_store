@@ -466,7 +466,8 @@
         position: relative;
         width: 100%;
         height: 30%;
-        border: 1px solid red;
+        text-align: left;
+        padding-left: 5%;
     }
 
 }

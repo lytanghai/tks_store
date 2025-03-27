@@ -26,4 +26,6 @@ let clearStoreFilter = false;
 const itemsPerPage = 14;
 
 let groupNum = 1;
+let globalStockQuantities = 0;
+
 

@@ -12,7 +12,7 @@ if(window.location.pathname.includes("/api/product")) {
             let basePrice = '';
             let basePriceCurrency = '';
             let stockQuantity = '';
-            let sku = '';
+//            let sku = '';
             let images = [];
             let attributes = [];
 
@@ -48,7 +48,7 @@ if(window.location.pathname.includes("/api/product")) {
             basePrice = element.getAttribute("data-base-price");
             basePriceCurrency = element.getAttribute("data-base-price-currency");
             stockQuantity = element.getAttribute("data-stock-quantity");
-            sku = element.getAttribute("data-sku");
+//            sku = element.getAttribute("data-sku");
 
             showExistingImage(element.getAttribute("data-images"));
 
@@ -56,13 +56,15 @@ if(window.location.pathname.includes("/api/product")) {
 
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
+//                    console.log(attributeArr)
+
                 attributes = JSON.stringify(attributeArr, null, 4)
             }
 
             document.getElementById("product_base_price_edit").value = basePrice;
             document.getElementById("product_base_price_currency_edit").value = basePriceCurrency;
             document.getElementById("product_stock_quantity_edit").value = stockQuantity;
-            document.getElementById("product_stock_sku").value = sku;
+//            document.getElementById("product_stock_sku").value = sku;
 
             variantAttributes = attributes;
 
@@ -146,7 +148,7 @@ if(window.location.pathname.includes("/api/product")) {
         document.getElementById("verify-variant-base-price").innerHTML = parseFloat(document.getElementById('product_base_price_edit').value) | '';
         document.getElementById("verify-variant-currency").innerHTML = document.getElementById('product_base_price_currency_edit').value | '';
         document.getElementById("verify-variant-stock-quantity").innerHTML = parseInt(document.getElementById('product_stock_quantity_edit').value) | '';
-        document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
+//        document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
 
         getLiElementsContentAsArray();
         document.getElementById("verify-variant-attribute-name").innerHTML = resultList.join('</br>');
@@ -434,7 +436,7 @@ if(window.location.pathname.includes("/api/product")) {
         document.getElementById("product_base_price_edit").value = "";
         document.getElementById("product_base_price_currency_edit").value = "";
         document.getElementById("product_stock_quantity_edit").value = "";
-        document.getElementById("product_stock_sku").value = "";
+//        document.getElementById("product_stock_sku").value = "";
         document.getElementById("product_attribute_select").value = "";
         document.getElementById("product_attribute_value").value = "";
         document.getElementById("product_variant_image_value").value = "";

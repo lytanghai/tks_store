@@ -120,7 +120,7 @@ if(window.location.pathname.includes("/api/product")) {
                                                 data-base-price="${product.variants[0]?.base_price || 0}"
                                                 data-base-price-currency="${product.variants[0]?.base_price_currency || ''}"
                                                 data-stock-quantity="${product.variants[0]?.stock_quantity || 0}"
-                                                data-sku="${product.variants[0]?.sku || ''}"
+//                                                data-sku="${product.variants[0]?.sku || ''}"
                                                 data-images="${product.variants[0]?.images.map(image => image.id + ':' + image.uuid).join(',') || ''}"
                                                 data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.id + ':' + attribute.name + ':' + attribute.value + ':' + attribute.group_num).join(',') || ''}"
                                                 data-variantId="${product.variants[0]?.id || ''}"

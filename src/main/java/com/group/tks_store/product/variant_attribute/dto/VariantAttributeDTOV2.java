@@ -11,6 +11,5 @@ public class VariantAttributeDTOV2 {
     private Integer id;
     private String name;
     private String value;
-    Integer groupNum;
-
+    private Integer groupNum;
 }

@@ -122,7 +122,7 @@ if(window.location.pathname.includes("/api/product")) {
                                                 data-stock-quantity="${product.variants[0]?.stock_quantity || 0}"
 //                                                data-sku="${product.variants[0]?.sku || ''}"
                                                 data-images="${product.variants[0]?.images.map(image => image.id + ':' + image.uuid).join(',') || ''}"
-                                                data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.id + ':' + attribute.name + ':' + attribute.value + ':' + attribute.group_num).join(',') || ''}"
+                                                data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.id + ':' + attribute.name + ':' + attribute.value + ':' + attribute.groupNum).join(',') || ''}"
                                                 data-variantId="${product.variants[0]?.id || ''}"
                                                 data-form-title="Update"
                                                 href="#" onclick="openCreateUpdateProductModal(this)">

@@ -59,8 +59,7 @@ async function uploadProduct() {
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
                 attribute_id: variantAttributes[y].attribute_id,
-                value: variantAttributes[y].value,
-                group_num: variantAttributes[y].group_num
+                value: variantAttributes[y].value
             });
         }
     }
@@ -74,11 +73,11 @@ async function uploadProduct() {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
-        groupNum = 1;
+        groupNumReq = 1;
 //        let result = await response.json();
     } catch (error) {
         console.error("Error uploading:", error);
-        groupNum = 1;
+        groupNumReq = 1;
     }
 }
     async function updateProductDetail() {
@@ -129,7 +128,7 @@ async function uploadProduct() {
                         attribute_id: variantAttr[i].attribute_id,
                         name: variantAttr[i].name,
                         value: variantAttr[i].value,
-                        group_num: variantAttr[i].group_num
+                        group_num: variantAttr[i].groupNum
                     });
                 }
             }
@@ -232,10 +231,10 @@ if(window.location.pathname.includes("/api/product")) {
                 if (data.length > 0) {
                     // Group attributes by `group_num`
                     let groupedAttributes = data.reduce((acc, attr) => {
-                        if (!acc[attr.group_num]) {
-                            acc[attr.group_num] = [];
+                        if (!acc[attr.groupNum]) {
+                            acc[attr.groupNum] = [];
                         }
-                        acc[attr.group_num].push(`${attr.attribute_name}: ${attr.value}`);
+                        acc[attr.groupNum].push(`${attr.attribute_name}: ${attr.value}`);
                         return acc;
                     }, {});
 

@@ -556,7 +556,7 @@ if(window.location.pathname.includes("/api/product")) {
                     const nameSpan = document.createElement('span');
                     nameSpan.classList.add('attribute-name');
                     nameSpan.style.flex = "1";
-                    nameSpan.textContent = attribute.name + '[' + attribute.group_num + ']';
+                    nameSpan.textContent = attribute.name;
 
                     const valueSpan = document.createElement('span');
                     valueSpan.classList.add('attribute-value');

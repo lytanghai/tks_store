@@ -55,6 +55,7 @@ async function uploadProduct() {
         }
     }
 
+    console.log('1 group_num: ')
     if(variantAttributes.length > 0) {
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
@@ -74,11 +75,11 @@ async function uploadProduct() {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
-        groupNum = 1;
+        groupNumReq = 1;
 //        let result = await response.json();
     } catch (error) {
         console.error("Error uploading:", error);
-        groupNum = 1;
+        groupNumReq = 1;
     }
 }
     async function updateProductDetail() {
@@ -121,7 +122,7 @@ async function uploadProduct() {
                 };
 
             let variantAttr = JSON.parse(variantAttributes);
-
+            console.log('2 group_num: ')
             if (variantAttr.length > 0) {
                 for (let i = 0; i < variantAttr.length; i++) {
                     jsonData.variant_attributes.push({
@@ -158,10 +159,10 @@ async function uploadProduct() {
             sessionStorage.setItem('popupMessage', 'success');
             sessionStorage.setItem('popupAction', 'update');
             showPopUpMessage('success', 'update');
-            groupNum = 1;
+//            groupNum = 1;
     //            let result = await response.json();
             } catch (error) {
-                groupNum = 1;
+//                groupNum = 1;
                 console.error("Error uploading:", error);
             }
     }
@@ -228,7 +229,7 @@ if(window.location.pathname.includes("/api/product")) {
             .then(data => {
                 let attributeList = document.getElementById("attributeList");
                 attributeList.innerHTML = "";
-
+    console.log('3 group_num: ')
                 if (data.length > 0) {
                     // Group attributes by `group_num`
                     let groupedAttributes = data.reduce((acc, attr) => {

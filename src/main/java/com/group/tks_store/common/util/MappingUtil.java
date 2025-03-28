@@ -27,8 +27,8 @@ public class MappingUtil {
                 dto.setName(attrParts[1].trim()); // Name
                 dto.setValue(attrParts[2].trim()); // Value
 
-//                int groupNum = (i < groupNums.length) ? Integer.parseInt(groupNums[i].trim()) : 0;
-                dto.setGroupNum(Integer.parseInt(groupNums[0]));
+                int groupNum = (i < groupNums.length) ? Integer.parseInt(groupNums[i].trim()) : 0;
+                dto.setGroupNum(groupNum);
 
                 result.add(dto);
             }

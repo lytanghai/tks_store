@@ -53,10 +53,10 @@ if(window.location.pathname.includes("/api/product")) {
             showExistingImage(element.getAttribute("data-images"));
 
             const rawAttributeString = element.getAttribute("data-attributes");
+           console.log( 'raw '+rawAttributeString)
 
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
-//                    console.log(attributeArr)
 
                 attributes = JSON.stringify(attributeArr, null, 4)
             }
@@ -175,8 +175,9 @@ if(window.location.pathname.includes("/api/product")) {
 //                alert("This attribute is already added!");
 //                return;
 //            }
+    console.log('5 group_num: ')
              variantAttributes.push({
-                group_num: groupNum,
+                group_num: groupNumReq,
                 attribute_id: attributeId,
                 name: attributeName,
                 value: value
@@ -191,8 +192,9 @@ if(window.location.pathname.includes("/api/product")) {
 //                alert("This attribute is already added!");
 //                return;
 //            }
+    console.log('6 group_num: ')
             variantAttributes.push({
-                group_num: groupNum,
+                group_num: groupNumReq,
                 attribute_id: attributeId,
                 name: attributeName,
                 value: value
@@ -627,7 +629,7 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function addNewGroupVariantAttribute() {
-        groupNum += 1;
+        groupNumReq += 1;
         document.getElementById("attribute-list").innerHTML = "";
     }
 

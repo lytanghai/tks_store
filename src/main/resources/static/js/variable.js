@@ -25,7 +25,8 @@ let url = '';
 let clearStoreFilter = false;
 const itemsPerPage = 14;
 
-let groupNum = 1;
+let groupNumReq = 1;
+let selectedData = [];
 let globalStockQuantities = 0;
 
 

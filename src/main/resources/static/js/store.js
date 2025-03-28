@@ -336,7 +336,6 @@ function closeProductDetails() {
     let productHeaderInfo = document.querySelector('.product-detail-information');
     productHeaderInfo.innerHTML = ''; // Clears content
 
-    // Reset images
     document.querySelector('.store-image-slider-container').innerHTML = '';
     document.querySelector('.store-image-thumbnail-container').innerHTML = '';
 
@@ -628,7 +627,6 @@ function productQuantityDisplay(product, productHeaderInfo) {
     productHeaderInfo.appendChild(buyNowBtn);
     productHeaderInfo.appendChild(footerContainer);
 }
-
 function createRightInfoContainer(product, parentContainer) {
     let rightContainer = document.createElement("div");
     rightContainer.style.width = "60%";
@@ -639,57 +637,207 @@ function createRightInfoContainer(product, parentContainer) {
     rightContainer.style.right = "6%";
     rightContainer.style.overflow = "hidden";
 
-    // Create search input
     let searchInput = document.createElement("input");
     searchInput.type = "text";
-    searchInput.placeholder = "Search Variant Attribute...";
+    searchInput.placeholder = "ស្វែងរក...";
     searchInput.style.width = "100%";
     searchInput.style.padding = "8px";
     searchInput.style.marginBottom = "10px";
-    searchInput.style.fontSize = "1rem";
+    searchInput.style.fontSize = "1.2rem";
     searchInput.style.border = "1px solid #ccc";
     searchInput.style.borderRadius = "5px";
 
-    // Create scrollable variant list container
     let variantInfoContainer = document.createElement("div");
-    variantInfoContainer.style.maxHeight = "200px"; // Set a fixed height for scrolling
-    variantInfoContainer.style.overflowY = "auto"; // Enables vertical scrolling
+    variantInfoContainer.style.maxHeight = "200px";
+    variantInfoContainer.style.overflowY = "auto";
     variantInfoContainer.style.border = "1px solid #ccc";
     variantInfoContainer.style.padding = "10px";
     variantInfoContainer.style.borderRadius = "5px";
-    variantInfoContainer.style.fontSize = "1rem";
+    variantInfoContainer.style.fontSize = "1.2rem";
     variantInfoContainer.style.whiteSpace = "normal";
 
-    // Create variant list items
-    let variantInfoList = product.variants.map((variant, index) => {
-        let variantDiv = document.createElement("div");
-        variantDiv.style.marginBottom = "10px";
+    let groupedVariants = {};
 
-        let attributesText = variant.attributes.map(attr => {
-            return `<span style="display: inline-block; word-wrap: break-word; max-width: 100%;">
-                        ${attr.name}: ${attr.value}
-                    </span>`;
-        }).join(' | ');
-
-        variantDiv.innerHTML = `អង្គធាតុទី ${index + 1}: ${attributesText}`;
+    product.variants.forEach(variant => {
         globalStockQuantities = variant.stock_quantity;
-
-        return variantDiv;
-    });
-
-    variantInfoList.forEach(variantDiv => variantInfoContainer.appendChild(variantDiv));
-
-    // Search function
-    searchInput.addEventListener("input", function () {
-        let searchTerm = searchInput.value.toLowerCase();
-        variantInfoList.forEach(variantDiv => {
-            if (variantDiv.textContent.toLowerCase().includes(searchTerm)) {
-                variantDiv.style.display = "block";
-            } else {
-                variantDiv.style.display = "none";
+        variant.attributes.forEach(attr => {
+            let groupNum = attr.group_num;
+            if (!groupedVariants[groupNum]) {
+                groupedVariants[groupNum] = [];
             }
+            groupedVariants[groupNum].push({
+                variant,
+                key: attr.name,
+                value: attr.value
+            });
         });
     });
+
+    let sortedGroupNums = Object.keys(groupedVariants).sort((a, b) => a - b);
+    sortedGroupNums.forEach(groupNum => {
+        let groupHeader = document.createElement("div");
+        groupHeader.style.borderBottom = "1px solid #ccc";
+        groupHeader.style.paddingBottom = "3px";
+        groupHeader.style.textAlign = "center";
+        groupHeader.style.fontSize = "1.2rem";
+        groupHeader.style.border = "1px solid";
+        groupHeader.style.cursor = "pointer";
+        groupHeader.style.display = "flex";
+        groupHeader.style.alignItems = "center";
+
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.style.marginRight = "10px";
+        checkbox.style.width = "30px";
+        checkbox.style.height = "30px";
+        checkbox.style.cursor = "pointer";
+        checkbox.id = `checkbox-group-${groupNum}`;
+        checkbox.classList.add("variant-checkbox");
+        checkbox.checked = false;
+
+        groupHeader.appendChild(checkbox);
+
+        let text = document.createElement("span");
+        text.innerHTML = ` អង្គធាតុទី ${groupNum}`;
+        groupHeader.appendChild(text);
+
+        variantInfoContainer.appendChild(groupHeader);
+
+        let keyContainer = document.createElement("div");
+        keyContainer.style.display = "inline-block";
+        keyContainer.style.width = "45%";
+        keyContainer.style.borderRight = "1px solid";
+        keyContainer.style.textAlign = "center";
+
+        let valueContainer = document.createElement("div");
+        valueContainer.style.display = "inline-block";
+        valueContainer.style.width = "50%";
+        valueContainer.style.paddingLeft = "3%";
+        valueContainer.style.textAlign = "left";
+
+        groupedVariants[groupNum].forEach(({ key, value }) => {
+            let keyDiv = document.createElement("div");
+            keyDiv.style.marginBottom = "5px";
+            keyDiv.style.padding = "1px 0";
+            keyDiv.style.fontSize = "1.2rem";
+            keyDiv.innerText = key;
+
+            let valueDiv = document.createElement("div");
+            valueDiv.style.marginBottom = "5px";
+            valueDiv.style.padding = "1px 0";
+            valueDiv.style.fontSize = "1.2rem";
+            valueDiv.innerText = value;
+
+            keyContainer.appendChild(keyDiv);
+            valueContainer.appendChild(valueDiv);
+        });
+
+        variantInfoContainer.appendChild(keyContainer);
+        variantInfoContainer.appendChild(valueContainer);
+    });
+
+    variantInfoContainer.addEventListener("click", function(event) {
+        if (event.target.tagName === "INPUT" && event.target.type === "checkbox") {
+            const groupNum = event.target.id.split('-')[2];
+
+            const groupData = {
+                groupNum,
+                variants: groupedVariants[groupNum]
+            };
+
+            if (event.target.checked) {
+                selectedData.push(groupData);
+            } else {
+                selectedData = selectedData.filter(item => item.groupNum !== groupNum);
+            }
+            console.log("Selected Data:", selectedData);
+        }
+    });
+
+searchInput.addEventListener("input", function () {
+    let searchTerm = searchInput.value.toLowerCase(); // Get the search term and convert to lowercase
+    variantInfoContainer.innerHTML = '';
+
+    Object.keys(groupedVariants).forEach(groupNum => {
+        let groupData = groupedVariants[groupNum];
+
+        let groupHeader = document.createElement("div");
+        groupHeader.style.borderBottom = "1px solid #ccc";
+        groupHeader.style.paddingBottom = "3px";
+        groupHeader.style.textAlign = "center";
+        groupHeader.style.fontSize = "1.2rem";
+        groupHeader.style.border = "1px solid";
+        groupHeader.style.cursor = "pointer";
+        groupHeader.style.display = "flex";
+        groupHeader.style.alignItems = "center";
+
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.style.marginRight = "10px";
+        checkbox.style.width = "30px";
+        checkbox.style.height = "30px";
+        checkbox.style.cursor = "pointer";
+        checkbox.id = `checkbox-group-${groupNum}`;
+        checkbox.classList.add("variant-checkbox");
+        checkbox.checked = false;
+
+       let text = document.createElement("span");
+        text.innerHTML = ` អង្គធាតុទី ${groupNum}`;
+        groupHeader.appendChild(text);
+
+        variantInfoContainer.appendChild(groupHeader);
+
+        let keyContainer = document.createElement("div");
+        keyContainer.style.display = "inline-block";
+        keyContainer.style.width = "45%";
+        keyContainer.style.borderRight = "1px solid";
+        keyContainer.style.textAlign = "center";
+
+        let valueContainer = document.createElement("div");
+        valueContainer.style.display = "inline-block";
+        valueContainer.style.width = "50%";
+        valueContainer.style.paddingLeft = "3%";
+        valueContainer.style.textAlign = "left";
+
+        let foundVariants = false;
+
+        groupData.forEach(({ key, value }) => {
+            if (key.toLowerCase().includes(searchTerm) || value.toLowerCase().includes(searchTerm)) {
+                let keyDiv = document.createElement("div");
+                keyDiv.style.marginBottom = "5px";
+                keyDiv.style.padding = "1px 0";
+                keyDiv.style.fontSize = "1.2rem";
+
+                let keyText = document.createElement("span");
+                keyText.innerText = key;
+
+                keyDiv.appendChild(keyText);
+
+                let valueDiv = document.createElement("div");
+                valueDiv.style.marginBottom = "5px";
+                valueDiv.style.padding = "1px 0";
+                valueDiv.style.fontSize = "1.2rem";
+
+                let valueText = document.createElement("span");
+                valueText.innerText = value;
+
+                valueDiv.appendChild(valueText);
+
+                keyContainer.appendChild(keyDiv);
+                valueContainer.appendChild(valueDiv);
+
+                foundVariants = true;
+            }
+        });
+        if (foundVariants) {
+            groupHeader.appendChild(checkbox);
+            variantInfoContainer.appendChild(groupHeader);
+
+            variantInfoContainer.appendChild(keyContainer);
+            variantInfoContainer.appendChild(valueContainer);
+        }
+    });
+});
 
     rightContainer.appendChild(searchInput);
     rightContainer.appendChild(variantInfoContainer);

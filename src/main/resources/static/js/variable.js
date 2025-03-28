@@ -26,6 +26,7 @@ let clearStoreFilter = false;
 const itemsPerPage = 14;
 
 let groupNumReq = 1;
+let selectedData = [];
 let globalStockQuantities = 0;
 
 

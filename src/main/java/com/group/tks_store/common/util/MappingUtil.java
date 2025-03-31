@@ -24,8 +24,8 @@ public class MappingUtil {
                 VariantAttributeDTOV2 dto = new VariantAttributeDTOV2();
 
                 dto.setId(Integer.parseInt(attrParts[0].trim())); // ID
-                dto.setName(attrParts[1].trim()); // Name
-                dto.setValue(attrParts[2].trim()); // Value
+                dto.setName(attrParts[1].trim());
+                dto.setValue(attrParts[2].trim());
 
                 int groupNum = (i < groupNums.length) ? Integer.parseInt(groupNums[i].trim()) : 0;
                 dto.setGroupNum(groupNum);

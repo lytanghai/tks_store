@@ -53,8 +53,6 @@ if(window.location.pathname.includes("/api/product")) {
             showExistingImage(element.getAttribute("data-images"));
 
             const rawAttributeString = element.getAttribute("data-attributes");
-            console.log( 'raw '+rawAttributeString)
-
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
 
@@ -90,14 +88,12 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function addToRemoveImg() {
-        console.log("removed")
         if (imageUrls.length === 0) {
             return;
         }
         currentImageIndex = 0;
         let imageUrl = imageUrls[currentImageIndex];
         let uuid = imageUrl.split("/").pop();
-        console.log('uuid' + uuid)
 
         if(imageUrls.length === 1) {
             imageUrls = [];
@@ -157,55 +153,6 @@ if(window.location.pathname.includes("/api/product")) {
         showVerifyImageSlider();
     }
 
-//    function addAttribute() {
-//        let selectElement = document.getElementById("product_attribute_select");
-//        let attributeId = parseInt(selectElement.value);
-//        let attributeName = selectElement.options[selectElement.selectedIndex].text;
-//        let value = document.getElementById("product_attribute_value").value.trim();
-//        if (!value) {
-//            alert("Please enter a value for the attribute.");
-//            return;
-//        }
-//
-//        let existingIndex = '';
-//        if(typeof(variantAttributes) === 'object') {
-//            //create
-//            existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
-////            if (existingIndex !== -1) {
-////                alert("This attribute is already added!");
-////                return;
-////            }
-//    console.log('5 group_num: ')
-//             variantAttributes.push({
-//                group_num: groupNumReq,
-//                attribute_id: attributeId,
-//                name: attributeName,
-//                value: value
-//            });
-//            updateAttributeList();
-//
-//        } else {
-//            variantAttributes = JSON.parse(variantAttributes);
-//            existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
-//
-////            if (existingIndex !== -1) {
-////                alert("This attribute is already added!");
-////                return;
-////            }
-//    console.log('6 group_num: ')
-//            variantAttributes.push({
-//                group_num: groupNumReq,
-//                attribute_id: attributeId,
-//                name: attributeName,
-//                value: value
-//            });
-//            variantAttributes = JSON.stringify(variantAttributes);
-//            displayVariantAttributes(variantAttributes);
-//            document.getElementById("product_attribute_value").value = '';
-//            document.getElementById("product_attribute_select").value = '';
-//        }
-//    }
-
 function addAttribute() {
     let selectElement = document.getElementById("product_attribute_select");
     let attributeId = parseInt(selectElement.value);
@@ -228,7 +175,6 @@ function addAttribute() {
             return;
         }
 
-        console.log('5 group_num:', groupNumReq);
         variantAttributes.push({
             group_num: groupNumReq,
             attribute_id: attributeId,
@@ -247,7 +193,6 @@ function addAttribute() {
             return;
         }
 
-        console.log('6 group_num:', groupNumReq);
         variantAttributes.push({
             group_num: groupNumReq,
             attribute_id: attributeId,
@@ -261,57 +206,6 @@ function addAttribute() {
         document.getElementById("product_attribute_select").value = '';
     }
 }
-
-//    function updateAttributeList() {
-//        let selectElement = document.getElementById("product_attribute_select");
-//        let attributeId = selectElement.value; // Get selected attribute ID
-//        let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
-//        let value = document.getElementById("product_attribute_value").value;
-//
-//        if (!value) {
-//            alert("Please enter a value for the attribute.");
-//            return;
-//        }
-//
-//        let listItem = document.createElement("li");
-//        listItem.style.display = "flex";
-//        listItem.style.textAlign = "center";
-//        listItem.style.fontSize = "1.6rem";
-//        listItem.style.paddingLeft = "5%";
-//        listItem.style.backgroundColor = "#fff";
-//        listItem.setAttribute("data-id", attributeId);
-//
-//        let attrSpan = document.createElement("span");
-//        attrSpan.classList.add("attribute-name");
-//        attrSpan.style.flex = "1";
-//        attrSpan.style.marginLeft = '2%';
-//        attrSpan.textContent = attributeName;
-//
-//        let valueSpan = document.createElement("span");
-//        valueSpan.classList.add("attribute-value");
-//        valueSpan.style.flex = "1";
-//        valueSpan.style.paddingRight = "3%";
-//        valueSpan.textContent = value;
-//
-//        let deleteButton = document.createElement("button");
-//        deleteButton.textContent = "Delete";
-//        deleteButton.style.flex = "1";
-//        deleteButton.style.backgroundColor = "#fff";
-//        deleteButton.style.width = "100px";
-//        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-//        deleteButton.addEventListener("click", function() {
-//            removeAttributeItem(listItem);
-//        });
-//
-//        listItem.appendChild(attrSpan);
-//        listItem.appendChild(valueSpan);
-//        listItem.appendChild(deleteButton);
-//
-//        document.getElementById("attribute-list").appendChild(listItem);
-//
-//        document.getElementById("product_attribute_select").value = "";
-//        document.getElementById("product_attribute_value").value = "";
-//    }
 
 function updateAttributeList() {
     let selectElement = document.getElementById("product_attribute_select");
@@ -651,7 +545,6 @@ function getLiElementsContentAsArray() {
     }
 
     function prevProductImage() {
-        console.log("currenct Image Index: " + currentImageIndex)
         if (currentImageIndex > 0) {
             currentImageIndex--;
         } else {
@@ -676,7 +569,6 @@ function getLiElementsContentAsArray() {
     try {
         if (variantAttributes.length > 0) {
             const attributes = JSON.parse(variantAttributes);
-            console.log('attri ' + JSON.stringify(attributes));
 
             if (Array.isArray(attributes)) {
                 const groupedAttributes = {};

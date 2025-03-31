@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchFilterProduct(url) {
-    console.log("request url: " + url)
     clearTimeout(storeDebounceTimeout);
 
     const loadingSpinner = document.getElementById("loading-spinner");
@@ -43,7 +42,6 @@ function fetchFilterProduct(url) {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log("API Response:", data);
                 if (!data.products || data.products.length === 0) {
                     console.warn("No products found.");
                     displayProducts([]);
@@ -332,10 +330,8 @@ document.getElementById("clear-store-search").addEventListener("click", () => {
 function closeProductDetails() {
     let container = document.querySelector('.store-view-detail-container');
     container.classList.remove('show');
-
     let productHeaderInfo = document.querySelector('.product-detail-information');
     productHeaderInfo.innerHTML = ''; // Clears content
-
     document.querySelector('.store-image-slider-container').innerHTML = '';
     document.querySelector('.store-image-thumbnail-container').innerHTML = '';
 
@@ -351,21 +347,16 @@ function viewProductDetails(product) {
     imageSliderContainer.innerHTML = '';
     imageThumbnailContainer.innerHTML = '';
 
-    const imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
+    let imageUUIDs = product.variants[0]?.images?.map(image => image.uuid) || [];
 
+    // If no images are available, use the default image
     if (imageUUIDs.length === 0) {
-        const noImageMessage = document.createElement('div');
-        noImageMessage.textContent = 'No image preview available';
-        noImageMessage.style.textAlign = 'center';
-        noImageMessage.style.fontSize = '16px';
-        noImageMessage.style.color = '#888'; // Optional styling
-        imageSliderContainer.appendChild(noImageMessage);
-        return;
+        imageUUIDs = ["/icon/shopping-cart.png"];
     }
 
     imageUUIDs.forEach((uuid, index) => {
         const mainImage = document.createElement('img');
-        mainImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+        mainImage.src = uuid.includes("shopping-cart.png") ? uuid : `http://localhost:8080/api/image/show?uuid=${uuid}`;
         mainImage.alt = `Image ${index + 1}`;
         mainImage.setAttribute('data-uuid', uuid);
         mainImage.style.display = (index === 0) ? 'block' : 'none';
@@ -379,7 +370,7 @@ function viewProductDetails(product) {
         const imagesToShow = imageUUIDs.slice(currentThumbnailIndex, currentThumbnailIndex + 3); // Show 3 at a time
         imagesToShow.forEach((uuid, index) => {
             const thumbImage = document.createElement('img');
-            thumbImage.src = `http://localhost:8080/api/image/show?uuid=${uuid}`;
+            thumbImage.src = uuid.includes("shopping-cart.png") ? uuid : `http://localhost:8080/api/image/show?uuid=${uuid}`;
             thumbImage.alt = `Thumb ${currentThumbnailIndex + index + 1}`;
             thumbImage.onclick = () => {
                 goToSlide(currentThumbnailIndex + index);
@@ -437,7 +428,7 @@ function viewProductDetails(product) {
     let productHeaderInfo = document.querySelector('.product-detail-information');
     console.warn(product)
     if (productHeaderInfo) {
-        productInfoDisplay(product,productHeaderInfo);
+        productInfoDisplay(product, productHeaderInfo);
         createRightInfoContainer(product, productHeaderInfo);
         productQuantityDisplay(product, productHeaderInfo);
 
@@ -467,7 +458,6 @@ function viewProductDetails(product) {
                 pTag.style.display = pTag.style.display === "none" ? "block" : "none";
             });
 
-//            tabContainer.appendChild(tabButton); description
             tabContainer.appendChild(pTag);
 
             productHeaderInfo.appendChild(tabContainer);
@@ -750,7 +740,6 @@ function createRightInfoContainer(product, parentContainer) {
             } else {
                 selectedData = selectedData.filter(item => item.groupNum !== groupNum);
             }
-            console.log("Selected Data:", selectedData);
         }
     });
 

@@ -85,8 +85,6 @@ function fetchAttributesFilter() {
     document.getElementById("loading-spinner").style.display = "block";
     document.getElementById("loading-spinner_2").style.display = "block";
 
-    console.log('Fetching URL:', url);
-
     setTimeout(() => {
         fetch(url)
             .then(response => response.json())

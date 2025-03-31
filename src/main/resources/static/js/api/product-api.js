@@ -1,5 +1,5 @@
 async function uploadProduct() {
-    let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
+    let fileInput = document.getElementById('product_variant_image_value');
     let files = fileInput.files;
     let formData = new FormData();
 
@@ -17,7 +17,7 @@ async function uploadProduct() {
     }
 
     let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
-    if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
+    if (isNaN(salePrice)) {
         alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
         return;
     }
@@ -55,9 +55,7 @@ async function uploadProduct() {
         }
     }
 
-    console.log('1 group_num: ')
     if(variantAttributes.length > 0) {
-        console.log('var attr : ' + variantAttributes)
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
                 attribute_id: variantAttributes[y].attribute_id,
@@ -123,7 +121,6 @@ async function uploadProduct() {
                 };
 
             let variantAttr = JSON.parse(variantAttributes);
-            console.log('2 group_num: ')
             if (variantAttr.length > 0) {
                 for (let i = 0; i < variantAttr.length; i++) {
                     jsonData.variant_attributes.push({
@@ -160,10 +157,8 @@ async function uploadProduct() {
             sessionStorage.setItem('popupMessage', 'success');
             sessionStorage.setItem('popupAction', 'update');
             showPopUpMessage('success', 'update');
-//            groupNum = 1;
-    //            let result = await response.json();
+//            let result = await response.json();
             } catch (error) {
-//                groupNum = 1;
                 console.error("Error uploading:", error);
             }
     }
@@ -227,7 +222,6 @@ if(window.location.pathname.includes("/api/product")) {
         fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
             .then(response => response.json())
             .then(data => {
-                console.log('response: ' + JSON.stringify(data))
                 let attributeList = document.getElementById("attributeList");
                 attributeList.innerHTML = "";
 
@@ -241,8 +235,6 @@ if(window.location.pathname.includes("/api/product")) {
                     }, {});
 
                     Object.keys(groupedAttributes).forEach(groupNum => {
-                        console.log(groupNum)
-                        console.log(groupedAttributes)
                         let listItem = document.createElement("li");
                         listItem.textContent = `អង្គធាតុទី ${groupNum}: ${groupedAttributes[groupNum].join(" | ")}`;
                         listItem.style.textAlign = "left";

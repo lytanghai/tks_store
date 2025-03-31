@@ -53,7 +53,7 @@ if(window.location.pathname.includes("/api/product")) {
             showExistingImage(element.getAttribute("data-images"));
 
             const rawAttributeString = element.getAttribute("data-attributes");
-           console.log( 'raw '+rawAttributeString)
+            console.log( 'raw '+rawAttributeString)
 
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
@@ -532,15 +532,113 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function displayVariantAttributes(attributes) {
-        const attributeListContainer = document.getElementById('attribute-list');
-        attributeListContainer.innerHTML = "";
+    console.warn('attribute: ' + attributes);
+//        const attributeListContainer = document.getElementById('attribute-list');
+//        attributeListContainer.innerHTML = "";
+//
+//        try {
+//            if(variantAttributes.length > 0) {
+//                const attributes = JSON.parse(variantAttributes);
+//                console.log('attri ' + JSON.stringify(attributes))
+//                if (Array.isArray(attributes)) {
+//                    attributes.forEach((attribute, index) => {
+//                    const listItem = document.createElement('li');
+//                    listItem.style.display = 'flex';
+//                    listItem.style.textAlign = "center";
+//                    listItem.style.fontSize = "1.6rem";
+//                    listItem.style.paddingRight = "2%";
+//                    listItem.style.backgroundColor = "#fff";
+//
+//                    const idSpan = document.createElement('span');
+//                    idSpan.classList.add('attribute-id');
+//                    idSpan.style.flex = "1";
+//                    idSpan.textContent = attribute.id;
+//
+//                    const nameSpan = document.createElement('span');
+//                    nameSpan.classList.add('attribute-name');
+//                    nameSpan.style.flex = "1";
+//                    nameSpan.textContent = attribute.name + '[' + attribute.group_num + ']';
+//
+//                    const valueSpan = document.createElement('span');
+//                    valueSpan.classList.add('attribute-value');
+//                    valueSpan.style.flex = "1";
+//                    valueSpan.style.paddingRight = "10%";
+//                    valueSpan.style.marginRight = "6%";
+//                    valueSpan.textContent = attribute.value;
+//
+//                    const actionsSpan = document.createElement('span');
+//                    actionsSpan.classList.add('product-attribute-actions');
+//                    actionsSpan.style.marginRight = "10%";
+//
+//                    const deleteButton = document.createElement('button');
+//                    deleteButton.textContent = 'Delete';
+//                    deleteButton.style.flex = "1";
+//                    deleteButton.style.backgroundColor = "#fff";
+//                    deleteButton.style.paddingLeft = "0%";
+//                    deleteButton.style.zIndex = "-4";
+//                    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+//                    deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
+//
+//                    actionsSpan.appendChild(deleteButton);
+//
+//                    listItem.appendChild(nameSpan);
+//                    listItem.appendChild(valueSpan);
+//                    listItem.appendChild(actionsSpan);
+//
+//                    attributeListContainer.appendChild(listItem);
+//                });
+//                } else {
+//                    console.error('Expected an array for attributes, but got:', attributes);
+//                }
+//            }
+//
+//        } catch (e) {
+//            console.error('Failed to parse attributes:', e);
+//        }
+const attributeListContainer = document.getElementById('attribute-list');
+attributeListContainer.innerHTML = "";
 
-        try {
-            if(variantAttributes.length > 0) {
-                const attributes = JSON.parse(variantAttributes);
-                console.log('attri ' + JSON.stringify(attributes))
-                if (Array.isArray(attributes)) {
-                    attributes.forEach((attribute, index) => {
+try {
+    if (variantAttributes.length > 0) {
+        const attributes = JSON.parse(variantAttributes);
+        console.log('attri ' + JSON.stringify(attributes));
+
+        if (Array.isArray(attributes)) {
+            // Group attributes by group_num
+            const groupedAttributes = {};
+            attributes.forEach(attribute => {
+                const groupNum = attribute.group_num;
+                if (!groupedAttributes[groupNum]) {
+                    groupedAttributes[groupNum] = [];
+                }
+                groupedAttributes[groupNum].push(attribute);
+            });
+
+            // Sort groups numerically
+            const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
+
+            // Iterate through sorted groups
+            sortedGroupNums.forEach(groupNum => {
+                const group = groupedAttributes[groupNum];
+
+                // Create a container for each group
+                const groupContainer = document.createElement('div');
+                groupContainer.classList.add('group-container');
+                groupContainer.style.borderBottom = "1px solid #000"; // Add separator
+                groupContainer.style.marginBottom = "10px";
+                groupContainer.style.paddingBottom = "10px";
+
+                // Group header
+                const groupHeader = document.createElement('div');
+                groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
+                groupHeader.style.fontWeight = "bold";
+                groupHeader.style.fontSize = "1.8rem";
+                groupHeader.style.marginBottom = "5px";
+
+                groupContainer.appendChild(groupHeader);
+
+                // Append attributes to this group
+                group.forEach((attribute, index) => {
                     const listItem = document.createElement('li');
                     listItem.style.display = 'flex';
                     listItem.style.textAlign = "center";
@@ -548,15 +646,10 @@ if(window.location.pathname.includes("/api/product")) {
                     listItem.style.paddingRight = "2%";
                     listItem.style.backgroundColor = "#fff";
 
-                    const idSpan = document.createElement('span');
-                    idSpan.classList.add('attribute-id');
-                    idSpan.style.flex = "1";
-                    idSpan.textContent = attribute.id;
-
                     const nameSpan = document.createElement('span');
                     nameSpan.classList.add('attribute-name');
                     nameSpan.style.flex = "1";
-                    nameSpan.textContent = attribute.name + '[' + attribute.group_num + ']';
+                    nameSpan.textContent = attribute.name;
 
                     const valueSpan = document.createElement('span');
                     valueSpan.classList.add('attribute-value');
@@ -574,7 +667,6 @@ if(window.location.pathname.includes("/api/product")) {
                     deleteButton.style.flex = "1";
                     deleteButton.style.backgroundColor = "#fff";
                     deleteButton.style.paddingLeft = "0%";
-                    deleteButton.style.zIndex = "-4";
                     deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
                     deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
 
@@ -584,16 +676,22 @@ if(window.location.pathname.includes("/api/product")) {
                     listItem.appendChild(valueSpan);
                     listItem.appendChild(actionsSpan);
 
-                    attributeListContainer.appendChild(listItem);
+                    groupContainer.appendChild(listItem);
                 });
-                } else {
-                    console.error('Expected an array for attributes, but got:', attributes);
-                }
-            }
 
-        } catch (e) {
-            console.error('Failed to parse attributes:', e);
+                // Append the group container to the main list
+                attributeListContainer.appendChild(groupContainer);
+            });
+
+        } else {
+            console.error('Expected an array for attributes, but got:', attributes);
         }
+    }
+
+} catch (e) {
+    console.error('Failed to parse attributes:', e);
+}
+
     }
 
 
@@ -630,7 +728,15 @@ if(window.location.pathname.includes("/api/product")) {
 
     function addNewGroupVariantAttribute() {
         groupNumReq += 1;
-        document.getElementById("attribute-list").innerHTML = "";
+//        document.getElementById("attribute-list").innerHTML = "";
+        const attributeList = document.getElementById("attribute-list");
+
+        const newGroup = document.createElement("li");
+        newGroup.classList.add("product-attribute-group");
+        newGroup.style.borderBottom = "1px solid #000";
+        newGroup.innerHTML = `<div style="font-size: 1.5rem">ប្រភេទឥវ៉ាន់ ${groupNumReq}</div>`;
+
+        attributeList.appendChild(newGroup);
     }
 
 }

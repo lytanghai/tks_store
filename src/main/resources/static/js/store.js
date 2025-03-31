@@ -680,7 +680,7 @@ function createRightInfoContainer(product, parentContainer) {
         groupHeader.style.paddingBottom = "3px";
         groupHeader.style.textAlign = "center";
         groupHeader.style.fontSize = "1.2rem";
-        groupHeader.style.border = "1px solid";
+        groupHeader.style.borderBottom = "1px solid";
         groupHeader.style.cursor = "pointer";
         groupHeader.style.display = "flex";
         groupHeader.style.alignItems = "center";

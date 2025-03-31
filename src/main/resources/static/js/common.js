@@ -173,8 +173,10 @@ function extractNumber(value) {
 }
 
 function convertToJSONArray(input) {
-    console.log('convertToJSONArray' + input)
-        console.log('4 group_num: ')
+    let items = input.split(",");
+    let lastItem = items[items.length - 1];
+    let lastValue = lastItem.substring(lastItem.lastIndexOf(":") + 1);
+    let lastMatch = items.reverse().find(item => item.endsWith(":2"));
     return input.split(',').map(pair => {
         let [id, name, value, group_num] = pair.split(':').map(item => item.trim());
         return { id , name, value, group_num };

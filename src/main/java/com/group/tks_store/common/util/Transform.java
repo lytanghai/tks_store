@@ -1,11 +1,13 @@
 package com.group.tks_store.common.util;
 
+import lombok.NoArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 import java.util.Iterator;
 
+@NoArgsConstructor
 public class Transform {
 
     public static JSONObject convertKeysToSnakeCase(JSONObject jsonObject) {
@@ -37,28 +39,6 @@ public class Transform {
 
         return newJsonObject;
     }
-
-
-    // Method to recursively convert JSONArray elements' keys to snake_case
-    private static JSONArray convertArrayKeysToSnakeCase(JSONArray jsonArray) {
-        JSONArray newArray = new JSONArray();
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            Object element = jsonArray.get(i);
-
-            if (element instanceof JSONObject) {
-                element = convertKeysToSnakeCase((JSONObject) element);
-            } else if (element instanceof JSONArray) {
-                element = convertArrayKeysToSnakeCase((JSONArray) element);
-            }
-
-            newArray.put(element);
-        }
-
-        return newArray;
-    }
-
-
 
     private static String convertToSnakeCase(String input) {
         return input.replaceAll("([a-z])([A-Z]+)", "$1_$2").toLowerCase();

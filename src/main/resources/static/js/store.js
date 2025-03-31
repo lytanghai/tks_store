@@ -55,12 +55,12 @@ function fetchFilterProduct(url) {
                     return;
                 }
 
-                totalStoreProductPage = data.totalPages;
+                totalStoreProductPage = data.total_pages;
                 document.getElementById("pageIndicator").textContent = `ទំព័រ ${currentStoreProductPage} នៃ ${totalStoreProductPage}`;
 
                 document.getElementById("prevPage").disabled = currentStoreProductPage === 1;
                 document.getElementById("nextPage").disabled = currentStoreProductPage === totalStoreProductPage;
-                document.getElementById("store-search-size").textContent = data.totalItems;
+                document.getElementById("store-search-size").textContent = data.total_items;
                 document.getElementById("store-search-datetime").textContent = displayDateTime();
                 displayProducts(data.products);
             })
@@ -755,7 +755,7 @@ function createRightInfoContainer(product, parentContainer) {
     });
 
 searchInput.addEventListener("input", function () {
-    let searchTerm = searchInput.value.toLowerCase(); // Get the search term and convert to lowercase
+    let searchTerm = searchInput.value.toLowerCase();
     variantInfoContainer.innerHTML = '';
 
     Object.keys(groupedVariants).forEach(groupNum => {

@@ -60,7 +60,7 @@ if(window.location.pathname.includes("/api/product")) {
                     .then(response => response.json())
                     .then(data => {
                         const productTable = document.getElementById("productTable");
-                        totalPage = data.totalPages;
+                        totalPage = data.total_pages;
                         document.getElementById("display-page-num").textContent = currentPage;
                         document.getElementById("display-page-total").textContent = totalPage;
 

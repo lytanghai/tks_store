@@ -57,10 +57,12 @@ async function uploadProduct() {
 
     console.log('1 group_num: ')
     if(variantAttributes.length > 0) {
+        console.log('var attr : ' + variantAttributes)
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
                 attribute_id: variantAttributes[y].attribute_id,
-                value: variantAttributes[y].value
+                value: variantAttributes[y].value,
+                group_num: variantAttributes[y].group_num
             });
         }
     }
@@ -222,25 +224,25 @@ if(window.location.pathname.includes("/api/product")) {
     function openVariantAttributeDetail(button) {
         let variantId = button.getAttribute("data-variant-id");
 
-        // Fetch data using AJAX
         fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
             .then(response => response.json())
             .then(data => {
+                console.log('response: ' + JSON.stringify(data))
                 let attributeList = document.getElementById("attributeList");
                 attributeList.innerHTML = "";
-    console.log('3 group_num: ')
+
                 if (data.length > 0) {
-                    // Group attributes by `group_num`
                     let groupedAttributes = data.reduce((acc, attr) => {
-                        if (!acc[attr.groupNum]) {
-                            acc[attr.groupNum] = [];
+                        if (!acc[attr.group_num]) {
+                            acc[attr.group_num] = [];
                         }
-                        acc[attr.groupNum].push(`${attr.attribute_name}: ${attr.value}`);
+                        acc[attr.group_num].push(`${attr.attribute_name}: ${attr.value}`);
                         return acc;
                     }, {});
 
-                    // Create list items for each group
                     Object.keys(groupedAttributes).forEach(groupNum => {
+                        console.log(groupNum)
+                        console.log(groupedAttributes)
                         let listItem = document.createElement("li");
                         listItem.textContent = `អង្គធាតុទី ${groupNum}: ${groupedAttributes[groupNum].join(" | ")}`;
                         listItem.style.textAlign = "left";

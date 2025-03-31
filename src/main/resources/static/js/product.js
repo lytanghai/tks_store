@@ -157,106 +157,230 @@ if(window.location.pathname.includes("/api/product")) {
         showVerifyImageSlider();
     }
 
-    function addAttribute() {
-        let selectElement = document.getElementById("product_attribute_select");
-        let attributeId = parseInt(selectElement.value);
-        let attributeName = selectElement.options[selectElement.selectedIndex].text;
-        let value = document.getElementById("product_attribute_value").value.trim();
-        if (!value) {
-            alert("Please enter a value for the attribute.");
-            return;
-        }
+//    function addAttribute() {
+//        let selectElement = document.getElementById("product_attribute_select");
+//        let attributeId = parseInt(selectElement.value);
+//        let attributeName = selectElement.options[selectElement.selectedIndex].text;
+//        let value = document.getElementById("product_attribute_value").value.trim();
+//        if (!value) {
+//            alert("Please enter a value for the attribute.");
+//            return;
+//        }
+//
+//        let existingIndex = '';
+//        if(typeof(variantAttributes) === 'object') {
+//            //create
+//            existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
+////            if (existingIndex !== -1) {
+////                alert("This attribute is already added!");
+////                return;
+////            }
+//    console.log('5 group_num: ')
+//             variantAttributes.push({
+//                group_num: groupNumReq,
+//                attribute_id: attributeId,
+//                name: attributeName,
+//                value: value
+//            });
+//            updateAttributeList();
+//
+//        } else {
+//            variantAttributes = JSON.parse(variantAttributes);
+//            existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
+//
+////            if (existingIndex !== -1) {
+////                alert("This attribute is already added!");
+////                return;
+////            }
+//    console.log('6 group_num: ')
+//            variantAttributes.push({
+//                group_num: groupNumReq,
+//                attribute_id: attributeId,
+//                name: attributeName,
+//                value: value
+//            });
+//            variantAttributes = JSON.stringify(variantAttributes);
+//            displayVariantAttributes(variantAttributes);
+//            document.getElementById("product_attribute_value").value = '';
+//            document.getElementById("product_attribute_select").value = '';
+//        }
+//    }
 
-        let existingIndex = '';
-        if(typeof(variantAttributes) === 'object') {
-            //create
-            existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
-//            if (existingIndex !== -1) {
-//                alert("This attribute is already added!");
-//                return;
-//            }
-    console.log('5 group_num: ')
-             variantAttributes.push({
-                group_num: groupNumReq,
-                attribute_id: attributeId,
-                name: attributeName,
-                value: value
-            });
-            updateAttributeList();
+function addAttribute() {
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = parseInt(selectElement.value);
+    let attributeName = selectElement.options[selectElement.selectedIndex].text;
+    let value = document.getElementById("product_attribute_value").value.trim();
 
-        } else {
-            variantAttributes = JSON.parse(variantAttributes);
-            existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
-
-//            if (existingIndex !== -1) {
-//                alert("This attribute is already added!");
-//                return;
-//            }
-    console.log('6 group_num: ')
-            variantAttributes.push({
-                group_num: groupNumReq,
-                attribute_id: attributeId,
-                name: attributeName,
-                value: value
-            });
-            variantAttributes = JSON.stringify(variantAttributes);
-            displayVariantAttributes(variantAttributes);
-            document.getElementById("product_attribute_value").value = '';
-            document.getElementById("product_attribute_select").value = '';
-        }
-
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
     }
 
-    function updateAttributeList() {
-        let selectElement = document.getElementById("product_attribute_select");
-        let attributeId = selectElement.value; // Get selected attribute ID
-        let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
-        let value = document.getElementById("product_attribute_value").value;
+    let existingIndex = '';
 
-        if (!value) {
-            alert("Please enter a value for the attribute.");
+    if (typeof variantAttributes === 'object') {
+        // Check if attribute with same ID exists in the current group
+        existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
+
+        if (existingIndex !== -1) {
+            alert("This attribute is already added in the current group!");
             return;
         }
 
-        let listItem = document.createElement("li");
-        listItem.style.display = "flex";
-        listItem.style.textAlign = "center";
-        listItem.style.fontSize = "1.6rem";
-        listItem.style.paddingLeft = "5%";
-        listItem.style.backgroundColor = "#fff";
-        listItem.setAttribute("data-id", attributeId);
+        console.log('5 group_num:', groupNumReq);
+        variantAttributes.push({
+            group_num: groupNumReq,
+            attribute_id: attributeId,
+            name: attributeName,
+            value: value
+        });
+        updateAttributeList();
 
-        let attrSpan = document.createElement("span");
-        attrSpan.classList.add("attribute-name");
-        attrSpan.style.flex = "1";
-        attrSpan.style.marginLeft = '2%';
-        attrSpan.textContent = attributeName;
+    } else {
+        // Convert JSON string to object if necessary
+        variantAttributes = JSON.parse(variantAttributes);
+        existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
 
-        let valueSpan = document.createElement("span");
-        valueSpan.classList.add("attribute-value");
-        valueSpan.style.flex = "1";
-        valueSpan.style.paddingRight = "3%";
-        valueSpan.textContent = value;
+        if (existingIndex !== -1) {
+            alert("This attribute is already added in the current group!");
+            return;
+        }
 
-        let deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.style.flex = "1";
-        deleteButton.style.backgroundColor = "#fff";
-        deleteButton.style.width = "100px";
-        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-        deleteButton.addEventListener("click", function() {
-            removeAttributeItem(listItem);
+        console.log('6 group_num:', groupNumReq);
+        variantAttributes.push({
+            group_num: groupNumReq,
+            attribute_id: attributeId,
+            name: attributeName,
+            value: value
         });
 
-        listItem.appendChild(attrSpan);
-        listItem.appendChild(valueSpan);
-        listItem.appendChild(deleteButton);
-
-        document.getElementById("attribute-list").appendChild(listItem);
-
-        document.getElementById("product_attribute_select").value = "";
-        document.getElementById("product_attribute_value").value = "";
+        variantAttributes = JSON.stringify(variantAttributes);
+        displayVariantAttributes(variantAttributes);
+        document.getElementById("product_attribute_value").value = '';
+        document.getElementById("product_attribute_select").value = '';
     }
+}
+
+//    function updateAttributeList() {
+//        let selectElement = document.getElementById("product_attribute_select");
+//        let attributeId = selectElement.value; // Get selected attribute ID
+//        let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
+//        let value = document.getElementById("product_attribute_value").value;
+//
+//        if (!value) {
+//            alert("Please enter a value for the attribute.");
+//            return;
+//        }
+//
+//        let listItem = document.createElement("li");
+//        listItem.style.display = "flex";
+//        listItem.style.textAlign = "center";
+//        listItem.style.fontSize = "1.6rem";
+//        listItem.style.paddingLeft = "5%";
+//        listItem.style.backgroundColor = "#fff";
+//        listItem.setAttribute("data-id", attributeId);
+//
+//        let attrSpan = document.createElement("span");
+//        attrSpan.classList.add("attribute-name");
+//        attrSpan.style.flex = "1";
+//        attrSpan.style.marginLeft = '2%';
+//        attrSpan.textContent = attributeName;
+//
+//        let valueSpan = document.createElement("span");
+//        valueSpan.classList.add("attribute-value");
+//        valueSpan.style.flex = "1";
+//        valueSpan.style.paddingRight = "3%";
+//        valueSpan.textContent = value;
+//
+//        let deleteButton = document.createElement("button");
+//        deleteButton.textContent = "Delete";
+//        deleteButton.style.flex = "1";
+//        deleteButton.style.backgroundColor = "#fff";
+//        deleteButton.style.width = "100px";
+//        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+//        deleteButton.addEventListener("click", function() {
+//            removeAttributeItem(listItem);
+//        });
+//
+//        listItem.appendChild(attrSpan);
+//        listItem.appendChild(valueSpan);
+//        listItem.appendChild(deleteButton);
+//
+//        document.getElementById("attribute-list").appendChild(listItem);
+//
+//        document.getElementById("product_attribute_select").value = "";
+//        document.getElementById("product_attribute_value").value = "";
+//    }
+
+function updateAttributeList() {
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = selectElement.value; // Get selected attribute ID
+    let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
+    let value = document.getElementById("product_attribute_value").value;
+
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
+    }
+
+    let attributeListContainer = document.getElementById("attribute-list");
+
+    // Check if group header for group_num = 1 exists
+    let existingGroupHeader = attributeListContainer.querySelector(".group-header[data-group='1']");
+
+    if (!existingGroupHeader) {
+        let groupHeader = document.createElement("li");
+        groupHeader.classList.add("group-header");
+        groupHeader.style.fontSize = "1.5rem";
+        groupHeader.style.borderBottom = "1px solid";
+        groupHeader.style.fontSize = "1.5rem";
+        groupHeader.setAttribute("data-group", "1");
+        groupHeader.textContent = "ប្រភេទទំនិញ 1";
+
+        attributeListContainer.appendChild(groupHeader);
+    }
+
+    let listItem = document.createElement("li");
+    listItem.style.display = "flex";
+    listItem.style.textAlign = "center";
+    listItem.style.fontSize = "1.6rem";
+    listItem.style.paddingLeft = "5%";
+    listItem.style.backgroundColor = "#fff";
+    listItem.setAttribute("data-id", attributeId);
+
+    let attrSpan = document.createElement("span");
+    attrSpan.classList.add("attribute-name");
+    attrSpan.style.flex = "1";
+    attrSpan.style.marginLeft = '2%';
+    attrSpan.textContent = attributeName;
+
+    let valueSpan = document.createElement("span");
+    valueSpan.classList.add("attribute-value");
+    valueSpan.style.flex = "1";
+    valueSpan.style.paddingRight = "3%";
+    valueSpan.textContent = value;
+
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.style.flex = "1";
+    deleteButton.style.backgroundColor = "#fff";
+    deleteButton.style.width = "100px";
+    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+    deleteButton.addEventListener("click", function() {
+        removeAttributeItem(listItem);
+    });
+
+    listItem.appendChild(attrSpan);
+    listItem.appendChild(valueSpan);
+    listItem.appendChild(deleteButton);
+
+    attributeListContainer.appendChild(listItem);
+
+    // Reset input fields
+    document.getElementById("product_attribute_select").value = "";
+    document.getElementById("product_attribute_value").value = "";
+}
 
     function removeAttributeItem(listItem) {
         listItem.parentNode.removeChild(listItem);
@@ -484,24 +608,37 @@ if(window.location.pathname.includes("/api/product")) {
         }
     }
 
-    function getLiElementsContentAsArray() {
-        let ulElement = document.getElementById('attribute-list');
-        let liElements = ulElement.querySelectorAll('li');
-        if(liElements.length === 0) {
-            resultList = [];
+function getLiElementsContentAsArray() {
+    let ulElement = document.getElementById('attribute-list');
+    let liElements = ulElement.querySelectorAll('li');
+
+    if (liElements.length === 0) {
+        resultList = [];
+        return;
+    }
+
+    resultList = []; // Reset before adding new content
+    let validIndex = 1; // Tracks the correct count for valid items
+
+    liElements.forEach((liElement) => {
+        let attributeNameElement = liElement.querySelector('.attribute-name');
+        let attributeValueElement = liElement.querySelector('.attribute-value');
+
+        // Skip elements that don't have .attribute-name or .attribute-value
+        if (!attributeNameElement || !attributeValueElement) {
             return;
         }
-        if(document.getElementById("attribute-list").textContent !== '') {
-            liElements.forEach((liElement, index) => {
-                let attributeName = liElement.querySelector('.attribute-name').textContent;
-                let attributeValue = liElement.querySelector('.attribute-value').textContent;
-                let content = `អង្គធាតុទី ${index + 1}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
-                if (!resultList.includes(content)) {
-                    resultList.push(content);
-                }
-            });
+
+        let attributeName = attributeNameElement.textContent.trim();
+        let attributeValue = attributeValueElement.textContent.trim();
+        let content = `អង្គធាតុទី ${validIndex}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
+
+        if (!resultList.includes(content)) {
+            resultList.push(content);
+            validIndex++; // Only increment when adding a valid item
         }
-    }
+    });
+}
 
     function nextProductImage() {
 
@@ -533,167 +670,101 @@ if(window.location.pathname.includes("/api/product")) {
 
     function displayVariantAttributes(attributes) {
     console.warn('attribute: ' + attributes);
-//        const attributeListContainer = document.getElementById('attribute-list');
-//        attributeListContainer.innerHTML = "";
-//
-//        try {
-//            if(variantAttributes.length > 0) {
-//                const attributes = JSON.parse(variantAttributes);
-//                console.log('attri ' + JSON.stringify(attributes))
-//                if (Array.isArray(attributes)) {
-//                    attributes.forEach((attribute, index) => {
-//                    const listItem = document.createElement('li');
-//                    listItem.style.display = 'flex';
-//                    listItem.style.textAlign = "center";
-//                    listItem.style.fontSize = "1.6rem";
-//                    listItem.style.paddingRight = "2%";
-//                    listItem.style.backgroundColor = "#fff";
-//
-//                    const idSpan = document.createElement('span');
-//                    idSpan.classList.add('attribute-id');
-//                    idSpan.style.flex = "1";
-//                    idSpan.textContent = attribute.id;
-//
-//                    const nameSpan = document.createElement('span');
-//                    nameSpan.classList.add('attribute-name');
-//                    nameSpan.style.flex = "1";
-//                    nameSpan.textContent = attribute.name + '[' + attribute.group_num + ']';
-//
-//                    const valueSpan = document.createElement('span');
-//                    valueSpan.classList.add('attribute-value');
-//                    valueSpan.style.flex = "1";
-//                    valueSpan.style.paddingRight = "10%";
-//                    valueSpan.style.marginRight = "6%";
-//                    valueSpan.textContent = attribute.value;
-//
-//                    const actionsSpan = document.createElement('span');
-//                    actionsSpan.classList.add('product-attribute-actions');
-//                    actionsSpan.style.marginRight = "10%";
-//
-//                    const deleteButton = document.createElement('button');
-//                    deleteButton.textContent = 'Delete';
-//                    deleteButton.style.flex = "1";
-//                    deleteButton.style.backgroundColor = "#fff";
-//                    deleteButton.style.paddingLeft = "0%";
-//                    deleteButton.style.zIndex = "-4";
-//                    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-//                    deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
-//
-//                    actionsSpan.appendChild(deleteButton);
-//
-//                    listItem.appendChild(nameSpan);
-//                    listItem.appendChild(valueSpan);
-//                    listItem.appendChild(actionsSpan);
-//
-//                    attributeListContainer.appendChild(listItem);
-//                });
-//                } else {
-//                    console.error('Expected an array for attributes, but got:', attributes);
-//                }
-//            }
-//
-//        } catch (e) {
-//            console.error('Failed to parse attributes:', e);
-//        }
-const attributeListContainer = document.getElementById('attribute-list');
-attributeListContainer.innerHTML = "";
+    const attributeListContainer = document.getElementById('attribute-list');
+    attributeListContainer.innerHTML = "";
 
-try {
-    if (variantAttributes.length > 0) {
-        const attributes = JSON.parse(variantAttributes);
-        console.log('attri ' + JSON.stringify(attributes));
+    try {
+        if (variantAttributes.length > 0) {
+            const attributes = JSON.parse(variantAttributes);
+            console.log('attri ' + JSON.stringify(attributes));
 
-        if (Array.isArray(attributes)) {
-            // Group attributes by group_num
-            const groupedAttributes = {};
-            attributes.forEach(attribute => {
-                const groupNum = attribute.group_num;
-                if (!groupedAttributes[groupNum]) {
-                    groupedAttributes[groupNum] = [];
-                }
-                groupedAttributes[groupNum].push(attribute);
-            });
-
-            // Sort groups numerically
-            const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
-
-            // Iterate through sorted groups
-            sortedGroupNums.forEach(groupNum => {
-                const group = groupedAttributes[groupNum];
-
-                // Create a container for each group
-                const groupContainer = document.createElement('div');
-                groupContainer.classList.add('group-container');
-                groupContainer.style.borderBottom = "1px solid #000"; // Add separator
-                groupContainer.style.marginBottom = "10px";
-                groupContainer.style.paddingBottom = "10px";
-
-                // Group header
-                const groupHeader = document.createElement('div');
-                groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
-                groupHeader.style.fontWeight = "bold";
-                groupHeader.style.fontSize = "1.8rem";
-                groupHeader.style.marginBottom = "5px";
-
-                groupContainer.appendChild(groupHeader);
-
-                // Append attributes to this group
-                group.forEach((attribute, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.style.display = 'flex';
-                    listItem.style.textAlign = "center";
-                    listItem.style.fontSize = "1.6rem";
-                    listItem.style.paddingRight = "2%";
-                    listItem.style.backgroundColor = "#fff";
-
-                    const nameSpan = document.createElement('span');
-                    nameSpan.classList.add('attribute-name');
-                    nameSpan.style.flex = "1";
-                    nameSpan.textContent = attribute.name;
-
-                    const valueSpan = document.createElement('span');
-                    valueSpan.classList.add('attribute-value');
-                    valueSpan.style.flex = "1";
-                    valueSpan.style.paddingRight = "10%";
-                    valueSpan.style.marginRight = "6%";
-                    valueSpan.textContent = attribute.value;
-
-                    const actionsSpan = document.createElement('span');
-                    actionsSpan.classList.add('product-attribute-actions');
-                    actionsSpan.style.marginRight = "10%";
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.style.flex = "1";
-                    deleteButton.style.backgroundColor = "#fff";
-                    deleteButton.style.paddingLeft = "0%";
-                    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-                    deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
-
-                    actionsSpan.appendChild(deleteButton);
-
-                    listItem.appendChild(nameSpan);
-                    listItem.appendChild(valueSpan);
-                    listItem.appendChild(actionsSpan);
-
-                    groupContainer.appendChild(listItem);
+            if (Array.isArray(attributes)) {
+                const groupedAttributes = {};
+                attributes.forEach(attribute => {
+                    const groupNum = attribute.group_num;
+                    if (!groupedAttributes[groupNum]) {
+                        groupedAttributes[groupNum] = [];
+                    }
+                    groupedAttributes[groupNum].push(attribute);
                 });
 
-                // Append the group container to the main list
-                attributeListContainer.appendChild(groupContainer);
-            });
+                // Sort groups numerically
+                const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
 
-        } else {
-            console.error('Expected an array for attributes, but got:', attributes);
+                // Iterate through sorted groups
+                sortedGroupNums.forEach(groupNum => {
+                    const group = groupedAttributes[groupNum];
+
+                    // Create a container for each group
+                    const groupContainer = document.createElement('div');
+                    groupContainer.classList.add('group-container');
+                    groupContainer.style.borderBottom = "1px solid #000";
+                    groupContainer.style.marginBottom = "10px";
+                    groupContainer.style.paddingBottom = "10px";
+
+                    const groupHeader = document.createElement('div');
+                    groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
+                    groupHeader.style.fontWeight = "bold";
+                    groupHeader.style.fontSize = "1.8rem";
+                    groupHeader.style.marginBottom = "5px";
+
+                    groupContainer.appendChild(groupHeader);
+
+                    group.forEach((attribute, index) => {
+                        const listItem = document.createElement('li');
+                        listItem.style.display = 'flex';
+                        listItem.style.textAlign = "center";
+                        listItem.style.fontSize = "1.6rem";
+                        listItem.style.paddingRight = "2%";
+                        listItem.style.backgroundColor = "#fff";
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.classList.add('attribute-name');
+                        nameSpan.style.flex = "1";
+                        nameSpan.textContent = attribute.name;
+
+                        const valueSpan = document.createElement('span');
+                        valueSpan.classList.add('attribute-value');
+                        valueSpan.style.flex = "1";
+                        valueSpan.style.paddingRight = "10%";
+                        valueSpan.style.marginRight = "6%";
+                        valueSpan.textContent = attribute.value;
+
+                        const actionsSpan = document.createElement('span');
+                        actionsSpan.classList.add('product-attribute-actions');
+                        actionsSpan.style.marginRight = "10%";
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.style.flex = "1";
+                        deleteButton.style.backgroundColor = "#fff";
+                        deleteButton.style.paddingLeft = "0%";
+                        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+                        deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
+
+                        actionsSpan.appendChild(deleteButton);
+
+                        listItem.appendChild(nameSpan);
+                        listItem.appendChild(valueSpan);
+                        listItem.appendChild(actionsSpan);
+
+                        groupContainer.appendChild(listItem);
+                    });
+
+                    // Append the group container to the main list
+                    attributeListContainer.appendChild(groupContainer);
+                });
+
+            } else {
+                console.error('Expected an array for attributes, but got:', attributes);
+            }
         }
+
+    } catch (e) {
+        console.error('Failed to parse attributes: ', e);
     }
 
-} catch (e) {
-    console.error('Failed to parse attributes:', e);
-}
-
     }
-
 
     function removeAttributeUpdateItem(attributes, index) {
        attributes = JSON.parse(attributes);
@@ -728,12 +799,10 @@ try {
 
     function addNewGroupVariantAttribute() {
         groupNumReq += 1;
-//        document.getElementById("attribute-list").innerHTML = "";
         const attributeList = document.getElementById("attribute-list");
-
         const newGroup = document.createElement("li");
         newGroup.classList.add("product-attribute-group");
-        newGroup.style.borderBottom = "1px solid #000";
+        newGroup.style.borderTop = "1px solid #000";
         newGroup.innerHTML = `<div style="font-size: 1.5rem">ប្រភេទឥវ៉ាន់ ${groupNumReq}</div>`;
 
         attributeList.appendChild(newGroup);

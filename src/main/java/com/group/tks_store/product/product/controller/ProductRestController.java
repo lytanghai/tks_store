@@ -106,7 +106,7 @@ public class ProductRestController {
         int totalPage = productPage.getTotalPages();
 
         if(pageNumber == 0) {
-            totalPage += 1;
+//            totalPage += 1;
         }
 
         Map<String, Object> response = new HashMap<>();

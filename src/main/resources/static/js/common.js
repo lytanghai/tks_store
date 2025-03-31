@@ -178,8 +178,8 @@ function convertToJSONArray(input) {
     let lastValue = lastItem.substring(lastItem.lastIndexOf(":") + 1);
     let lastMatch = items.reverse().find(item => item.endsWith(":2"));
     return input.split(',').map(pair => {
-        let [id, name, value, group_num] = pair.split(':').map(item => item.trim());
-        return { id , name, value, group_num };
+        let [id, name, value, groupNum] = pair.split(':').map(item => item.trim());
+        return { id , name, value, groupNum };
     });
 }
 

@@ -88,11 +88,11 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "AND (:code IS NULL OR :code = '' OR LOWER(p.code) = LOWER(:code)) " +
             "AND (:productName IS NULL OR :productName = '' OR LOWER(p.name_en) = LOWER(:productName) OR LOWER(p.name_kh) = LOWER(:productName)) " +
             "AND (:categoryId IS NULL OR :categoryId = -1 OR c.id = :categoryId) " +
+            "AND (:stockQuantity IS NULL OR :stockQuantity != -1 OR v.stock_quantity = :stockQuantity) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR LOWER(c.name) = LOWER(:categoryName) OR LOWER(c.name_kh) = LOWER(:categoryName)) " +
             "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
             "AND (:salePriceCurrency = '' OR LOWER(p.currency) = LOWER(:salePriceCurrency)) " +
             "AND (:sku IS NULL OR :sku = '' OR LOWER(v.sku) = LOWER(:sku)) " +
-            "AND (:stockQuantity IS NULL OR :stockQuantity = -1 OR v.stock_quantity = :stockQuantity) " +
             "AND (:variantAttributeValue IS NULL OR LOWER(va.value) = LOWER(:variantAttributeValue)) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",

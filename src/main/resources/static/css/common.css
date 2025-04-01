@@ -8,6 +8,10 @@
         height: 70%;
     }
 
+    .hidden{
+        display: none;
+    }
+
     .service-type-title{
         display: flex;
         width: 99%;

@@ -54,6 +54,7 @@ if(window.location.pathname.includes("/api/product")) {
                 url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
             }
         }
+        console.warn(url)
         setTimeout(() => {
             fetch(url)
                     .then(response => response.json())

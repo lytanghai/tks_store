@@ -184,7 +184,6 @@ function addAttribute() {
         updateAttributeList();
 
     } else {
-        // Convert JSON string to object if necessary
         variantAttributes = JSON.parse(variantAttributes);
         existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
 
@@ -220,7 +219,6 @@ function updateAttributeList() {
 
     let attributeListContainer = document.getElementById("attribute-list");
 
-    // Check if group header for group_num = 1 exists
     let existingGroupHeader = attributeListContainer.querySelector(".group-header[data-group='1']");
 
     if (!existingGroupHeader) {
@@ -286,6 +284,26 @@ function updateAttributeList() {
         }
     }
 
+    function toggleChoice() {
+        const selectElement = document.getElementById('filterColumn');
+        const selectedCondition = document.getElementById("filterCondition");
+        for(let i=0;i<selectedCondition.options.length;i++) {
+            let value = selectedCondition.options[i].value;
+
+            if (selectElement.value === 'code' || selectElement.value === 'product_name' || selectElement.value === 'category_name') {
+             if (value === 'BETWEEN' || value === 'GREATER_THAN' || value === 'LESS_THAN') {
+                 selectedCondition.options[i].classList.add('hidden');
+                 selectedCondition.options[i].disabled = true;
+             } else {
+                 selectedCondition.options[i].classList.remove('hidden');
+                 selectedCondition.options[i].disabled = false;
+             }
+            } else {
+             selectedCondition.options[i].classList.remove('hidden');
+             selectedCondition.options[i].disabled = false;
+            }
+        }
+    }
     function toggleInputFields() {
         const condition = document.getElementById("filterCondition").value;
         const inFields = document.getElementById("inConditionFields");
@@ -311,8 +329,6 @@ function updateAttributeList() {
         }
     }
 
-    //const selectElement = document.getElementById('filterColumn');
-    //const condition = document.getElementById('filterCondition');
 
     function clearProductStartDate() {
         let startDateInput = document.getElementById("productStartDate");
@@ -580,14 +596,11 @@ function getLiElementsContentAsArray() {
                     groupedAttributes[groupNum].push(attribute);
                 });
 
-                // Sort groups numerically
                 const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
 
-                // Iterate through sorted groups
                 sortedGroupNums.forEach(groupNum => {
                     const group = groupedAttributes[groupNum];
 
-                    // Create a container for each group
                     const groupContainer = document.createElement('div');
                     groupContainer.classList.add('group-container');
                     groupContainer.style.borderBottom = "1px solid #000";

@@ -96,7 +96,6 @@ public class ProductRestController {
                 code, productName, categoryId, categoryName, salePrice, stockQty, sku, variantAttributeValue, general,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
 
         pageNumber -=1;
-        // Get filtered product details from the service
         Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
                 pageNumber,
                 pageSize,
@@ -104,10 +103,6 @@ public class ProductRestController {
                 propertiesList);
 
         int totalPage = productPage.getTotalPages();
-
-        if(pageNumber == 0) {
-//            totalPage += 1;
-        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("products", productPage.getContent());

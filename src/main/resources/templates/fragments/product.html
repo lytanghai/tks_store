@@ -3,9 +3,10 @@
     <div class="product-search-bar-container">
         &nbsp; &nbsp;
         <input type="text" id="search_input_product" placeholder="ស្វែងរក..." class="search-ipt">
+
         <div class="filter-container">
             &nbsp;&nbsp;&nbsp;&nbsp;
-                <select id="filterColumn" >
+                <select id="filterColumn" onchange="toggleChoice()">
                     <optgroup>
                         <option value="defaultChoice" disabled selected> ជ្រើសរើស </option>
                         <option value="code">លេខកូដ</option>
@@ -13,8 +14,8 @@
                         <option value="category_name">ប្រភេទទំនិញ</option>
                         <option value="sale_price">តម្លៃ</option>
                         <option value="stock_quantity">ចំនួនស្ដុក</option>
-                        <option value="sku">SKU</option>
-                        <!--                <option value="10">ថ្ងៃខែបញ្ជូល</option>-->
+                          <option value="sku">SKU</option>-->
+                            <option value="10">ថ្ងៃខែបញ្ជូល</option>
                     </optgroup>
                 </select>
             &nbsp;&nbsp;

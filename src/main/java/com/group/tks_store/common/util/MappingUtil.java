@@ -14,9 +14,20 @@ public class MappingUtil {
         if (parts.length < 2) return result;
 
         String attributePart = parts[0];
-        String[] groupNums = parts[1].split(",");
+        String groupNumPart = parts[1];
 
         String[] attributesArray = attributePart.split(",");
+        String[] groupNums = groupNumPart.split(",");
+
+        // Filter out group numbers that are at every third index (0, 3, 6, 9, ...)
+        List<String> selectedGroupNums = new ArrayList<>();
+        for (int i = 0; i < groupNums.length; i++) {
+            // Only select every third index
+            if (i % 3 == 0) {
+                selectedGroupNums.add(groupNums[i]);
+            }
+        }
+
         for (int i = 0; i < attributesArray.length; i++) {
             String[] attrParts = attributesArray[i].split(":");
 
@@ -24,10 +35,10 @@ public class MappingUtil {
                 VariantAttributeDTOV2 dto = new VariantAttributeDTOV2();
 
                 dto.setId(Integer.parseInt(attrParts[0].trim())); // ID
-                dto.setName(attrParts[1].trim());
-                dto.setValue(attrParts[2].trim());
+                dto.setName(attrParts[1].trim());                // Name
+                dto.setValue(attrParts[2].trim());               // Value
 
-                int groupNum = (i < groupNums.length) ? Integer.parseInt(groupNums[i].trim()) : 0;
+                int groupNum = (i < selectedGroupNums.size()) ? Integer.parseInt(selectedGroupNums.get(i).trim()) : 0;
                 dto.setGroupNum(groupNum);
 
                 result.add(dto);
@@ -36,5 +47,6 @@ public class MappingUtil {
 
         return result;
     }
+
 
 }

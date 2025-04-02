@@ -53,9 +53,9 @@ if(window.location.pathname.includes("/api/product")) {
             showExistingImage(element.getAttribute("data-images"));
 
             const rawAttributeString = element.getAttribute("data-attributes");
+            console.log("raw:: " + rawAttributeString)
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
-
                 attributes = JSON.stringify(attributeArr, null, 4)
             }
 
@@ -193,7 +193,7 @@ function addAttribute() {
         }
 
         variantAttributes.push({
-            group_num: groupNumReq,
+            group_num: groupNum,
             attribute_id: attributeId,
             name: attributeName,
             value: value
@@ -578,106 +578,111 @@ function getLiElementsContentAsArray() {
     }
 
     function displayVariantAttributes(attributes) {
-    console.warn('attribute: ' + attributes);
-    const attributeListContainer = document.getElementById('attribute-list');
-    attributeListContainer.innerHTML = "";
+        console.warn('attribute: ' + attributes);
+        const attributeListContainer = document.getElementById('attribute-list');
+        attributeListContainer.innerHTML = "";
 
-    try {
-        if (variantAttributes.length > 0) {
-            const attributes = JSON.parse(variantAttributes);
+        try {
+            if (attributes.length > 0) {  // Use attributes directly here, not variantAttributes
+                const parsedAttributes = JSON.parse(attributes); // Parse the string to JSON
 
-            if (Array.isArray(attributes)) {
-                const groupedAttributes = {};
-                attributes.forEach(attribute => {
-                    const groupNum = attribute.group_num;
-                    if (!groupedAttributes[groupNum]) {
-                        groupedAttributes[groupNum] = [];
-                    }
-                    groupedAttributes[groupNum].push(attribute);
-                });
-
-                const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
-
-                sortedGroupNums.forEach(groupNum => {
-                    const group = groupedAttributes[groupNum];
-
-                    const groupContainer = document.createElement('div');
-                    groupContainer.classList.add('group-container');
-                    groupContainer.style.borderBottom = "1px solid #000";
-                    groupContainer.style.marginBottom = "10px";
-                    groupContainer.style.paddingBottom = "10px";
-
-                    const groupHeader = document.createElement('div');
-                    groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
-                    groupHeader.style.fontWeight = "bold";
-                    groupHeader.style.fontSize = "1.8rem";
-                    groupHeader.style.marginBottom = "5px";
-
-                    groupContainer.appendChild(groupHeader);
-
-                    group.forEach((attribute, index) => {
-                        const listItem = document.createElement('li');
-                        listItem.style.display = 'flex';
-                        listItem.style.textAlign = "center";
-                        listItem.style.fontSize = "1.6rem";
-                        listItem.style.paddingRight = "2%";
-                        listItem.style.backgroundColor = "#fff";
-
-                        const nameSpan = document.createElement('span');
-                        nameSpan.classList.add('attribute-name');
-                        nameSpan.style.flex = "1";
-                        nameSpan.textContent = attribute.name;
-
-                        const valueSpan = document.createElement('span');
-                        valueSpan.classList.add('attribute-value');
-                        valueSpan.style.flex = "1";
-                        valueSpan.style.paddingRight = "10%";
-                        valueSpan.style.marginRight = "6%";
-                        valueSpan.textContent = attribute.value;
-
-                        const actionsSpan = document.createElement('span');
-                        actionsSpan.classList.add('product-attribute-actions');
-                        actionsSpan.style.marginRight = "10%";
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.style.flex = "1";
-                        deleteButton.style.backgroundColor = "#fff";
-                        deleteButton.style.paddingLeft = "0%";
-                        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-                        deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
-
-                        actionsSpan.appendChild(deleteButton);
-
-                        listItem.appendChild(nameSpan);
-                        listItem.appendChild(valueSpan);
-                        listItem.appendChild(actionsSpan);
-
-                        groupContainer.appendChild(listItem);
+                if (Array.isArray(parsedAttributes)) {
+                    const groupedAttributes = {};
+                    parsedAttributes.forEach(attribute => {
+                        const groupNum = attribute.groupNum;
+                        if (!groupedAttributes[groupNum]) {
+                            groupedAttributes[groupNum] = [];
+                        }
+                        groupedAttributes[groupNum].push(attribute);
                     });
 
-                    // Append the group container to the main list
-                    attributeListContainer.appendChild(groupContainer);
-                });
+                    const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
+                    sortedGroupNums.forEach(groupNum => {
+                        const group = groupedAttributes[groupNum];
 
-            } else {
-                console.error('Expected an array for attributes, but got:', attributes);
+                        const groupContainer = document.createElement('div');
+                        groupContainer.classList.add('group-container');
+                        groupContainer.style.borderBottom = "1px solid #000";
+                        groupContainer.style.marginBottom = "10px";
+                        groupContainer.style.paddingBottom = "10px";
+
+                        const groupHeader = document.createElement('div');
+                        groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
+                        groupHeader.style.fontWeight = "bold";
+                        groupHeader.style.fontSize = "1.8rem";
+                        groupHeader.style.marginBottom = "5px";
+
+                        groupContainer.appendChild(groupHeader);
+
+                        group.forEach((attribute) => {
+                            const listItem = document.createElement('li');
+                            listItem.style.display = 'flex';
+                            listItem.style.textAlign = "center";
+                            listItem.style.fontSize = "1.6rem";
+                            listItem.style.paddingRight = "2%";
+                            listItem.style.backgroundColor = "#fff";
+
+                            const nameSpan = document.createElement('span');
+                            nameSpan.classList.add('attribute-name');
+                            nameSpan.style.flex = "1";
+                            nameSpan.textContent = attribute.name;
+
+                            const valueSpan = document.createElement('span');
+                            valueSpan.classList.add('attribute-value');
+                            valueSpan.style.flex = "1";
+                            valueSpan.style.paddingRight = "10%";
+                            valueSpan.style.marginRight = "6%";
+                            valueSpan.textContent = attribute.value;
+
+                            const actionsSpan = document.createElement('span');
+                            actionsSpan.classList.add('product-attribute-actions');
+                            actionsSpan.style.marginRight = "10%";
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.style.flex = "1";
+                            deleteButton.style.backgroundColor = "#fff";
+                            deleteButton.style.paddingLeft = "0%";
+                            deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+
+                            // Pass the correct id to remove the right attribute
+                            deleteButton.onclick = () => removeAttributeUpdateItem(attributes, attribute.id);
+
+                            actionsSpan.appendChild(deleteButton);
+
+                            listItem.appendChild(nameSpan);
+                            listItem.appendChild(valueSpan);
+                            listItem.appendChild(actionsSpan);
+
+                            groupContainer.appendChild(listItem);
+                        });
+
+                        attributeListContainer.appendChild(groupContainer);
+                    });
+
+                } else {
+                    console.error('Expected an array for attributes, but got:', attributes);
+                }
             }
+
+        } catch (e) {
+            console.error('Failed to parse attributes: ', e);
         }
-
-    } catch (e) {
-        console.error('Failed to parse attributes: ', e);
     }
 
-    }
+    function removeAttributeUpdateItem(attributes, id) {
+        try {
+            attributes = JSON.parse(attributes);
+            const index = attributes.findIndex(attribute => attribute.id === id);
 
-    function removeAttributeUpdateItem(attributes, index) {
-       attributes = JSON.parse(attributes);
-       if (index > -1 && index < attributes.length) {
-           attributes.splice(index, 1);
-       }
-       variantAttributes = JSON.stringify(attributes);
-       displayVariantAttributes(variantAttributes);
+            if (index > -1) {
+                attributes.splice(index, 1);
+            }
+            variantAttributes = JSON.stringify(attributes);
+            displayVariantAttributes(variantAttributes);
+        } catch (e) {
+            console.error('Error removing attribute:', e);
+        }
     }
 
     const checkVariantButtonUpdate = document.getElementById("product-next-btn");

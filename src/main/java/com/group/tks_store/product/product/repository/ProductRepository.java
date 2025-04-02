@@ -144,28 +144,28 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
-            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " + // Aggregating group_num
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',' ORDER BY va.group_num, va.id) AS group_nums " +
             "FROM product p " +
-            "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
-            "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
-            "LEFT JOIN images i ON i.variant_id = v.id " +
-            "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
-            "LEFT JOIN attributes a ON va.attribute_id = a.id " +
-            "WHERE p.status = 'ACTIVE' " +
-            "AND (:general IS NULL OR :general = '' OR " +
-            "(p.code ILIKE CONCAT('%', :general, '%') " +
-            "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
-            "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
-            "OR c.name ILIKE CONCAT('%', :general, '%') " +
-            "OR c.name_kh ILIKE CONCAT('%', :general, '%') " +
-            "OR v.sku ILIKE CONCAT('%', :general, '%') " +
-            "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
-            "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%'))) " +
-            "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-            "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
+                    "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
+                    "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
+                    "LEFT JOIN images i ON i.variant_id = v.id " +
+                    "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
+                    "LEFT JOIN attributes a ON va.attribute_id = a.id " +
+                    "WHERE p.status = 'ACTIVE' " +
+                    "AND (:general IS NULL OR :general = '' OR " +
+                    "(p.code ILIKE CONCAT('%', :general, '%') " +
+                    "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
+                    "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
+                    "OR c.name ILIKE CONCAT('%', :general, '%') " +
+                    "OR c.name_kh ILIKE CONCAT('%', :general, '%') " +
+                    "OR v.sku ILIKE CONCAT('%', :general, '%') " +
+                    "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
+                    "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%'))) " +
+                    "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
+                    "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
             nativeQuery = true)
 
-Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable, @Param("general") String general);
+    Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable, @Param("general") String general);
 
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +

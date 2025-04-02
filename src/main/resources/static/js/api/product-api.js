@@ -250,6 +250,4 @@ if(window.location.pathname.includes("/api/product")) {
             })
             .catch(error => console.error("Error fetching data:", error));
     }
-
-
 }

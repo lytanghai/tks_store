@@ -22,6 +22,7 @@ if(window.location.pathname.includes("/api/product")) {
         showTab("Product");
 
         if(formTitle === 'Create') {
+            groupNumReq = 1;
             document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
             document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
             document.getElementById("form-modal-product-title-2").textContent = 'បញ្ជូលអង្គធាតុទំនិញ';
@@ -54,10 +55,17 @@ if(window.location.pathname.includes("/api/product")) {
 
             const rawAttributeString = element.getAttribute("data-attributes");
             console.log("raw:: " + rawAttributeString)
+//            populateGroupSelect(rawAttributeString);
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
                 attributes = JSON.stringify(attributeArr, null, 4)
             }
+
+            let parts = rawAttributeString.split(',');
+            let lastPart = parts[parts.length - 1];
+            let lastValue = lastPart.split(':').pop();
+            lastGroupNum = lastValue;
+            groupNumReq = parseInt(lastValue, 10);
 
             document.getElementById("product_base_price_edit").value = basePrice;
             document.getElementById("product_base_price_currency_edit").value = basePriceCurrency;
@@ -76,6 +84,11 @@ if(window.location.pathname.includes("/api/product")) {
             document.getElementById("product-category-edit").value = categoryNameEn + ' / ' + categoryNameKh;
             document.getElementById("product-submit-btn").value = "update";
         }
+//        if(groupNumReq <= 1) {
+//            document.getElementById("add-attribute-btn").style.display = "none";
+//        } else {
+//            document.getElementById("add-attribute-btn").style.display = "block";
+//        }
 
         document.getElementById("product_id_edit").value = id;
         document.getElementById("product_name_en_edit").value = nameEn;
@@ -122,7 +135,6 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function showProductVerify() {
-
     //Product
         document.getElementById("verify-product-id").innerHTML = document.getElementById("product_id_edit").value
         document.getElementById("verify-product-nameEn").innerHTML = document.getElementById("product_name_en_edit").value
@@ -154,6 +166,8 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
 function addAttribute() {
+    document.getElementById("add-attribute-btn").style.display = "block";
+
     let selectElement = document.getElementById("product_attribute_select");
     let attributeId = parseInt(selectElement.value);
     let attributeName = selectElement.options[selectElement.selectedIndex].text;
@@ -167,7 +181,6 @@ function addAttribute() {
     let existingIndex = '';
 
     if (typeof variantAttributes === 'object') {
-        // Check if attribute with same ID exists in the current group
         existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
 
         if (existingIndex !== -1) {
@@ -191,19 +204,46 @@ function addAttribute() {
             alert("This attribute is already added in the current group!");
             return;
         }
+        const validEntries = variantAttributes.filter(attribute => attribute.hasOwnProperty('id'));
+        let lastGroupNum = groupNumReq;
+        if (validEntries.length > 0) {
+            lastGroupNum = validEntries.reduce((last, current) => {
+                const currentGroupNum = isNaN(parseInt(current.groupNum)) ? 0 : parseInt(current.groupNum);
+                const lastGroupNumValue = isNaN(parseInt(last.groupNum)) ? 0 : parseInt(last.groupNum);
+                return currentGroupNum > lastGroupNumValue ? current : last;
+            }).groupNum;
+        }
 
+        lastGroupNum = lastGroupNum !== null && !isNaN(lastGroupNum) ? parseInt(lastGroupNum) + 1 : groupNumReq;
         variantAttributes.push({
-            group_num: groupNum,
+            groupNum: lastGroupNum,
             attribute_id: attributeId,
             name: attributeName,
             value: value
         });
-
+        groupNumReq = lastGroupNum;
         variantAttributes = JSON.stringify(variantAttributes);
         displayVariantAttributes(variantAttributes);
         document.getElementById("product_attribute_value").value = '';
         document.getElementById("product_attribute_select").value = '';
     }
+}
+
+function addNewGroupVariantAttribute() {
+    const attributeList = document.getElementById("attribute-list");
+    const lastGroup = attributeList.lastElementChild;
+    if (lastGroup && lastGroup.children.length === 1) {
+        return;
+    }
+
+    groupNumReq += 1;
+
+    const newGroup = document.createElement("li");
+    newGroup.classList.add("product-attribute-group");
+    newGroup.style.borderTop = "1px solid #000";
+    newGroup.innerHTML = `<div style="font-size: 1.5rem">ប្រភេទឥវ៉ាន់ ${groupNumReq}</div>`;
+
+    attributeList.appendChild(newGroup);
 }
 
 function updateAttributeList() {
@@ -415,7 +455,6 @@ function updateAttributeList() {
             uploadProduct();
             closeModal();
         } else if (window.currentAction === 'update') {
-    //        updateProduct();
             updateProductDetail();
             closeModal();
         } else if (window.currentAction === 'delete') {
@@ -545,17 +584,16 @@ function getLiElementsContentAsArray() {
 
         if (!resultList.includes(content)) {
             resultList.push(content);
-            validIndex++; // Only increment when adding a valid item
+            validIndex++;
         }
     });
 }
 
     function nextProductImage() {
-
         if (currentImageIndex < imageUUIDs.length - 1) {
-            currentImageIndex++; // Move to the next image
+            currentImageIndex++;
         } else {
-            currentImageIndex = 0; // Reset to the first image
+            currentImageIndex = 0;
         }
         showImage();
     }
@@ -581,10 +619,9 @@ function getLiElementsContentAsArray() {
         console.warn('attribute: ' + attributes);
         const attributeListContainer = document.getElementById('attribute-list');
         attributeListContainer.innerHTML = "";
-
         try {
-            if (attributes.length > 0) {  // Use attributes directly here, not variantAttributes
-                const parsedAttributes = JSON.parse(attributes); // Parse the string to JSON
+            if (attributes.length > 0) {
+                const parsedAttributes = JSON.parse(attributes);
 
                 if (Array.isArray(parsedAttributes)) {
                     const groupedAttributes = {};
@@ -645,7 +682,6 @@ function getLiElementsContentAsArray() {
                             deleteButton.style.paddingLeft = "0%";
                             deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
 
-                            // Pass the correct id to remove the right attribute
                             deleteButton.onclick = () => removeAttributeUpdateItem(attributes, attribute.id);
 
                             actionsSpan.appendChild(deleteButton);
@@ -705,17 +741,6 @@ function getLiElementsContentAsArray() {
         } else {
             previewButton.style.display = "none";
         }
-    }
-
-    function addNewGroupVariantAttribute() {
-        groupNumReq += 1;
-        const attributeList = document.getElementById("attribute-list");
-        const newGroup = document.createElement("li");
-        newGroup.classList.add("product-attribute-group");
-        newGroup.style.borderTop = "1px solid #000";
-        newGroup.innerHTML = `<div style="font-size: 1.5rem">ប្រភេទឥវ៉ាន់ ${groupNumReq}</div>`;
-
-        attributeList.appendChild(newGroup);
     }
 
 }

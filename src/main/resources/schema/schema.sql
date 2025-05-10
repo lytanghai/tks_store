@@ -39,6 +39,7 @@ CREATE TABLE public.product (
 );
 -- public.product foreign keys
 ALTER TABLE public.product ADD CONSTRAINT product_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.category(id) ON DELETE SET NULL;
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --4
 CREATE TABLE public.variants (
@@ -53,6 +54,7 @@ CREATE TABLE public.variants (
 	last_updated_at timestamp NULL DEFAULT now(),
 	CONSTRAINT variants_pkey PRIMARY KEY (id)
 );
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --5
 CREATE TABLE public.variant_attributes (
@@ -60,6 +62,7 @@ CREATE TABLE public.variant_attributes (
 	variant_id int4 NULL,
 	attribute_id int4 NULL,
 	value varchar(255) NOT NULL,
+	group_num int4,
 	status varchar(10) NULL,
 	CONSTRAINT variant_attributes_pkey PRIMARY KEY (id)
 );

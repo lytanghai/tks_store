@@ -7,4 +7,5 @@ public interface VariantAttributeDetailInterface {
     String getAttributeName();
     String getAttributeNameKh();
     String getValue();
+    Integer getGroupNum();
 }

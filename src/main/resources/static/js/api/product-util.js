@@ -54,13 +54,13 @@ if(window.location.pathname.includes("/api/product")) {
                 url = '/internal/product/list/filter?condition_type=' + condition + '&' + searchProperty + '=' + searchValue + '&page=' + currentPage;
             }
         }
-        console.log('url: ' + url)
+        console.warn(url)
         setTimeout(() => {
             fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         const productTable = document.getElementById("productTable");
-                        totalPage = data.totalPages;
+                        totalPage = data.total_pages;
                         document.getElementById("display-page-num").textContent = currentPage;
                         document.getElementById("display-page-total").textContent = totalPage;
 
@@ -120,9 +120,31 @@ if(window.location.pathname.includes("/api/product")) {
                                                 data-base-price="${product.variants[0]?.base_price || 0}"
                                                 data-base-price-currency="${product.variants[0]?.base_price_currency || ''}"
                                                 data-stock-quantity="${product.variants[0]?.stock_quantity || 0}"
-                                                data-sku="${product.variants[0]?.sku || ''}"
+//                                                data-sku="${product.variants[0]?.sku || ''}"
                                                 data-images="${product.variants[0]?.images.map(image => image.id + ':' + image.uuid).join(',') || ''}"
-                                                data-attributes="${product.variants[0]?.attributes.map(attribute => attribute.id + ':' + attribute.name + ':' + attribute.value).join(',') || ''}"
+                                                data-attributes="${product.variants
+                                                  .map(variant => {
+                                                    const groupedAttributes = variant.attributes.reduce((acc, attribute) => {
+                                                      const groupNum = attribute.group_num; // Group by group_num
+                                                      if (!acc[groupNum]) {
+                                                        acc[groupNum] = [];
+                                                      }
+                                                      acc[groupNum].push(attribute);
+                                                      return acc;
+                                                    }, {});
+                                                    return Object.keys(groupedAttributes)
+                                                      .map(groupNum => {
+                                                        const group = groupedAttributes[groupNum];
+                                                        return group
+                                                          .map(attribute => {
+                                                            return `${attribute.id}:${attribute.name}:${attribute.value}:${attribute.group_num}`;
+                                                          })
+                                                          .join(',');
+                                                      })
+                                                      .join(',');
+                                                  })
+                                                  .join(',') || ''}" // Join all variants' attributes
+
                                                 data-variantId="${product.variants[0]?.id || ''}"
                                                 data-form-title="Update"
                                                 href="#" onclick="openCreateUpdateProductModal(this)">

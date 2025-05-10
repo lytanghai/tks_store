@@ -4,14 +4,10 @@ function fetchFilteredCategories() {
 
     document.getElementById("loading-spinner").style.display = "block";
     document.getElementById("loading-spinner_2").style.display = "block";
-
-    console.log('url: ' + url)
     setTimeout(() => {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log("API Response:", data);
-
                 const categoryTable = document.getElementById("categoryTable");
                 categoryTable.innerHTML = ""; // Clear previous data
 

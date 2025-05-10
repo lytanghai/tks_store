@@ -3,12 +3,15 @@ package com.group.tks_store.product.product.controller;
 import com.group.tks_store.common.static_key.AddressRedirect;
 import com.group.tks_store.common.static_key.CommonKey;
 import com.group.tks_store.common.static_key.LIB;
+import com.group.tks_store.common.util.Transform;
 import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.entity.ProductEntity;
 import com.group.tks_store.product.product.service.ProductService;
 import com.group.tks_store.product.product.service.ProductServiceBK;
 import com.group.tks_store.product.product.service.ProductFilterService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +71,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/list/filter")
-    public ResponseEntity<Map<String, Object>> getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
+    public ResponseEntity<Object> getProductFilterDetail(@RequestParam(name = CommonKey.PAGE, defaultValue = "0") Integer pageNumber,
                                          @RequestParam(name = CommonKey.SIZE, defaultValue = "10") Integer pageSize,
                                          @RequestParam(name = CommonKey.SORT, defaultValue = "id") String sortBy,
                                          @RequestParam(name = CommonKey.DIRECTION, defaultValue = "DESC") String sortDirection,
@@ -93,7 +96,6 @@ public class ProductRestController {
                 code, productName, categoryId, categoryName, salePrice, stockQty, sku, variantAttributeValue, general,salePriceCurrency,salePriceVal1,salePriceVal2,stockQtyVal1,stockQtyVal2,conditionType);
 
         pageNumber -=1;
-        // Get filtered product details from the service
         Page<ProductListDetailDTO> productPage = productFilterService.fetchProductFilterResponse(PageRequest.of(
                 pageNumber,
                 pageSize,
@@ -101,10 +103,6 @@ public class ProductRestController {
                 propertiesList);
 
         int totalPage = productPage.getTotalPages();
-
-        if(pageNumber == 0) {
-            totalPage += 1;
-        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("products", productPage.getContent());
@@ -114,7 +112,53 @@ public class ProductRestController {
 
         log.info("calling to get filter");
 
-        return ResponseEntity.ok(response);
+        JSONObject jsonObject = new JSONObject(transformResponse(response));
+        JSONObject snakeCaseJson = Transform.convertKeysToSnakeCase(jsonObject);
+
+        return ResponseEntity.ok(snakeCaseJson.toString(2));
+    }
+
+    public Map<String, Object> transformResponse(Map<String, Object> response) {
+        JSONObject input = new JSONObject(response);
+
+        JSONArray products = input.getJSONArray("products");
+
+        for (int i = 0; i < products.length(); i++) {
+            JSONObject product = products.getJSONObject(i);
+            JSONArray variants = product.getJSONArray("variants");
+
+            JSONArray combinedAttributes = new JSONArray();
+
+            for (int j = 0; j < variants.length(); j++) {
+                JSONObject variant = variants.getJSONObject(j);
+                JSONArray attributes = variant.getJSONArray("attributes");
+
+                for (int k = 0; k < attributes.length(); k++) {
+                    combinedAttributes.put(attributes.get(k));
+                }
+            }
+
+            JSONArray newVariants = new JSONArray();
+            JSONObject mergedVariant = new JSONObject();
+            mergedVariant.put("id", variants.getJSONObject(0).getInt("id"));
+            mergedVariant.put("sku", variants.getJSONObject(0).getString("sku"));
+            mergedVariant.put("base_price", variants.getJSONObject(0).getDouble("basePrice"));
+            mergedVariant.put("base_price_currency", variants.getJSONObject(0).getString("basePriceCurrency"));
+            mergedVariant.put("stock_quantity", variants.getJSONObject(0).getInt("stockQuantity"));
+            mergedVariant.put("images", variants.getJSONObject(0).getJSONArray("images"));
+            mergedVariant.put("attributes", combinedAttributes);
+            newVariants.put(mergedVariant);
+
+            product.put("variants", newVariants);
+        }
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("totalItems", input.get("totalItems"));
+        resultMap.put("totalPages", input.get("totalPages"));
+        resultMap.put("currentPage", input.get("currentPage"));
+        resultMap.put("products", input.getJSONArray("products").toList());  // Convert products JSONArray to a list
+
+        return resultMap;
     }
 
     private Map<String,Object> mapPropertyList(String code, String productName, Integer categoryId, String categoryName, String salePrice, String stockQty, String sku,

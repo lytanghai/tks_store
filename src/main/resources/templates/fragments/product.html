@@ -3,9 +3,10 @@
     <div class="product-search-bar-container">
         &nbsp; &nbsp;
         <input type="text" id="search_input_product" placeholder="ស្វែងរក..." class="search-ipt">
+
         <div class="filter-container">
             &nbsp;&nbsp;&nbsp;&nbsp;
-                <select id="filterColumn" >
+                <select id="filterColumn" onchange="toggleChoice()">
                     <optgroup>
                         <option value="defaultChoice" disabled selected> ជ្រើសរើស </option>
                         <option value="code">លេខកូដ</option>
@@ -13,8 +14,8 @@
                         <option value="category_name">ប្រភេទទំនិញ</option>
                         <option value="sale_price">តម្លៃ</option>
                         <option value="stock_quantity">ចំនួនស្ដុក</option>
-                        <option value="sku">SKU</option>
-                        <!--                <option value="10">ថ្ងៃខែបញ្ជូល</option>-->
+                          <option value="sku">SKU</option>-->
+                            <option value="10">ថ្ងៃខែបញ្ជូល</option>
                     </optgroup>
                 </select>
             &nbsp;&nbsp;
@@ -128,7 +129,7 @@
         <div class="custom-modal-content">
             <span class="close-var-att-btn" onclick="closeVariantAttributeModal()">&times;</span>
             <p style="font-size: 2.3rem">ពត័មានអង្គធាតុ</p>
-            <ul id="attributeList" style="font-size: 2rem"></ul>
+            <ul id="attributeList" style="font-size: 1.5rem"></ul>
         </div>
     </div>
 
@@ -181,7 +182,6 @@
                                             onblur="this.size = 0;" required>
                                     </select>
                                 </div>
-
                             </div>
                             <div class="general-form-group flex-item" id="product-grid-sale-price">
                                 <label for="product_sale_price_edit" class="general_label product-price-ipt" style=" font-size: 1.3rem;"><span style="color: red">*</span>តម្លៃ:</label>
@@ -190,11 +190,24 @@
                             <div  class="general-form-group flex-item">
                                 <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label"><span style="color: red">*</span>ជ្រើសរើសរូបីយប័ណ្ណ:</label>
                                 <div class="product-tab-currency-container">
-                                    <select id="product_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem">
+                                    <select id="product_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem;border:1px solid">
                                         <option value="USD">USD</option>-->
                                         <option value="KHR">KHR</option>
                                     </select>
                                 </div>
+
+<!--                                <label for="product_currency_edit" style=" font-size: 1.3rem;" class="general_label product-currency-label">-->
+<!--                                    <span style="color: red">*</span>ជ្រើសរើសរូបីយប័ណ្ណ:-->
+<!--                                </label>-->
+<!--                                <div class="product-tab-currency-container" id="currencySelectorContainer">-->
+<!--                                    <button id="prevCurrency" class="currency-btn">◀</button>-->
+<!--                                    <span id="currencyDisplay" class="currency-display"></span>-->
+<!--                                    <button id="nextCurrency" class="currency-btn">▶</button>-->
+<!--                                    <select id="product_currency_edit" name="product_id" style="display: none;">-->
+<!--                                        <option value="USD" selected>USD / ដុល្លារ </option>-->
+<!--                                        <option value="KHR">KHR / រៀល</option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
                             </div>
 
                             <div class="general-form-group" id="product-grid-description">
@@ -221,12 +234,10 @@
                                 <label for="product_sale_price_edit" style=" font-size: 1.6rem;">តម្លៃដើម:</label>
                                 <span style="margin-left: 14%"></span>
                                 <input type="text" id="product_base_price_edit"
-                                       style="border:1px solid; width: 350px; font-size: 1.6rem; text-align:center"
+                                       style="border:1px solid; width: 160px; font-size: 1.6rem; text-align:center"
                                        name="product_base_price">
-                            </div>
-                            <div id="product-base-price-grid-currency">
+                                <span style="margin-left: 3%"></span>
                                 <label for="product_currency_edit" style="font-size: 1.6rem;">រូបីយប័ណ្ណ:</label>
-                                <span style="margin-left: 12%"></span>
                                 <select id="product_base_price_currency_edit" name="product_id" style="width: 135px; height: 50px; text-align: center; font-size: .9rem">
                                     <option value="USD">USD</option>-->
                                     <option value="KHR">KHR</option>
@@ -243,17 +254,16 @@
                                        style="border:1px solid; width: 100px; font-size: 1.6rem; text-align:center">
                             </div>
 
-                            <div id="product-grid-sky">
-                                <label for="product_code_edit" style="font-size: 1.6rem"> SKU Code:</label>
-                                <span style="margin-left: 8%"></span>
-                                <input type="text"
-                                       id="product_stock_sku"
-                                       name="product_code"
-                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center">
-                            </div>
+<!--                            <div id="product-grid-sky">-->
+<!--                                <label for="product_code_edit" style="font-size: 1.6rem"> SKU Code:</label>-->
+<!--                                <span style="margin-left: 8%"></span>-->
+<!--                                <input type="text"-->
+<!--                                       id="product_stock_sku"-->
+<!--                                       name="product_code"-->
+<!--                                       style="border:1px solid; width: 500px; font-size: 1.6rem; text-align:center">-->
+<!--                            </div>-->
 
                             <div class="variant-attribute-container">
-
                                 <div style="display: block;">
                                     <div style="font-size: 1.6rem">អង្គធាតុ</div>
                                     <div >
@@ -273,36 +283,38 @@
                                     </div>
                                 </div>
 
-                                <div style="display: block;margin-left: 7%">
-                                    <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
-                                    <div>
-                                        <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
-                                               style="width: 150px; background: #fafafa" onchange="addImages(event)">
-                                    </div>
-
-                                    <div class="preview-image-container" id="preview-image-container">
-                                        <button type="button" id="preview_button"
-                                                style="display: none; margin-left: 10px;"
-                                                onclick="openPreview()">មើល</button>
-                                    </div>
-
-                                    <div id="image_preview_modal" class="image-preview">
-                                        <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
-                                        <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
-                                        <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
-                                        <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
-                                        <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
-                                    </div>
+                                <div style="display: block; margin-left: 2%; margin-top: 6%">
+                                    <button type="button" onclick="addAttribute()"
+                                            style="width: 155px; background-color: #e28743;color: #000;height:56px">
+                                        បន្ថែមអង្គធាតុ</button>
+                                </div>
+                            </div>
+                            <div class="image-uploader" style="display: block; margin-left: 7%">
+                                <div style="font-size: 1.6rem">បញ្ជូលរូបភាព:</div>
+                                <div>
+                                    <input type="file" accept="image/*" multiple id="product_variant_image_value" class="product-variant-attribute-value"
+                                           style="width: 150px; background: #fafafa" onchange="addImages(event)">
                                 </div>
 
+                                <div class="preview-image-container" id="preview-image-container">
+                                    <button type="button" id="preview_button"
+                                            style="display: none; margin-left: 10px;"
+                                            onclick="openPreview()">មើល</button>
+                                </div>
+
+                                <div id="image_preview_modal" class="image-preview">
+                                    <span onclick="closePreview()" style="cursor: pointer; color: red; font-size: 3.5rem; position: absolute; top: -20px; right: 10px;">×</span>
+                                    <span onclick="addToRemoveImg()" style="cursor: pointer; color: #000; font-size: 3rem; position: absolute; top: -20px; left: 10px;">🗑</span>
+                                    <button onclick="prevImageUpload(event)" class="preview-prev-img">◀</button>
+                                    <img id="preview_image" src="" style="max-width: 300px; max-height: 300px; display: block; margin: auto;">
+                                    <button onclick="nextImageUpload(event)" class="preview-next-img">▶</button>
+                                </div>
                             </div>
-                            <div class="add-attribute-btn">
-                                <button type="button" onclick="addAttribute()"
-                                        style="width: 250px; background-color: #e28743;color: #000;">
-                                         បន្ថែមអង្គធាតុទំនិញ</button>
+                            <div class="add-attribute-btn" id="add-attribute-btn">
+                                <button type="button" onclick="addNewGroupVariantAttribute()"
+                                        style="width: 250px; background-color: #e28743;color: #000;">បន្ថែមថ្មី</button>
                             </div>
                         </div>
-
                         <div class="attribute-list-title">
                             <h2 class="product-attribute-list-table"> អង្គធាតុទំនិញ: </h2>
                         </div>
@@ -354,8 +366,8 @@
                         <label id="verify-variant-currency" style="margin-left: 15%;" class="common-label"></label><br>
                         <label>ចំនួនស្ដុកឥវ៉ាន់:</label>
                         <label id="verify-variant-stock-quantity" style="margin-left: 7%;" class="common-label"></label><br>
-                        <label>SKU Code:</label>
-                        <label id="verify-variant-sku-code" style="margin-left: 9%;" class="common-label"></label><br>
+<!--                        <label>SKU Code:</label>-->
+<!--                        <label id="verify-variant-sku-code" style="margin-left: 9%;" class="common-label"></label><br>-->
 
                         <h2 style="text-align: center; font-weight: normal">រូបភាព</h2>
                         <div id="image_verify_preview_modal" class="verify_image-preview">

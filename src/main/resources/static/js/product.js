@@ -12,7 +12,7 @@ if(window.location.pathname.includes("/api/product")) {
             let basePrice = '';
             let basePriceCurrency = '';
             let stockQuantity = '';
-            let sku = '';
+//            let sku = '';
             let images = [];
             let attributes = [];
 
@@ -22,6 +22,7 @@ if(window.location.pathname.includes("/api/product")) {
         showTab("Product");
 
         if(formTitle === 'Create') {
+            groupNumReq = 1;
             document.getElementById("form-modal-product-title").textContent = 'បន្ទាប់';
             document.getElementById("form-product-create-title").textContent = 'បញ្ញូលពត៍មានទំនិញ';
             document.getElementById("form-modal-product-title-2").textContent = 'បញ្ជូលអង្គធាតុទំនិញ';
@@ -48,21 +49,28 @@ if(window.location.pathname.includes("/api/product")) {
             basePrice = element.getAttribute("data-base-price");
             basePriceCurrency = element.getAttribute("data-base-price-currency");
             stockQuantity = element.getAttribute("data-stock-quantity");
-            sku = element.getAttribute("data-sku");
+//            sku = element.getAttribute("data-sku");
 
             showExistingImage(element.getAttribute("data-images"));
 
             const rawAttributeString = element.getAttribute("data-attributes");
-
+            console.log("raw:: " + rawAttributeString)
+//            populateGroupSelect(rawAttributeString);
             if(rawAttributeString !== null) {
                 const attributeArr = convertToJSONArray(rawAttributeString);
-                attributes = JSON.stringify(attributeArr, null, 3)
+                attributes = JSON.stringify(attributeArr, null, 4)
             }
+
+            let parts = rawAttributeString.split(',');
+            let lastPart = parts[parts.length - 1];
+            let lastValue = lastPart.split(':').pop();
+            lastGroupNum = lastValue;
+            groupNumReq = parseInt(lastValue, 10);
 
             document.getElementById("product_base_price_edit").value = basePrice;
             document.getElementById("product_base_price_currency_edit").value = basePriceCurrency;
             document.getElementById("product_stock_quantity_edit").value = stockQuantity;
-            document.getElementById("product_stock_sku").value = sku;
+//            document.getElementById("product_stock_sku").value = sku;
 
             variantAttributes = attributes;
 
@@ -76,6 +84,11 @@ if(window.location.pathname.includes("/api/product")) {
             document.getElementById("product-category-edit").value = categoryNameEn + ' / ' + categoryNameKh;
             document.getElementById("product-submit-btn").value = "update";
         }
+//        if(groupNumReq <= 1) {
+//            document.getElementById("add-attribute-btn").style.display = "none";
+//        } else {
+//            document.getElementById("add-attribute-btn").style.display = "block";
+//        }
 
         document.getElementById("product_id_edit").value = id;
         document.getElementById("product_name_en_edit").value = nameEn;
@@ -88,14 +101,12 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function addToRemoveImg() {
-        console.log("removed")
         if (imageUrls.length === 0) {
             return;
         }
         currentImageIndex = 0;
         let imageUrl = imageUrls[currentImageIndex];
         let uuid = imageUrl.split("/").pop();
-        console.log('uuid' + uuid)
 
         if(imageUrls.length === 1) {
             imageUrls = [];
@@ -124,7 +135,6 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function showProductVerify() {
-
     //Product
         document.getElementById("verify-product-id").innerHTML = document.getElementById("product_id_edit").value
         document.getElementById("verify-product-nameEn").innerHTML = document.getElementById("product_name_en_edit").value
@@ -146,7 +156,7 @@ if(window.location.pathname.includes("/api/product")) {
         document.getElementById("verify-variant-base-price").innerHTML = parseFloat(document.getElementById('product_base_price_edit').value) | '';
         document.getElementById("verify-variant-currency").innerHTML = document.getElementById('product_base_price_currency_edit').value | '';
         document.getElementById("verify-variant-stock-quantity").innerHTML = parseInt(document.getElementById('product_stock_quantity_edit').value) | '';
-        document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
+//        document.getElementById("verify-variant-sku-code").innerHTML = document.getElementById('product_stock_sku').value
 
         getLiElementsContentAsArray();
         document.getElementById("verify-variant-attribute-name").innerHTML = resultList.join('</br>');
@@ -155,102 +165,154 @@ if(window.location.pathname.includes("/api/product")) {
         showVerifyImageSlider();
     }
 
-    function addAttribute() {
-        let selectElement = document.getElementById("product_attribute_select");
-        let attributeId = parseInt(selectElement.value);
-        let attributeName = selectElement.options[selectElement.selectedIndex].text;
-        let value = document.getElementById("product_attribute_value").value.trim();
-        if (!value) {
-            alert("Please enter a value for the attribute.");
-            return;
-        }
+function addAttribute() {
+    document.getElementById("add-attribute-btn").style.display = "block";
 
-        let existingIndex = '';
-        if(typeof(variantAttributes) === 'object') {
-            //create
-            existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId);
-//            if (existingIndex !== -1) {
-//                alert("This attribute is already added!");
-//                return;
-//            }
-             variantAttributes.push({
-                attribute_id: attributeId,
-                name: attributeName,
-                value: value
-            });
-            updateAttributeList();
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = parseInt(selectElement.value);
+    let attributeName = selectElement.options[selectElement.selectedIndex].text;
+    let value = document.getElementById("product_attribute_value").value.trim();
 
-        } else {
-            variantAttributes = JSON.parse(variantAttributes);
-            existingIndex = variantAttributes.findIndex(attr => attr.name === attributeName);
-
-//            if (existingIndex !== -1) {
-//                alert("This attribute is already added!");
-//                return;
-//            }
-            variantAttributes.push({
-                attribute_id: attributeId,
-                name: attributeName,
-                value: value
-            });
-            variantAttributes = JSON.stringify(variantAttributes);
-            displayVariantAttributes(variantAttributes);
-            document.getElementById("product_attribute_value").value = '';
-            document.getElementById("product_attribute_select").value = '';
-        }
-
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
     }
 
-    function updateAttributeList() {
-        let selectElement = document.getElementById("product_attribute_select");
-        let attributeId = selectElement.value; // Get selected attribute ID
-        let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
-        let value = document.getElementById("product_attribute_value").value;
+    let existingIndex = '';
 
-        if (!value) {
-            alert("Please enter a value for the attribute.");
+    if (typeof variantAttributes === 'object') {
+        existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
+
+        if (existingIndex !== -1) {
+            alert("This attribute is already added in the current group!");
             return;
         }
 
-        let listItem = document.createElement("li");
-        listItem.style.display = "flex";
-        listItem.style.textAlign = "center";
-        listItem.style.fontSize = "1.6rem";
-        listItem.style.paddingLeft = "5%";
-        listItem.style.backgroundColor = "#fff";
-        listItem.setAttribute("data-id", attributeId);
-
-        let attrSpan = document.createElement("span");
-        attrSpan.classList.add("attribute-name");
-        attrSpan.style.flex = "1";
-        attrSpan.style.marginLeft = '2%';
-        attrSpan.textContent = attributeName;
-
-        let valueSpan = document.createElement("span");
-        valueSpan.classList.add("attribute-value");
-        valueSpan.style.flex = "1";
-        valueSpan.style.paddingRight = "3%";
-        valueSpan.textContent = value;
-
-        let deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.style.flex = "1";
-        deleteButton.style.backgroundColor = "#fff";
-        deleteButton.style.width = "100px";
-        deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-        deleteButton.addEventListener("click", function() {
-            removeAttributeItem(listItem);
+        variantAttributes.push({
+            group_num: groupNumReq,
+            attribute_id: attributeId,
+            name: attributeName,
+            value: value
         });
+        updateAttributeList();
 
-        listItem.appendChild(attrSpan);
-        listItem.appendChild(valueSpan);
-        listItem.appendChild(deleteButton);
+    } else {
+        variantAttributes = JSON.parse(variantAttributes);
+        existingIndex = variantAttributes.findIndex(attr => attr.attribute_id === attributeId && attr.group_num === groupNumReq);
 
-        document.getElementById("attribute-list").appendChild(listItem);
+        if (existingIndex !== -1) {
+            alert("This attribute is already added in the current group!");
+            return;
+        }
+        const validEntries = variantAttributes.filter(attribute => attribute.hasOwnProperty('id'));
+        let lastGroupNum = groupNumReq;
+        if (validEntries.length > 0) {
+            lastGroupNum = validEntries.reduce((last, current) => {
+                const currentGroupNum = isNaN(parseInt(current.groupNum)) ? 0 : parseInt(current.groupNum);
+                const lastGroupNumValue = isNaN(parseInt(last.groupNum)) ? 0 : parseInt(last.groupNum);
+                return currentGroupNum > lastGroupNumValue ? current : last;
+            }).groupNum;
+        }
 
-        document.getElementById("product_attribute_select").value = "";
-        document.getElementById("product_attribute_value").value = "";
+        lastGroupNum = lastGroupNum !== null && !isNaN(lastGroupNum) ? parseInt(lastGroupNum) + 1 : groupNumReq;
+        variantAttributes.push({
+            groupNum: lastGroupNum,
+            attribute_id: attributeId,
+            name: attributeName,
+            value: value
+        });
+        groupNumReq = lastGroupNum;
+        variantAttributes = JSON.stringify(variantAttributes);
+        displayVariantAttributes(variantAttributes);
+        document.getElementById("product_attribute_value").value = '';
+        document.getElementById("product_attribute_select").value = '';
     }
+}
+
+function addNewGroupVariantAttribute() {
+    const attributeList = document.getElementById("attribute-list");
+    const lastGroup = attributeList.lastElementChild;
+    if (lastGroup && lastGroup.children.length === 1) {
+        return;
+    }
+
+    groupNumReq += 1;
+
+    const newGroup = document.createElement("li");
+    newGroup.classList.add("product-attribute-group");
+    newGroup.style.borderTop = "1px solid #000";
+    newGroup.innerHTML = `<div style="font-size: 1.5rem">ប្រភេទឥវ៉ាន់ ${groupNumReq}</div>`;
+
+    attributeList.appendChild(newGroup);
+}
+
+function updateAttributeList() {
+    let selectElement = document.getElementById("product_attribute_select");
+    let attributeId = selectElement.value; // Get selected attribute ID
+    let attributeName = selectElement.options[selectElement.selectedIndex].text; // Get selected attribute name
+    let value = document.getElementById("product_attribute_value").value;
+
+    if (!value) {
+        alert("Please enter a value for the attribute.");
+        return;
+    }
+
+    let attributeListContainer = document.getElementById("attribute-list");
+
+    let existingGroupHeader = attributeListContainer.querySelector(".group-header[data-group='1']");
+
+    if (!existingGroupHeader) {
+        let groupHeader = document.createElement("li");
+        groupHeader.classList.add("group-header");
+        groupHeader.style.fontSize = "1.5rem";
+        groupHeader.style.borderBottom = "1px solid";
+        groupHeader.style.fontSize = "1.5rem";
+        groupHeader.setAttribute("data-group", "1");
+        groupHeader.textContent = "ប្រភេទទំនិញ 1";
+
+        attributeListContainer.appendChild(groupHeader);
+    }
+
+    let listItem = document.createElement("li");
+    listItem.style.display = "flex";
+    listItem.style.textAlign = "center";
+    listItem.style.fontSize = "1.6rem";
+    listItem.style.paddingLeft = "5%";
+    listItem.style.backgroundColor = "#fff";
+    listItem.setAttribute("data-id", attributeId);
+
+    let attrSpan = document.createElement("span");
+    attrSpan.classList.add("attribute-name");
+    attrSpan.style.flex = "1";
+    attrSpan.style.marginLeft = '2%';
+    attrSpan.textContent = attributeName;
+
+    let valueSpan = document.createElement("span");
+    valueSpan.classList.add("attribute-value");
+    valueSpan.style.flex = "1";
+    valueSpan.style.paddingRight = "3%";
+    valueSpan.textContent = value;
+
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.style.flex = "1";
+    deleteButton.style.backgroundColor = "#fff";
+    deleteButton.style.width = "100px";
+    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+    deleteButton.addEventListener("click", function() {
+        removeAttributeItem(listItem);
+    });
+
+    listItem.appendChild(attrSpan);
+    listItem.appendChild(valueSpan);
+    listItem.appendChild(deleteButton);
+
+    attributeListContainer.appendChild(listItem);
+
+    // Reset input fields
+    document.getElementById("product_attribute_select").value = "";
+    document.getElementById("product_attribute_value").value = "";
+}
 
     function removeAttributeItem(listItem) {
         listItem.parentNode.removeChild(listItem);
@@ -262,6 +324,26 @@ if(window.location.pathname.includes("/api/product")) {
         }
     }
 
+    function toggleChoice() {
+        const selectElement = document.getElementById('filterColumn');
+        const selectedCondition = document.getElementById("filterCondition");
+        for(let i=0;i<selectedCondition.options.length;i++) {
+            let value = selectedCondition.options[i].value;
+
+            if (selectElement.value === 'code' || selectElement.value === 'product_name' || selectElement.value === 'category_name') {
+             if (value === 'BETWEEN' || value === 'GREATER_THAN' || value === 'LESS_THAN') {
+                 selectedCondition.options[i].classList.add('hidden');
+                 selectedCondition.options[i].disabled = true;
+             } else {
+                 selectedCondition.options[i].classList.remove('hidden');
+                 selectedCondition.options[i].disabled = false;
+             }
+            } else {
+             selectedCondition.options[i].classList.remove('hidden');
+             selectedCondition.options[i].disabled = false;
+            }
+        }
+    }
     function toggleInputFields() {
         const condition = document.getElementById("filterCondition").value;
         const inFields = document.getElementById("inConditionFields");
@@ -287,8 +369,6 @@ if(window.location.pathname.includes("/api/product")) {
         }
     }
 
-    //const selectElement = document.getElementById('filterColumn');
-    //const condition = document.getElementById('filterCondition');
 
     function clearProductStartDate() {
         let startDateInput = document.getElementById("productStartDate");
@@ -375,7 +455,6 @@ if(window.location.pathname.includes("/api/product")) {
             uploadProduct();
             closeModal();
         } else if (window.currentAction === 'update') {
-    //        updateProduct();
             updateProductDetail();
             closeModal();
         } else if (window.currentAction === 'delete') {
@@ -432,7 +511,7 @@ if(window.location.pathname.includes("/api/product")) {
         document.getElementById("product_base_price_edit").value = "";
         document.getElementById("product_base_price_currency_edit").value = "";
         document.getElementById("product_stock_quantity_edit").value = "";
-        document.getElementById("product_stock_sku").value = "";
+//        document.getElementById("product_stock_sku").value = "";
         document.getElementById("product_attribute_select").value = "";
         document.getElementById("product_attribute_value").value = "";
         document.getElementById("product_variant_image_value").value = "";
@@ -478,37 +557,48 @@ if(window.location.pathname.includes("/api/product")) {
         }
     }
 
-    function getLiElementsContentAsArray() {
-        let ulElement = document.getElementById('attribute-list');
-        let liElements = ulElement.querySelectorAll('li');
-        if(liElements.length === 0) {
-            resultList = [];
-            return;
-        }
-        if(document.getElementById("attribute-list").textContent !== '') {
-            liElements.forEach((liElement, index) => {
-                let attributeName = liElement.querySelector('.attribute-name').textContent;
-                let attributeValue = liElement.querySelector('.attribute-value').textContent;
-                let content = `អង្គធាតុទី ${index + 1}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
-                if (!resultList.includes(content)) {
-                    resultList.push(content);
-                }
-            });
-        }
+function getLiElementsContentAsArray() {
+    let ulElement = document.getElementById('attribute-list');
+    let liElements = ulElement.querySelectorAll('li');
+
+    if (liElements.length === 0) {
+        resultList = [];
+        return;
     }
 
-    function nextProductImage() {
+    resultList = []; // Reset before adding new content
+    let validIndex = 1; // Tracks the correct count for valid items
 
+    liElements.forEach((liElement) => {
+        let attributeNameElement = liElement.querySelector('.attribute-name');
+        let attributeValueElement = liElement.querySelector('.attribute-value');
+
+        // Skip elements that don't have .attribute-name or .attribute-value
+        if (!attributeNameElement || !attributeValueElement) {
+            return;
+        }
+
+        let attributeName = attributeNameElement.textContent.trim();
+        let attributeValue = attributeValueElement.textContent.trim();
+        let content = `អង្គធាតុទី ${validIndex}: ${attributeName} - តម្លៃអង្គធាតុ ${attributeValue} <br>`;
+
+        if (!resultList.includes(content)) {
+            resultList.push(content);
+            validIndex++;
+        }
+    });
+}
+
+    function nextProductImage() {
         if (currentImageIndex < imageUUIDs.length - 1) {
-            currentImageIndex++; // Move to the next image
+            currentImageIndex++;
         } else {
-            currentImageIndex = 0; // Reset to the first image
+            currentImageIndex = 0;
         }
         showImage();
     }
 
     function prevProductImage() {
-        console.log("currenct Image Index: " + currentImageIndex)
         if (currentImageIndex > 0) {
             currentImageIndex--;
         } else {
@@ -526,75 +616,109 @@ if(window.location.pathname.includes("/api/product")) {
     }
 
     function displayVariantAttributes(attributes) {
+        console.warn('attribute: ' + attributes);
         const attributeListContainer = document.getElementById('attribute-list');
         attributeListContainer.innerHTML = "";
-
         try {
-            if(variantAttributes.length > 0) {
-                const attributes = JSON.parse(variantAttributes);
-                if (Array.isArray(attributes)) {
-                    attributes.forEach((attribute, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.style.display = 'flex';
-                    listItem.style.textAlign = "center";
-                    listItem.style.fontSize = "1.6rem";
-                    listItem.style.paddingRight = "2%";
-                    listItem.style.backgroundColor = "#fff";
+            if (attributes.length > 0) {
+                const parsedAttributes = JSON.parse(attributes);
 
-                    const idSpan = document.createElement('span');
-                    idSpan.classList.add('attribute-id');
-                    idSpan.style.flex = "1";
-                    idSpan.textContent = attribute.id;
+                if (Array.isArray(parsedAttributes)) {
+                    const groupedAttributes = {};
+                    parsedAttributes.forEach(attribute => {
+                        const groupNum = attribute.groupNum;
+                        if (!groupedAttributes[groupNum]) {
+                            groupedAttributes[groupNum] = [];
+                        }
+                        groupedAttributes[groupNum].push(attribute);
+                    });
 
-                    const nameSpan = document.createElement('span');
-                    nameSpan.classList.add('attribute-name');
-                    nameSpan.style.flex = "1";
-                    nameSpan.textContent = attribute.name;
+                    const sortedGroupNums = Object.keys(groupedAttributes).sort((a, b) => a - b);
+                    sortedGroupNums.forEach(groupNum => {
+                        const group = groupedAttributes[groupNum];
 
-                    const valueSpan = document.createElement('span');
-                    valueSpan.classList.add('attribute-value');
-                    valueSpan.style.flex = "1";
-                    valueSpan.style.paddingRight = "10%";
-                    valueSpan.textContent = attribute.value;
+                        const groupContainer = document.createElement('div');
+                        groupContainer.classList.add('group-container');
+                        groupContainer.style.borderBottom = "1px solid #000";
+                        groupContainer.style.marginBottom = "10px";
+                        groupContainer.style.paddingBottom = "10px";
 
-                    const actionsSpan = document.createElement('span');
-                    actionsSpan.classList.add('product-attribute-actions');
+                        const groupHeader = document.createElement('div');
+                        groupHeader.textContent = `ប្រភេទឥវ៉ាន់ ${groupNum}`;
+                        groupHeader.style.fontWeight = "bold";
+                        groupHeader.style.fontSize = "1.8rem";
+                        groupHeader.style.marginBottom = "5px";
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.style.flex = "1";
-                    deleteButton.style.backgroundColor = "#fff";
-                    deleteButton.style.paddingLeft = "0%";
-                    deleteButton.style.zIndex = "-4";
-                    deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
-                    deleteButton.onclick = () => removeAttributeUpdateItem(variantAttributes, index);
+                        groupContainer.appendChild(groupHeader);
 
-                    actionsSpan.appendChild(deleteButton);
+                        group.forEach((attribute) => {
+                            const listItem = document.createElement('li');
+                            listItem.style.display = 'flex';
+                            listItem.style.textAlign = "center";
+                            listItem.style.fontSize = "1.6rem";
+                            listItem.style.paddingRight = "2%";
+                            listItem.style.backgroundColor = "#fff";
 
-                    listItem.appendChild(nameSpan);
-                    listItem.appendChild(valueSpan);
-                    listItem.appendChild(actionsSpan);
+                            const nameSpan = document.createElement('span');
+                            nameSpan.classList.add('attribute-name');
+                            nameSpan.style.flex = "1";
+                            nameSpan.textContent = attribute.name;
 
-                    attributeListContainer.appendChild(listItem);
-                });
+                            const valueSpan = document.createElement('span');
+                            valueSpan.classList.add('attribute-value');
+                            valueSpan.style.flex = "1";
+                            valueSpan.style.paddingRight = "10%";
+                            valueSpan.style.marginRight = "6%";
+                            valueSpan.textContent = attribute.value;
+
+                            const actionsSpan = document.createElement('span');
+                            actionsSpan.classList.add('product-attribute-actions');
+                            actionsSpan.style.marginRight = "10%";
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.style.flex = "1";
+                            deleteButton.style.backgroundColor = "#fff";
+                            deleteButton.style.paddingLeft = "0%";
+                            deleteButton.innerHTML = '<img src="/icon/trash.png" class="icon" alt="Trash Icon">';
+
+                            deleteButton.onclick = () => removeAttributeUpdateItem(attributes, attribute.id);
+
+                            actionsSpan.appendChild(deleteButton);
+
+                            listItem.appendChild(nameSpan);
+                            listItem.appendChild(valueSpan);
+                            listItem.appendChild(actionsSpan);
+
+                            groupContainer.appendChild(listItem);
+                        });
+
+                        attributeListContainer.appendChild(groupContainer);
+                    });
+
                 } else {
                     console.error('Expected an array for attributes, but got:', attributes);
                 }
             }
 
         } catch (e) {
-            console.error('Failed to parse attributes:', e);
+            console.error('Failed to parse attributes: ', e);
         }
     }
 
+    function removeAttributeUpdateItem(attributes, id) {
+        try {
+            attributes = JSON.parse(attributes);
+            const index = attributes.findIndex(attribute => attribute.id === id);
 
-    function removeAttributeUpdateItem(attributes, index) {
-       attributes = JSON.parse(attributes);
-       if (index > -1 && index < attributes.length) {
-           attributes.splice(index, 1);
-       }
-       variantAttributes = JSON.stringify(attributes);
-       displayVariantAttributes(variantAttributes);
+            if (index > -1) {
+                attributes.splice(index, 1);
+            }
+            variantAttributes = JSON.stringify(attributes);
+            displayVariantAttributes(variantAttributes);
+        } catch (e) {
+            console.error('Error removing attribute:', e);
+        }
     }
 
     const checkVariantButtonUpdate = document.getElementById("product-next-btn");

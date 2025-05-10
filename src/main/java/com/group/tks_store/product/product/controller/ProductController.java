@@ -8,7 +8,6 @@ import com.group.tks_store.common.static_key.LIB;
 import com.group.tks_store.product.category.dto.CategoryDTO;
 import com.group.tks_store.product.category.entity.CategoryEntity;
 import com.group.tks_store.product.category.service.CategoryService;
-import com.group.tks_store.product.product.dto.ProductCreateDTO;
 import com.group.tks_store.product.product.dto.ProductListDetailDTO;
 import com.group.tks_store.product.product.service.ProductFilterService;
 import com.group.tks_store.product.product.service.ProductService;

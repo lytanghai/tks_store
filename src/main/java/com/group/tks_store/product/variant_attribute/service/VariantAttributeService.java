@@ -52,7 +52,7 @@ public class VariantAttributeService {
 
         entity = variantAttributeRepository.save(entity);
 
-        return new VariantAttributeDTO(entity.getId(), dto.getVariantId(), dto.getAttributeId(), entity.getValue(), entity.getStatus());
+        return new VariantAttributeDTO(entity.getId(), dto.getVariantId(), dto.getAttributeId(), entity.getValue(), entity.getGroupNum(), entity.getStatus());
     }
 
     public VariantAttributeEntity createVariantAttribute2(VariantAttributeDTO dto, Integer variantId) {
@@ -66,6 +66,7 @@ public class VariantAttributeService {
         entity.setVariant(variant);
         entity.setAttribute(attribute);
         entity.setValue(dto.getValue());
+        entity.setGroupNum(dto.getGroupNum());
         entity.setStatus(dto.getStatus());
 
         entity = variantAttributeRepository.save(entity);
@@ -77,14 +78,14 @@ public class VariantAttributeService {
     public VariantAttributeDTO getVariantAttributeById(Integer id) {
         VariantAttributeEntity entity = variantAttributeRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("VA-002","រកវ៉ារ្យ៉ង់ និងអង្គធាតុមិនឃើញទេ"));
-        return new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getStatus());
+        return new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getGroupNum(), entity.getStatus());
     }
 
     // Get all Variant Attributes
     public List<VariantAttributeDTO> getAllVariantAttributes() {
         return variantAttributeRepository.findAll()
                 .stream()
-                .map(entity -> new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getStatus()))
+                .map(entity -> new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getGroupNum(), entity.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -106,7 +107,7 @@ public class VariantAttributeService {
 
         entity = variantAttributeRepository.save(entity);
 
-        return new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getStatus());
+        return new VariantAttributeDTO(entity.getId(), entity.getVariant().getId(), entity.getAttribute().getId(), entity.getValue(), entity.getGroupNum(), entity.getStatus());
     }
 
     // Delete Variant Attribute
@@ -158,6 +159,7 @@ public class VariantAttributeService {
                 }
                 each.setAttributeId(variantAttr.getAttributeId());
                 each.setVariantId(variantId);
+                each.setGroupNum(variantAttr.getGroupNum());
                 response.add(each);
             }
         }

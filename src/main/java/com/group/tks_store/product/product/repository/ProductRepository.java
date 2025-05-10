@@ -21,7 +21,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description,  " + //11
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity,  " + //16
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " + //17
-            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " + //18
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " + //18
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " +
             "FROM product p " +
             "LEFT JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "LEFT JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -29,14 +30,15 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
             "LEFT JOIN attributes a ON va.attribute_id = a.id " +
             "WHERE p.status = 'ACTIVE' " +
-            "GROUP BY p.id, c.id, v.id ", nativeQuery = true)
+            "GROUP BY p.id, c.id, v.id", nativeQuery = true)
     Page<Object[]> findActiveProductsRaw(Pageable pageable);
 
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -74,7 +76,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' ||  a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -85,11 +88,11 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             "AND (:code IS NULL OR :code = '' OR LOWER(p.code) = LOWER(:code)) " +
             "AND (:productName IS NULL OR :productName = '' OR LOWER(p.name_en) = LOWER(:productName) OR LOWER(p.name_kh) = LOWER(:productName)) " +
             "AND (:categoryId IS NULL OR :categoryId = -1 OR c.id = :categoryId) " +
+            "AND (:stockQuantity IS NULL OR :stockQuantity != -1 OR v.stock_quantity = :stockQuantity) " +
             "AND (:categoryName IS NULL OR :categoryName = '' OR LOWER(c.name) = LOWER(:categoryName) OR LOWER(c.name_kh) = LOWER(:categoryName)) " +
             "AND (:salePriceKHR IS NULL OR p.sale_price = :salePriceKHR) OR (:salePriceUSD IS NULL OR p.sale_price = :salePriceUSD) " +
             "AND (:salePriceCurrency = '' OR LOWER(p.currency) = LOWER(:salePriceCurrency)) " +
             "AND (:sku IS NULL OR :sku = '' OR LOWER(v.sku) = LOWER(:sku)) " +
-            "AND (:stockQuantity IS NULL OR :stockQuantity = -1 OR v.stock_quantity = :stockQuantity) " +
             "AND (:variantAttributeValue IS NULL OR LOWER(va.value) = LOWER(:variantAttributeValue)) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
@@ -107,13 +110,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
                                                        @Param("variantAttributeValue") String variantAttributeValue);
 
 
-
-
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
             "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " + // Aggregating group_num
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -137,61 +139,40 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             @Param("stockQtyVal1") Integer stockQtyVal1,
             @Param("stockQtyVal2") Integer stockQtyVal2);
 
-//    @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-//            "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
-//            "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-//            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-//            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
-//            "FROM product p " +
-//            "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
-//            "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
-//            "LEFT JOIN images i ON i.variant_id = v.id " +
-//            "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
-//            "LEFT JOIN attributes a ON va.attribute_id = a.id " +
-//            "WHERE p.status = 'ACTIVE' " +
-//            "AND (:general IS NULL OR :general = '' OR p.code ILIKE CONCAT('%', :general, '%')) " +
-//            "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
-//            "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
-//            "OR c.name ILIKE CONCAT('%', :general, '%') " +
-//            "OR c.name_kh ILIKE CONCAT('%', :general, '%') " +
-//            "OR v.sku ILIKE CONCAT('%', :general, '%') " +
-//            "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
-//            "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%') " +
-//            "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-//            "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
-//            nativeQuery = true)
-@Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-        "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
-        "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-        "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-        "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
-        "FROM product p " +
-        "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
-        "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
-        "LEFT JOIN images i ON i.variant_id = v.id " +
-        "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
-        "LEFT JOIN attributes a ON va.attribute_id = a.id " +
-        "WHERE p.status = 'ACTIVE' " +
-        "AND (:general IS NULL OR :general = '' OR " +
-        "(p.code ILIKE CONCAT('%', :general, '%') " +
-        "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
-        "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
-        "OR c.name ILIKE CONCAT('%', :general, '%') " +
-        "OR c.name_kh ILIKE CONCAT('%', :general, '%') " +
-        "OR v.sku ILIKE CONCAT('%', :general, '%') " +
-        "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
-        "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%'))) " +
-        "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-        "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
-        nativeQuery = true)
-Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable,
-                                                      @Param("general") String general);
-
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',' ORDER BY va.group_num, va.id) AS group_nums " +
+            "FROM product p " +
+                    "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
+                    "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
+                    "LEFT JOIN images i ON i.variant_id = v.id " +
+                    "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
+                    "LEFT JOIN attributes a ON va.attribute_id = a.id " +
+                    "WHERE p.status = 'ACTIVE' " +
+                    "AND (:general IS NULL OR :general = '' OR " +
+                    "(p.code ILIKE CONCAT('%', :general, '%') " +
+                    "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
+                    "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
+                    "OR c.name ILIKE CONCAT('%', :general, '%') " +
+                    "OR c.name_kh ILIKE CONCAT('%', :general, '%') " +
+                    "OR v.sku ILIKE CONCAT('%', :general, '%') " +
+                    "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
+                    "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%'))) " +
+                    "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
+                    "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
+            nativeQuery = true)
+
+    Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable, @Param("general") String general);
+
+    @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
+            "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
+            "v.id AS variant_id, v.sku, v.base_price, v.currency AS base_price_currency, v.stock_quantity, " +
+            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " + // Aggregating group_num
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -199,7 +180,8 @@ Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable,
             "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
             "LEFT JOIN attributes a ON va.attribute_id = a.id " +
             "WHERE p.status = 'ACTIVE' " +
-            "AND (:general IS NULL OR :general = '' OR p.code ILIKE CONCAT('%', :general, '%')) " +
+            "AND (:general IS NULL OR :general = '' OR (" +
+            "p.code ILIKE CONCAT('%', :general, '%') " +
             "OR p.name_en ILIKE CONCAT('%', :general, '%') " +
             "OR p.name_kh ILIKE CONCAT('%', :general, '%') " +
             "OR c.name ILIKE CONCAT('%', :general, '%') " +
@@ -208,39 +190,19 @@ Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable,
             "OR CAST(p.sale_price AS TEXT) ILIKE CONCAT('%', :general, '%') " +
             "OR CAST(p.sale_price / 4100 AS TEXT) ILIKE CONCAT('%', :general, '%') " +
             "OR CAST(p.sale_price * 4100 AS TEXT) ILIKE CONCAT('%', :general, '%') " +
-            "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%') " +
+            "OR CAST(v.stock_quantity AS TEXT) ILIKE CONCAT('%', :general, '%')" +
+            ")) " +
             "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity",
             nativeQuery = true)
-    Page<Object[]> fetchProductByPropertyUsingStoreGeneral(Pageable pageable,
-                                                      @Param("general") String general);
+    Page<Object[]> fetchProductByPropertyUsingStoreGeneral(Pageable pageable, @Param("general") String general);
 
-
-//    @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-//            "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
-//            "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
-//            "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-//            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
-//            "FROM product p " +
-//            "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
-//            "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
-//            "LEFT JOIN images i ON i.variant_id = v.id " +
-//            "LEFT JOIN variant_attributes va ON va.variant_id = v.id " +
-//            "LEFT JOIN attributes a ON va.attribute_id = a.id " +
-//            "WHERE p.status = 'ACTIVE' " +
-//            "AND ( " +
-//            "  (:salePriceCurrency = 'USD' AND p.sale_price > :salePriceUSD) OR " + // Compare sale_price in USD
-//            "  (:salePriceCurrency = 'KHR' AND p.sale_price > :salePriceKHR) " + // Compare sale_price in KHR
-//            ") " +
-//            "AND (:salePriceCurrency IS NULL OR :salePriceCurrency = '' OR p.currency = :salePriceCurrency) " +
-//            "AND (:stockQty IS NULL OR :stockQty = -1 OR v.stock_quantity > :stockQty) " +
-//            "GROUP BY p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
-//            "c.id, c.name, c.name_kh, c.description, v.id, v.sku, v.base_price, v.currency, v.stock_quantity", nativeQuery = true)
 @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
         "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
         "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
         "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
         "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+        "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " +
         "FROM product p " +
         "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
         "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +
@@ -263,13 +225,12 @@ Page<Object[]> fetchProductByPropertyUsingGeneral(Pageable pageable,
             @Param("salePriceCurrency") String salePriceCurrency,
             @Param("stockQty") Integer stockQty);
 
-
-
     @Query(value = "SELECT p.id, p.name_en, p.name_kh, p.code, p.sale_price, p.currency, p.description, p.status, p.created_at, " +
             "c.id AS category_id, c.name AS category_name, c.name_kh AS category_name_kh, c.description AS category_description, " +
             "v.id AS variant_id, v.sku, v.base_price, v.currency as base_price_currency, v.stock_quantity, " +
             "STRING_AGG(DISTINCT va.id || ':' || a.name || '(' || a.name_kh || ') ' || ':' || va.value, ',') AS attributes, " +
-            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images " +
+            "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT i.id || ':' || i.uuid), ',') AS images, " +
+            "STRING_AGG(CAST(va.group_num AS TEXT), ',') AS group_nums " +
             "FROM product p " +
             "INNER JOIN category c ON p.category_id = c.id AND c.status = 'ACTIVE' " +
             "INNER JOIN variants v ON v.product_id = p.id AND v.status = 'ACTIVE' " +

@@ -1,5 +1,5 @@
 async function uploadProduct() {
-    let fileInput = document.getElementById('product_variant_image_value'); // Assuming your input file field
+    let fileInput = document.getElementById('product_variant_image_value');
     let files = fileInput.files;
     let formData = new FormData();
 
@@ -17,7 +17,7 @@ async function uploadProduct() {
     }
 
     let salePrice = parseFloat(document.getElementById("product_sale_price_edit").value);
-    if (isNaN(salePrice)) {  // ✅ Fix: Use isNaN (correct function)
+    if (isNaN(salePrice)) {
         alert("តម្លៃទំនិញមិនអាចទទេរបានទេ!");
         return;
     }
@@ -41,8 +41,8 @@ async function uploadProduct() {
         variant: {
             base_price: parseFloat(document.getElementById('product_base_price_edit').value).toFixed(2),
             currency: document.getElementById('product_base_price_currency_edit').value,
-            stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value),
-            sku: document.getElementById('product_stock_sku').value
+            stock_quantity: parseInt(document.getElementById('product_stock_quantity_edit').value)
+//            sku: document.getElementById('product_stock_sku').value
         },
         images: [],
         variant_attributes: []
@@ -59,7 +59,8 @@ async function uploadProduct() {
         for (let y = 0; y < variantAttributes.length; y++) {
             jsonData.variant_attributes.push({
                 attribute_id: variantAttributes[y].attribute_id,
-                value: variantAttributes[y].value
+                value: variantAttributes[y].value,
+                group_num: variantAttributes[y].group_num
             });
         }
     }
@@ -73,9 +74,11 @@ async function uploadProduct() {
         sessionStorage.setItem('popupMessage', 'success');
         sessionStorage.setItem('popupAction', 'update');
         showPopUpMessage('success', 'update');
+        groupNumReq = 1;
 //        let result = await response.json();
     } catch (error) {
         console.error("Error uploading:", error);
+        groupNumReq = 1;
     }
 }
     async function updateProductDetail() {
@@ -93,7 +96,7 @@ async function uploadProduct() {
             let basePrice = parseFloat(document.getElementById('product_base_price_edit').value);
             let basePriceCurrency = document.getElementById('product_base_price_currency_edit').value;
             let stockQuantity = parseInt(document.getElementById('product_stock_quantity_edit').value);
-            let sku = document.getElementById('product_stock_sku').value;
+//            let sku = document.getElementById('product_stock_sku').value;
             let jsonData = {
                 product: {
                     id: id,
@@ -109,8 +112,8 @@ async function uploadProduct() {
                  id: parseInt(variantId),
                  base_price: basePrice || undefined,
                  currency: basePriceCurrency || undefined,
-                 stock_quantity: stockQuantity || undefined,
-                 sku: sku || undefined
+                 stock_quantity: stockQuantity || undefined
+//                 sku: sku || undefined
                  },
                  remove_images: [],
                  variant_attributes: [],
@@ -118,14 +121,14 @@ async function uploadProduct() {
                 };
 
             let variantAttr = JSON.parse(variantAttributes);
-
             if (variantAttr.length > 0) {
                 for (let i = 0; i < variantAttr.length; i++) {
                     jsonData.variant_attributes.push({
                         id: variantAttr[i].id,
                         attribute_id: variantAttr[i].attribute_id,
                         name: variantAttr[i].name,
-                        value: variantAttr[i].value
+                        value: variantAttr[i].value,
+                        group_num: variantAttr[i].groupNum
                     });
                 }
             }
@@ -154,8 +157,7 @@ async function uploadProduct() {
             sessionStorage.setItem('popupMessage', 'success');
             sessionStorage.setItem('popupAction', 'update');
             showPopUpMessage('success', 'update');
-
-    //            let result = await response.json();
+//            let result = await response.json();
             } catch (error) {
                 console.error("Error uploading:", error);
             }
@@ -216,29 +218,36 @@ if(window.location.pathname.includes("/api/product")) {
 
     function openVariantAttributeDetail(button) {
         let variantId = button.getAttribute("data-variant-id");
-        // Fetch data using AJAX
+
         fetch(`/api/variant-attributes/list?variant_id=${variantId}`)
-        .then(response => response.json())
-        .then(data => {
-            let attributeList = document.getElementById("attributeList");
-            attributeList.innerHTML = "";
+            .then(response => response.json())
+            .then(data => {
+                let attributeList = document.getElementById("attributeList");
+                attributeList.innerHTML = "";
 
-            if (data.length > 0) {
-                data.forEach(attr => {
-                    let listItemName = document.createElement("li");
-                    listItemName.textContent = `${attr.attribute_name}: ${attr.value}`;
-                    listItemName.style.listStyle = 'none'
-                    listItemName.style.paddingRight = '5%'
+                if (data.length > 0) {
+                    let groupedAttributes = data.reduce((acc, attr) => {
+                        if (!acc[attr.group_num]) {
+                            acc[attr.group_num] = [];
+                        }
+                        acc[attr.group_num].push(`${attr.attribute_name}: ${attr.value}`);
+                        return acc;
+                    }, {});
 
-                    attributeList.appendChild(listItemName);
-                });
+                    Object.keys(groupedAttributes).forEach(groupNum => {
+                        let listItem = document.createElement("li");
+                        listItem.textContent = `អង្គធាតុទី ${groupNum}: ${groupedAttributes[groupNum].join(" | ")}`;
+                        listItem.style.textAlign = "left";
+                        listItem.style.listStyle = "none";
+                        listItem.style.marginTop = "10px";
+                        attributeList.appendChild(listItem);
+                    });
 
-                document.getElementById("customModal").style.display = "flex";
-            } else {
-                alert("No attributes found!");
-            }
-        })
-        .catch(error => console.error("Error fetching data:", error));
+                    document.getElementById("customModal").style.display = "flex";
+                } else {
+                    alert("No attributes found!");
+                }
+            })
+            .catch(error => console.error("Error fetching data:", error));
     }
-
 }

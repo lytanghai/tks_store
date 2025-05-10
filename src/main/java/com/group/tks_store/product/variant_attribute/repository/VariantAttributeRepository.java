@@ -19,7 +19,7 @@ public interface VariantAttributeRepository extends JpaRepository<VariantAttribu
     Page<VariantAttributeEntity> findByStatus(String status, PageRequest pageRequest);
 
     @Query(value = "SELECT va.id as variantAttributeId, v.id as variantId, a.id as attributeId, " +
-            " a.name as attributeName, a.name_kh as attributeNameKh, va.value as value " +
+            " a.name as attributeName, a.name_kh as attributeNameKh, va.value as value, va.group_num as groupNum" +
             " FROM variant_attributes va " +
             " INNER JOIN variants v on v.id = va.variant_id " +
             " INNER JOIN attributes a ON a.id = va.attribute_id " +

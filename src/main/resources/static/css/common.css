@@ -8,6 +8,10 @@
         height: 70%;
     }
 
+    .hidden{
+        display: none;
+    }
+
     .service-type-title{
         display: flex;
         width: 99%;
@@ -306,8 +310,8 @@
     }
     .preview-image-container{
         position: absolute;
-        right: 19%;
-        bottom: 2%;
+        right: 25%;
+        bottom: -68%;
     }
 
     .preview-prev-img {

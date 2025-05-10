@@ -173,9 +173,13 @@ function extractNumber(value) {
 }
 
 function convertToJSONArray(input) {
+    let items = input.split(",");
+    let lastItem = items[items.length - 1];
+    let lastValue = lastItem.substring(lastItem.lastIndexOf(":") + 1);
+    let lastMatch = items.reverse().find(item => item.endsWith(":2"));
     return input.split(',').map(pair => {
-        let [id, name, value] = pair.split(':').map(item => item.trim());
-        return { id , name, value };
+        let [id, name, value, groupNum] = pair.split(':').map(item => item.trim());
+        return { id , name, value, groupNum };
     });
 }
 
